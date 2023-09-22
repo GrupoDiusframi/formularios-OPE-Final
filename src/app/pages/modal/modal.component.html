@@ -1,0 +1,110 @@
+<mat-dialog-content class="mat-typography">
+  <div class="container">
+    <button mat-button mat-dialog-close type="button" style="float: right">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  <!-- <p>Documento Principal</p>
+    <div class="" style="background: lightgray" role="alert">
+      <p style="text-align: center; font-size: 12px">
+        Solo se permite documentos PDF
+      </p>
+    </div>
+    <div class="">
+      <input
+        class=""
+        (change)="onUploadFile($event, true)"
+        accept=".pdf"
+        type="file"
+      />
+    </div>-->
+
+    <br />
+    <div
+      class="container text-center"
+      style="background: lightgray"
+      role="alert"
+    >
+      <p style="text-align: center; font-size: 12px">
+        Puede cargar documentos con la siguientes extensiones:
+        Txt,Doc,Docx,Pdf,Xls,Xlsx,Csv,Ppt,Pptx,Zip,Rar,7z,png,jpg,gif,mp4,mp3,mpeg,avi
+        <br />
+        Los Archivos cargados no deben superar las 2GB
+        <br />
+        El nombre los archivos no debe superar los 40 caracteres
+      </p>
+    </div>
+    <br />
+    <div class="">
+      <input id="archivoAnexos"
+        class=""
+        type="file"
+        multiple
+        (change)="onUploadFile($event)"
+        maxSize="100"
+        accept=".txt,.doc,.docx,.pdf,.xls,.xlsx,.csv,.ppt,.pptx,.rar,.7z,.png,.jpg,.gif,.mp4,.mp3,.mpeg,.avi,.zip,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      />
+    </div>
+    <br />
+    <div>
+      <p style="color: red" *ngIf="sizeFile">
+        El tamaño de los archivos cargados es mayor a 2GB
+      </p>
+    </div>
+   <!-- <div *ngIf="cargarchivos">
+      <p style="text-align: center; color: blue">
+        Los Archivos se están cargando
+      </p>
+      <mat-progress-bar mode="indeterminate" value="70"></mat-progress-bar>
+    </div>-->
+    <h4 class="mt-3">Archivos cargados</h4>
+    <table
+      class="table table-bordered"
+      aria-describedby="Listado de archivos subidos"
+    >
+      <thead class="thead-dark">
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Tamaño</th>
+        <th>Eliminiar</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let image of images | slice : desde : hasta">
+          <td>{{ image.name }}</td>
+          <td>{{ image.type }}</td>
+          <td>{{ image.size }} </td>
+          <td>
+            <button
+              type="button"
+              (click)="deleteImage(image)"
+              class="close"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-paginator
+      [length]="images.length"
+      [pageSize]="pageSize"
+      (page)="cambiarpagina($event)"
+    >
+    </mat-paginator>
+  </div>
+  <mat-dialog-actions class="botonAceptar">
+    <button
+      *ngIf="!sizeFile"
+      (click)="emitValues($event)"
+      mat-button
+      mat-dialog-close
+      type="button"
+      class="btn btn-outline-info"
+    >
+      Aceptar
+    </button>
+    <p style="color: red" *ngIf="sizeFile">
+      Los archivos no se pueden cargar ya que superan el peso maximo de 2GB
+    </p>
+  </mat-dialog-actions>
+</mat-dialog-content>

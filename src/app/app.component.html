@@ -1,0 +1,27 @@
+<app-nav-bar class="mb-5"></app-nav-bar>
+<div class="card mx-2 md:mx-12">
+  <div class="grid p-fluid card-container">
+    <div class="field col-12">
+      <p>Por favor seleccione la solicitud que desea diligenciar. A continuación se cargará el formulario correspondiente, recuerde completar los campos que son obligatorios identificados con el símbolo <span class="p-error">*</span></p>
+    </div>
+    <div class="field col-12">
+      <span class="p-float-label">
+        <p-dropdown
+          [options]="datos"
+          [autoDisplayFirst]="false"
+          [showClear]="true"
+          [filter]="true"
+          [(ngModel)]="procedure"
+          optionLabel="nombreAmigable"
+          emptyFilterMessage="No se encontró ningún resultado."
+          inputId="procedureDropdown"
+        >
+        </p-dropdown>
+        <label for="procedureDropdown">Tipo solicitud</label>
+      </span>
+    </div>
+  </div>
+</div>
+<app-form-furt *ngIf="procedure?.proceso?.nombre === 'QUEJAS'" [procedure]="procedure"></app-form-furt>
+<app-form-soborno-int *ngIf="procedure?.proceso?.nombre === 'PLANEACIÓN INSTITUCIONAL'"></app-form-soborno-int>
+<app-footer class="mt-auto"></app-footer>

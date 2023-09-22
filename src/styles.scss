@@ -1,0 +1,10 @@
+html, body app-modal{ height: 100%; }
+body app-modal{ margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Open Sans", sans-serif;
+}
+
