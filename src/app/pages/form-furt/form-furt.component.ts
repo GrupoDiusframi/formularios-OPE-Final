@@ -25,7 +25,6 @@ import { Tramites } from 'src/app/interfaces/tramites';
 import { TipoSolicitante } from 'src/app/interfaces/tipo-solicitante';
 import { RadicacionRequestDto } from 'src/app/interfaces/radicacionRequest';
 import { TramitesServices } from 'src/app/services/tramites.service';
-import { MessageService } from 'primeng/api';
 import { ISubirArchivo } from 'src/app/interfaces/ISubirArchivo';
 import { ModalComponent } from '../modal/modal.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,7 +33,6 @@ import { HttpEvent, HttpEventType } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { PaisesControllerService, PqrsdControllerService } from 'src/pqrsd-api/src/src/services';
 import { environment } from 'src/environments/environment';
-import { FileUploadService } from 'src/app/services/file-upload.service';
 import { CiudadDTO, DepartamentoDTO, PaisDTO } from 'src/pqrsd-api/src/src/models';
 import { formatDate } from '@angular/common';
 
@@ -55,10 +53,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   private fb: FormBuilder = inject(FormBuilder);
   private pqrsdService = inject(PqrsdControllerService);
   private tramitesServices = inject(TramitesServices);
-  private messageService = inject(MessageService);
-  private fileUploadService: FileUploadService = new FileUploadService(
-    this.messageService
-  );
+
   private destroy$ = new Subject<void>();
   loaderFile!: boolean;
   @Input() procedure!: Tramites;
@@ -80,12 +75,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
 
   countries!: Array<PaisDTO>;
   departments!: Array<DepartamentoDTO>;
-  applicants: Array<{ [key: string]: any }> = [
-    { id: 8, description: 'Organizaciones' },
-  ];
-  documentTypes: Array<{ [key: string]: any }> = [
-    { id: 5, description: 'NIT' },
-  ];
+
   departmentsPNJ!: Array<DepartamentoDTO>;
   municipalitiesPNJ!: Array<CiudadDTO>;
   departmentsRem!: Array<DepartamentoDTO>;
@@ -96,6 +86,11 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   ArchivosFormulario: any;
   limpiarArchivos: any[] = [];
   statusCarga: boolean = false;
+  seleccionInicial: boolean = false;
+  paisCol: boolean = false;
+  selectPersonaN: boolean = false;
+  indicativo: string = '';
+
 
   subirArchivo: ISubirArchivo = {
     radicacion: '',
@@ -200,11 +195,11 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       this.municipalitiesRem = [];
     }
   }
-
+/*
   handleChangeNumeroIdentificacionPNJ(): void {
     this.getNaturalLegalPerson();
   }
-
+*/
   onChangeRemPNJ(isPNJ: boolean): void {
     this.isRemPNJ = isPNJ;
     this.handleChangeRemPNJ();
@@ -226,6 +221,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     this.tipoSolicitante = this.procedure?.tiposSolicitante;
     this.documents = this.procedure?.documentos;
     this.form = this.fb.group({
+      validarCheck: new FormControl(),
       idTramite: new FormControl(this.procedure?.id, Validators.required),
       descripcionTramite: new FormControl(this.procedure?.descripcionSolicitud),
       claseProceso: new FormControl(this.procedure?.proceso.nombre),
@@ -319,23 +315,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSelectAttachment(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const files = target.files as FileList;
-    if (files && this.fileUploadService.validationFile(target)) {
-      const data = { [target.id]: files[0] };
-      const label = Array.from(
-        target.labels as NodeList
-      )[0] as HTMLLabelElement;
-      label.innerHTML = `<i class="pi pi-upload"></i> &nbsp; ${files[0].name}`;
-      const index = this.uploadedFiles.findIndex((file) => file[target.id]);
-      if (index >= 0) {
-        this.uploadedFiles[index] = data;
-      } else {
-        this.uploadedFiles.push(data);
-      }
-    }
-  }
+
 
   subirArchivoFilenet(): void {
     this.tramitesServices.subirArchivoFilenet(this.subirArchivo).subscribe(
@@ -369,7 +349,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
         },
       });
   }
-
+/*
   private getNaturalLegalPerson(): void {
     if (
       !this.form.value.idTipoIdentificacionPNJ ||
@@ -401,7 +381,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       )
       .catch((err) => console.log(`%c ${err}`, 'background-color: #f3e295;'));
   }
-
+*/
   private handleChangeNaturalLegalPerson(
     naturalLegalPerson: NaturalLegalPersonBody | null
   ): void {

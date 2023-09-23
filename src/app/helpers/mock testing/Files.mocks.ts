@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { ISubirArchivo } from '../models/ISubirArchivo';
+import { ISubirArchivo } from '../../models/ISubirArchivo';
 
 export function generateNArchivos(quantity: number): ISubirArchivo[] {
   const resultado: ISubirArchivo[] = [];

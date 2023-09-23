@@ -14,7 +14,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Files } from 'src/app/models/Files.model';
 import { TramitesServices } from 'src/app/services/tramites.service';
-import { generateNArchivos } from 'src/app/helpers/Files.mocks';
+import { generateNArchivos } from 'src/app/helpers/mock testing/Files.mocks';
 
 fdescribe('Suit de test unitarios para el componente ModalComponent', () => {
   let component: ModalComponent;

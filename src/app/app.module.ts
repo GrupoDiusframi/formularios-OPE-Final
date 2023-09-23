@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { FormFurtComponent } from './pages/form-furt/form-furt.component';
 import { FormSobornoIntComponent } from './pages/form-soborno-int/form-soborno-int.component';
 import { ModalComponent } from './pages/modal/modal.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FooterComponent } from './pages/shared/footer/footer.component';
 import { NavBarComponent } from './pages/shared/nav-bar/nav-bar.component';
@@ -35,7 +35,9 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { TramitesServices } from './services/tramites.service';
 import { AuthService } from './services/auth.service';
-import { NgModule } from '@angular/core';
+import { NgModule, forwardRef } from '@angular/core';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 
@@ -78,10 +80,13 @@ import { NgModule } from '@angular/core';
     PanelModule,
     RadioButtonModule,
     FileUploadModule,
-    ToastModule
+    ToastModule,
+    MatSelectModule,
+    MatFormFieldModule
 
   ],
-  providers: [MessageService, AuthService, TramitesServices],
+  providers: [TramitesServices,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

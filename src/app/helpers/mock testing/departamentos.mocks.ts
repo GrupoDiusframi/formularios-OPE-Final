@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 
-
 export function generateNDepartamentos(quantity: number): any[] {
   const resultado: any[] = [];
 
