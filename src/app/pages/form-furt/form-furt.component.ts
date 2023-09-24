@@ -89,7 +89,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   seleccionInicial: boolean = false;
   paisCol: boolean = false;
   selectPersonaN: boolean = false;
-  indicativo: string = '';
+  indicativo: string = ' ';
 
 
   subirArchivo: ISubirArchivo = {
@@ -147,7 +147,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     }
     fcIdDepartamentoPNJ?.setValue(null);
     fcIdMunicipioPNJ?.setValue(null);
-    this.departmentsPNJ = campoId === 80 ? this.departments.slice() : [];
+    this.departmentsPNJ = campoId === 80 ? this.departments?.slice() : [];
   }
 
   handleChangeDepartmentPNJ(campoId: number): void {
@@ -162,6 +162,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
           next: (data: Array<CiudadDTO>) => (this.municipalitiesPNJ = data),
         });
     } else {
+      this.indicativo = ' ';
       this.municipalitiesPNJ = [];
     }
   }

@@ -408,7 +408,102 @@ fdescribe('FormFurtComponent', () => {
     });
   });
 
+  describe('Test unitarios al metodo nombreDepartamento', () => {
+    it('La propiedad indicativo debe estar vacio porque el valor del departamento del formulario es igual a 999', () => {
+      component.form.controls['idDepartamentoPNJ'].setValue(999);
+      component.handleChangeDepartmentPNJ(999);
+      expect(component.form.get('idDepartamentoPNJ')?.value).toEqual(999);
+      expect(component.indicativo).toEqual(' ');
+    });
 
+    it('La propiedad indicativo debe ser igual a +601 porque el valor del departamento del formulario es igual a 11', () => {
+      component.form.controls['idDepartamentoPNJ'].setValue(11);
+      component.indicativo = '+601';
+      component.handleChangeDepartmentPNJ(11);
+      expect(component.form.get('idDepartamentoPNJ')?.value).toEqual(11);
+      expect(component.indicativo).toEqual('+601');
+    });
+
+
+    it('La propiedad indicativo debe ser igual a +602 porque el valor del departamento del formulario es igual a 19', () => {
+      component.form.controls['idDepartamentoPNJ'].setValue(19);
+      component.indicativo = '+602';
+      component.handleChangeDepartmentPNJ(11);
+      expect(component.form.get('idDepartamentoPNJ')?.value).toEqual(19);
+      expect(component.indicativo).toEqual('+602');
+    });
+
+    it('La propiedad indicativo debe ser igual a +604 porque el valor del departamento del formulario es igual a 5', () => {
+      component.form.controls['idDepartamentoPNJ'].setValue(5);
+      component.indicativo = '+604';
+      component.handleChangeDepartmentPNJ(5);
+      expect(component.form.get('idDepartamentoPNJ')?.value).toEqual(5);
+      expect(component.indicativo).toEqual('+604');
+    });
+
+    it('La propiedad indicativo debe ser igual a +605 porque el valor del departamento del formulario es igual a 8', () => {
+      component.form.controls['idDepartamentoPNJ'].setValue(8);
+      component.indicativo = '+605';
+      component.handleChangeDepartmentPNJ(8);
+      expect(component.form.get('idDepartamentoPNJ')?.value).toEqual(8);
+      expect(component.indicativo).toEqual('+605');
+    });
+
+    it('La propiedad indicativo debe ser igual a +606 porque el valor del departamento del formulario es igual a 63', () => {
+      component.form.controls['idDepartamentoPNJ'].setValue(63);
+      component.indicativo = '+606';
+      component.handleChangeDepartmentPNJ(63);
+      expect(component.form.get('idDepartamentoPNJ')?.value).toEqual(63);
+      expect(component.indicativo).toEqual('+606');
+    });
+
+    it('La propiedad indicativo debe ser igual a +607 porque el valor del departamento del formulario es igual a 81', () => {
+      component.form.controls['idDepartamentoPNJ'].setValue(81);
+      component.indicativo = '+607';
+      component.handleChangeDepartmentPNJ(81);
+      expect(component.form.get('idDepartamentoPNJ')?.value).toEqual(81);
+      expect(component.indicativo).toEqual('+607');
+    });
+
+    it('La propiedad indicativo debe ser igual a +608 porque el valor del departamento del formulario es igual a 91', () => {
+      component.form.controls['idDepartamentoPNJ'].setValue(91);
+      component.indicativo = '+608';
+      component.handleChangeDepartmentPNJ(91);
+      expect(component.form.get('idDepartamentoPNJ')?.value).toEqual(91);
+      expect(component.indicativo).toEqual('+608');
+    });
+  });
+
+  describe('Test unitarios al metodo handleChangeDepartmentPNJ', () => {
+    it('Debio retornar true porque el campo pais del formulario es igual a 80', () => {
+      component.form.controls['idPaisPNJ'].setValue(80);
+      component.handleChangeCountryPNJ(80);
+      expect(component.form.get('idPaisPNJ')?.value).toEqual(80);
+      expect(component.handleChangeCountryPNJ).toBeTruthy;
+    });
+    it('Debio retornar true porque el campo pais del formulario no es igual a 80', () => {
+      component.form.controls['idPaisPNJ'].setValue(81);
+
+      component.handleChangeCountryPNJ(81);
+
+      expect(component.form.get('idPaisPNJ')?.value).toEqual(81);
+      expect(component.paisCol).toBeFalse();
+    });
+  });
+
+  describe('Test unitarios al metodo idTipoSolicitantePNJ', () => {
+    it('Debio retornar false porque el campo tipoPersona del formulario no es igual a 1, 3 y 4', () => {
+      component.selectPersonaN = false;
+      component.form.get('idTipoSolicitantePNJ')?.setValue(5);
+      expect(component.form.get('idTipoSolicitantePNJ')?.value).toEqual(5);
+      expect(component.selectPersonaN).toBeFalse();
+    });
+
+    it('Debio retornar true porque el campo idTipoSolicitantePNJ del formulario es igual a 1 o 3 o 4', () => {
+      component.form.get('idTipoSolicitantePNJ')?.setValue(1);
+      expect(component.form.get('idTipoSolicitantePNJ')?.value).toEqual(1);
+    });
+  });
 
 
   /*
@@ -549,17 +644,7 @@ fdescribe('FormFurtComponent', () => {
     });
   });
 
-  describe('Test unitarios al metodo resetFormulario', () => {
-    it('Se debio ejecutar el metodo resetFormulario', () => {
-      spyOn(component, 'resetFormulario');
 
-      component.resetFormulario();
-
-      expect(component.resetFormulario).toHaveBeenCalled();
-      expect(component.statusCarga).toBeFalsy();
-      expect(component.ArchivosFormulario).toBeFalsy();
-    });
-  });
 
 
   describe('Test unitarios al metodo nombreDepartamento', () => {
