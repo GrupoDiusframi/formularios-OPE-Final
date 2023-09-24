@@ -15,13 +15,21 @@ import { generateNArchivos } from 'src/app/helpers/mock testing/Files.mocks';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+
 
 
 fdescribe('FormFurtComponent', () => {
   let component: FormFurtComponent;
   let fixture: ComponentFixture<FormFurtComponent>;
 
-/*
+
   beforeAll(() => {
     TestBed.resetTestEnvironment();
     TestBed.initTestEnvironment(
@@ -31,7 +39,7 @@ fdescribe('FormFurtComponent', () => {
     );
   });
 
-  */
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -43,23 +51,23 @@ fdescribe('FormFurtComponent', () => {
         NgbModule,
         DropdownModule,
         CheckboxModule,
-        InputSwitchModule
+        InputSwitchModule,
       ],
       declarations: [FormFurtComponent],
       providers: [
         TramitesServices,
         MatDialog,
         UntypedFormBuilder,
-        {
-          provide: MatDialogRef,
-          useValue: {},
-        },
-
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
     .compileComponents();
+    fixture = TestBed.createComponent(FormFurtComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(FormFurtComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -68,6 +76,173 @@ fdescribe('FormFurtComponent', () => {
   it('Debio ser creado el componente FormFurtComponent', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('Test unitarios al metodo CamposObligatorios', () => {
+    it('Se debio validar campos obligatorios  del formulario ', () => {
+      let camposObligatorios: string[] = [
+        'idTipoSolicitantePNJ',
+        'idTipoIdentificacionPNJ',
+        'numeroIdentificacionPNJ',
+        'nombreRazonSocialPNJ',
+        'telefonoPNJ',
+        'emailPNJ',
+        'direccionPNJ',
+        'idPaisPNJ',
+        'idDepartamentoPNJ',
+        'idMunicipioPNJ',
+        'idTipoIdentificacionRem',
+        'numeroIdentificacionRem',
+        'nombreRem',
+        'telefonoRem',
+        'emailRem',
+        'direccionRem',
+        'idPaisRem',
+        'idDepartamentoRem',
+        'idMunicipioRem',
+        'emailRadicar',
+
+      ];
+
+      component.agregarOQuitarValidadorCamposObligatorios(camposObligatorios);
+
+      expect(component.form.controls['idTipoSolicitantePNJ'].hasValidator(Validators.required)
+      ).toBeTruthy();
+    });
+  });
+
+  describe('Test unitarios al metodo resetFormulario', () => {
+    it('Se debio ejecutar el metodo resetFormulario', () => {
+      spyOn(component, 'resetFormulario');
+
+      component.resetFormulario();
+
+      expect(component.resetFormulario).toHaveBeenCalled();
+      expect(component.statusCarga).toBeFalsy();
+      expect(component.ArchivosFormulario).toBeFalsy();
+    });
+  });
+
+  describe('Test unitarios al campo validarCheck', () => {
+    it('Se debio ejecutar el campo validarCheck', () => {
+      component.form.controls['validarCheck'].setValue(true)
+      expect(component.form.controls['validarCheck'].value).toBeTrue();
+      expect(component.form.controls['validarCheck'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  idTramite', () => {
+    it('Se debio ejecutar el campo idTramite', () => {
+      component.form.controls['idTramite'].setValue(0)
+      expect(component.form.controls['idTramite'].value).toEqual(0);
+      expect(component.form.controls['idTramite'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  descripcionTramite', () => {
+    it('Se debio ejecutar el campo descripcionTramite', () => {
+      component.form.controls['descripcionTramite'].setValue('PRUEBA')
+      expect(component.form.controls['descripcionTramite'].value).toEqual('PRUEBA');
+      expect(component.form.controls['descripcionTramite'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  claseProceso', () => {
+    it('Se debio ejecutar el campo claseProceso', () => {
+      component.form.controls['claseProceso'].setValue('QUEJAS')
+      expect(component.form.controls['claseProceso'].value).toEqual('QUEJAS');
+      expect(component.form.controls['claseProceso'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  dependencia', () => {
+    it('Se debio ejecutar el campo dependencia', () => {
+      component.form.controls['dependencia'].setValue('GRUPO DE RELACION ESTADO - CIUDADANO')
+      expect(component.form.controls['dependencia'].value).toEqual('GRUPO DE RELACION ESTADO - CIUDADANO');
+      expect(component.form.controls['dependencia'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  numeroProceso', () => {
+    it('Se debio ejecutar el campo numeroProceso', () => {
+      component.form.controls['numeroProceso'].setValue(1000-1254-12512)
+      expect(component.form.controls['numeroProceso'].value).toEqual(1000-1254-12512);
+      expect(component.form.controls['numeroProceso'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  idTipoSolicitantePNJ', () => {
+    it('Se debio ejecutar el campo idTipoSolicitantePNJ', () => {
+      component.form.controls['idTipoSolicitantePNJ'].setValue(5)
+      expect(component.form.controls['idTipoSolicitantePNJ'].value).toEqual(5);
+      expect(component.form.controls['idTipoSolicitantePNJ'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  idTipoIdentificacionPNJ', () => {
+    it('Se debio ejecutar el campo idTipoIdentificacionPNJ', () => {
+      component.form.controls['idTipoIdentificacionPNJ'].setValue(1)
+      expect(component.form.controls['idTipoIdentificacionPNJ'].value).toEqual(1);
+      expect(component.form.controls['idTipoIdentificacionPNJ'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  nombreTipoIdentificacionPNJ', () => {
+    it('Se debio ejecutar el campo nombreTipoIdentificacionPNJ', () => {
+      component.form.controls['nombreTipoIdentificacionPNJ'].setValue('CEDULA')
+      expect(component.form.controls['nombreTipoIdentificacionPNJ'].value).toEqual('CEDULA');
+      expect(component.form.controls['nombreTipoIdentificacionPNJ'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  numeroIdentificacionPNJ', () => {
+    it('Se debio ejecutar el campo numeroIdentificacionPNJ', () => {
+      component.form.controls['numeroIdentificacionPNJ'].setValue(9999999999)
+      expect(component.form.controls['numeroIdentificacionPNJ'].value).toEqual(9999999999);
+    });
+  });
+
+  describe('Test unitarios al campo  nombreRazonSocialPNJ', () => {
+    it('Se debio ejecutar el campo nombreRazonSocialPNJ', () => {
+      component.form.controls['nombreRazonSocialPNJ'].setValue('PRUEBA')
+      expect(component.form.controls['nombreRazonSocialPNJ'].value).toEqual('PRUEBA');
+      expect(component.form.controls['nombreRazonSocialPNJ'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  telefonoPNJ', () => {
+    it('Se debio ejecutar el campo telefonoPNJ', () => {
+      component.form.controls['telefonoPNJ'].setValue(7777777)
+      expect(component.form.controls['telefonoPNJ'].value).toEqual(7777777);
+      expect(component.form.controls['telefonoPNJ'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  emailPNJ', () => {
+    it('Se debio ejecutar el campo emailPNJ', () => {
+      component.form.controls['emailPNJ'].setValue('AGGGGG@GMAIL.COM')
+      expect(component.form.controls['emailPNJ'].value).toEqual('AGGGGG@GMAIL.COM');
+      expect(component.form.controls['emailPNJ'].valid).toBeTrue();
+    });
+  });
+
+
+
+
+
+  describe('Test unitarios al campo keyCapchat', () => {
+    it('Se debio ejecutar el campo keyCapchat', () => {
+      component.form.controls['keyCapchat'].setValue(true)
+      expect(component.form.controls['keyCapchat'].value).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  nombreTipoIdentificacionPNJ', () => {
+    it('Se debio ejecutar el campo nombreTipoIdentificacionPNJ', () => {
+      component.form.controls['nombreTipoIdentificacionPNJ'].setValue('CEDULA')
+      expect(component.form.controls['nombreTipoIdentificacionPNJ'].value).toEqual('CEDULA');
+    });
+  });
+
 
   /*
 
@@ -330,5 +505,6 @@ fdescribe('FormFurtComponent', () => {
       expect(component.selectPersonaN).toBeTrue();
     });
   });
-*/
+
+  */
 });

@@ -305,6 +305,14 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     });
   }
 
+  agregarOQuitarValidadorCamposObligatorios(
+    campos: string[],
+  ): void {
+    for (let campo of campos) {
+        this.form.controls[campo].addValidators(Validators.required);
+    }
+  }
+
   openDialog() {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '700px',
