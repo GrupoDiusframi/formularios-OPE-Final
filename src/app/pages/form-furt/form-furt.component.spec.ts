@@ -225,9 +225,181 @@ fdescribe('FormFurtComponent', () => {
     });
   });
 
+  describe('Test unitarios al campo  direccionPNJ', () => {
+    it('Se debio ejecutar el campo direccionPNJ', () => {
+      component.form.controls['direccionPNJ'].setValue('CALLE 10')
+      expect(component.form.controls['direccionPNJ'].value).toEqual('CALLE 10');
+      expect(component.form.controls['direccionPNJ'].valid).toBeTrue();
+    });
+  });
 
+  describe('Test unitarios al campo  idPaisPNJ', () => {
+    it('Se debio ejecutar el campo idPaisPNJ', () => {
+      component.form.controls['idPaisPNJ'].setValue(80)
+      expect(component.form.controls['idPaisPNJ'].value).toEqual(80);
+      expect(component.form.controls['idPaisPNJ'].valid).toBeTrue();
+    });
+  });
 
+  describe('Test unitarios al campo  paisPNJ', () => {
+    it('Se debio ejecutar el campo paisPNJ', () => {
+      component.form.controls['paisPNJ'].setValue('COLOMBIA')
+      expect(component.form.controls['paisPNJ'].value).toEqual('COLOMBIA');
+      expect(component.form.controls['paisPNJ'].valid).toBeTrue();
+    });
+  });
 
+  describe('Test unitarios al campo  idDepartamentoPNJ', () => {
+    it('Se debio ejecutar el campo idDepartamentoPNJ', () => {
+      component.form.controls['idDepartamentoPNJ'].setValue(91)
+      expect(component.form.controls['idDepartamentoPNJ'].value).toEqual(91);
+      expect(component.form.controls['idDepartamentoPNJ'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  departamentoPNJ', () => {
+    it('Se debio ejecutar el campo departamentoPNJ', () => {
+      component.form.controls['departamentoPNJ'].setValue('ANTIOQUIA')
+      expect(component.form.controls['departamentoPNJ'].value).toEqual('ANTIOQUIA');
+      expect(component.form.controls['departamentoPNJ'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  idMunicipioPNJ', () => {
+    it('Se debio ejecutar el campo idMunicipioPNJ', () => {
+      component.form.controls['idMunicipioPNJ'].setValue(263)
+      expect(component.form.controls['idMunicipioPNJ'].value).toEqual(263);
+      expect(component.form.controls['idMunicipioPNJ'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  municipioPNJ', () => {
+    it('Se debio ejecutar el campo municipioPNJ', () => {
+      component.form.controls['municipioPNJ'].setValue('ARBOLETES')
+      expect(component.form.controls['municipioPNJ'].value).toEqual('ARBOLETES');
+      expect(component.form.controls['municipioPNJ'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  idTipoIdentificacionRem', () => {
+    it('Se debio ejecutar el campo idTipoIdentificacionRem', () => {
+      component.form.controls['idTipoIdentificacionRem'].setValue(1)
+      expect(component.form.controls['idTipoIdentificacionRem'].value).toEqual(1);
+      expect(component.form.controls['idTipoIdentificacionRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  nombreTipoIdentificacionRem', () => {
+    it('Se debio ejecutar el campo nombreTipoIdentificacionRem', () => {
+      component.form.controls['nombreTipoIdentificacionRem'].setValue('CEDULA')
+      expect(component.form.controls['nombreTipoIdentificacionRem'].value).toEqual('CEDULA');
+      expect(component.form.controls['nombreTipoIdentificacionRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  numeroIdentificacionRem', () => {
+    it('Se debio ejecutar el campo numeroIdentificacionRem', () => {
+      component.form.controls['numeroIdentificacionRem'].setValue(8888888888)
+      expect(component.form.controls['numeroIdentificacionRem'].value).toEqual(8888888888);
+      expect(component.form.controls['numeroIdentificacionRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  nombreRem', () => {
+    it('Se debio ejecutar el campo nombreRem', () => {
+      component.form.controls['nombreRem'].setValue('EDER')
+      expect(component.form.controls['nombreRem'].value).toEqual('EDER');
+      expect(component.form.controls['nombreRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  telefonoRem', () => {
+    it('Se debio ejecutar el campo telefonoRem', () => {
+      component.form.controls['telefonoRem'].setValue(5555555555)
+      expect(component.form.controls['telefonoRem'].value).toEqual(5555555555);
+      expect(component.form.controls['telefonoRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  emailRem', () => {
+    it('Se debio ejecutar el campo emailRem', () => {
+      component.form.controls['emailRem'].setValue('CARLOS1411@GMAIL.COM')
+      expect(component.form.controls['emailRem'].value).toEqual('CARLOS1411@GMAIL.COM');
+      expect(component.form.controls['emailRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  direccionRem', () => {
+    it('Se debio ejecutar el campo direccionRem', () => {
+      component.form.controls['direccionRem'].setValue('CALLE 100')
+      expect(component.form.controls['direccionRem'].value).toEqual('CALLE 100');
+      expect(component.form.controls['direccionRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  idPaisRem', () => {
+    it('Se debio ejecutar el campo idPaisRem', () => {
+      component.form.controls['idPaisRem'].setValue(80)
+      expect(component.form.controls['idPaisRem'].value).toEqual(80);
+      expect(component.form.controls['idPaisRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  paisRem', () => {
+    it('Se debio ejecutar el campo paisRem', () => {
+      component.form.controls['paisRem'].setValue('COLOMBIA')
+      expect(component.form.controls['paisRem'].value).toEqual('COLOMBIA');
+      expect(component.form.controls['paisRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  idDepartamentoRem', () => {
+    it('Se debio ejecutar el campo idDepartamentoRem', () => {
+      component.form.controls['idDepartamentoRem'].setValue(91)
+      expect(component.form.controls['idDepartamentoRem'].value).toEqual(91);
+      expect(component.form.controls['idDepartamentoRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  departamentoRem', () => {
+    it('Se debio ejecutar el campo departamentoRem', () => {
+      component.form.controls['departamentoRem'].setValue('ANTIOQUIA')
+      expect(component.form.controls['departamentoRem'].value).toEqual('ANTIOQUIA');
+      expect(component.form.controls['departamentoRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  idMunicipioRem', () => {
+    it('Se debio ejecutar el campo idMunicipioRem', () => {
+      component.form.controls['idMunicipioRem'].setValue(263)
+      expect(component.form.controls['idMunicipioRem'].value).toEqual(263);
+      expect(component.form.controls['idMunicipioRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  municipioRem', () => {
+    it('Se debio ejecutar el campo municipioRem', () => {
+      component.form.controls['municipioRem'].setValue('ARBOLETES')
+      expect(component.form.controls['municipioRem'].value).toEqual('ARBOLETES');
+      expect(component.form.controls['municipioRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  municipioRem', () => {
+    it('Se debio ejecutar el campo municipioRem', () => {
+      component.form.controls['municipioRem'].setValue('ARBOLETES')
+      expect(component.form.controls['municipioRem'].value).toEqual('ARBOLETES');
+      expect(component.form.controls['municipioRem'].valid).toBeTrue();
+    });
+  });
+
+  describe('Test unitarios al campo  emailRadicar', () => {
+    it('Se debio ejecutar el campo emailRadicar', () => {
+      component.form.controls['emailRadicar'].setValue('JULIOS5555@GMAIL.COM')
+      expect(component.form.controls['emailRadicar'].value).toEqual('JULIOS5555@GMAIL.COM');
+      expect(component.form.controls['emailRadicar'].valid).toBeTrue();
+    });
+  });
 
   describe('Test unitarios al campo keyCapchat', () => {
     it('Se debio ejecutar el campo keyCapchat', () => {
@@ -236,12 +408,7 @@ fdescribe('FormFurtComponent', () => {
     });
   });
 
-  describe('Test unitarios al campo  nombreTipoIdentificacionPNJ', () => {
-    it('Se debio ejecutar el campo nombreTipoIdentificacionPNJ', () => {
-      component.form.controls['nombreTipoIdentificacionPNJ'].setValue('CEDULA')
-      expect(component.form.controls['nombreTipoIdentificacionPNJ'].value).toEqual('CEDULA');
-    });
-  });
+
 
 
   /*
