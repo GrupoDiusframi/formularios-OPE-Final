@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
   providedIn: 'root'
 })
 export class FileUploadService {
-
+/*
   constructor(private messageService: MessageService) {}
 
   validationFile(target: HTMLInputElement): boolean {
@@ -42,5 +42,5 @@ export class FileUploadService {
   private validationFileSize(file: File, sizeBytes: number): boolean {
     return file.size <= sizeBytes;
   }
-
+*/
 }

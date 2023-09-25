@@ -38,24 +38,25 @@ import { PaisDTO } from 'src/pqrsd-api/src/src/models';
   styleUrls: ['./form-soborno-int.component.scss'],
 })
 export class FormSobornoIntComponent implements OnInit {
-  private readonly authorizationPqrsdApi = environment.authorizationPqrsdApi;
-  private fb: FormBuilder = inject(FormBuilder);
-  private paisService = inject(PaisesControllerService);
-  private messageService = inject(MessageService);
-  private fileUploadService: FileUploadService = new FileUploadService(this.messageService);
-  private tramitesServices = inject(TramitesServices);
 
+  //private readonly authorizationPqrsdApi = environment.authorizationPqrsdApi;
+ // private fb: FormBuilder = inject(FormBuilder);
+  //private paisService = inject(PaisesControllerService);
+  //private messageService = inject(MessageService);
+  //private fileUploadService: FileUploadService = new FileUploadService(this.messageService);
+  //private tramitesServices = inject(TramitesServices);
+/*
   form!: FormGroup;
   paises!: Array<PaisDTO>;
   uploadedFiles: Array<{[key:string]: File}> = [];
 
   @Input() procedure!: Tramites;
-
+*/
   ngOnInit(): void {
-    this.loadForm();
-    this.getListPais();
+    //this.loadForm();
+    //this.getListPais();
   }
-
+/*
   private loadForm(): void {
     this.form = this.fb.group({
       sabePersonaJuridica: ['No'],
@@ -118,5 +119,5 @@ export class FormSobornoIntComponent implements OnInit {
       }
     }
   }
-
+*/
 }

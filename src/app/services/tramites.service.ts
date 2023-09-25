@@ -50,7 +50,6 @@ export class TramitesServices {
 
   constructor(private httpClient: HttpClient) {
     this.generateToken();
-    this. getProfesor();
   }
 
 
@@ -169,9 +168,6 @@ export class TramitesServices {
     );
   }
 
-  getProfesor(): Observable<ProfesorResponse[]> {
-    return this.http.get<ProfesorResponse[]>(`http://localhost:8080/getProfesores`);
-  }
 
   generateToken(): void {
     let body = {

@@ -650,6 +650,13 @@ fdescribe('FormFurtComponent', () => {
     });
   });
 
+  describe('Test unitarios al metodo  getListTipoIdentificacion', () => {
+    it('Se debio ejecutar el metodo getListTipoIdentificacion, debe retornat true', () => {
+      component.getListTipoIdentificacion();
+      expect(component.getListTipoIdentificacion).toBeTruthy();
+    });
+  });
+
 
   describe('Test unitarios al metodo  sendEmail', () => {
     it('Se debio ejecutar el metodo sendEmail, debe retornat true', () => {
@@ -657,5 +664,6 @@ fdescribe('FormFurtComponent', () => {
       expect(component.sendEmail).toBeTruthy();
     });
   });
+
 
 });

@@ -9,6 +9,7 @@ import { Injectable, inject } from '@angular/core';
   providedIn: 'root'
 })
 export class NaturalLegalPersonService {
+/*
   private readonly apiCorrespondenciaUrlBase: string = environment.apiCorrespondenciaUrlBase;
   private http: HttpClient = inject(HttpClient);
   private _authService: AuthService = inject(AuthService);
@@ -21,4 +22,5 @@ export class NaturalLegalPersonService {
       throw new Error('No fue posible auntenticarse');
     }
   }
+  */
 }

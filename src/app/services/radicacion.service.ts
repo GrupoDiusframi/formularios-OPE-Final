@@ -7,6 +7,7 @@ import { Injectable, inject } from '@angular/core';
   providedIn: 'root'
 })
 export class RadicacionService {
+  /*
   private readonly apiCorrespondenciaUrlBase: string = environment.apiCorrespondenciaUrlBase;
   private http: HttpClient = inject(HttpClient);
   private _authService: AuthService = inject(AuthService);
@@ -17,5 +18,5 @@ export class RadicacionService {
       console.log('%c Hacemos de todo', 'background-color: #B2EED8;')
     }
   }
-
+*/
 }

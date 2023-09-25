@@ -47,9 +47,11 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     PaisesControllerService
   );
   private paisService = inject(PaisesControllerService);
+  /*
   private naturalLegalPersonService: NaturalLegalPersonService = inject(
     NaturalLegalPersonService
   );
+  */
   private fb: FormBuilder = inject(FormBuilder);
   private pqrsdService = inject(PqrsdControllerService);
   private tramitesServices = inject(TramitesServices);
@@ -108,7 +110,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   }
 
   handleChangeProcedure(idTramite: number) {}
-  private getListTipoIdentificacion(): void {
+  getListTipoIdentificacion(): void {
     this.pqrsdService
       .tiposIdentificacionAllUsingGET(this.authorizationPqrsdApi)
       .pipe(take(1))
@@ -203,7 +205,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
 */
   onChangeRemPNJ(isPNJ: boolean): void {
     this.isRemPNJ = isPNJ;
-    this.handleChangeRemPNJ();
+    //this.handleChangeRemPNJ();
   }
 
   showResponse(resp: any): void {
@@ -391,6 +393,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       .catch((err) => console.log(`%c ${err}`, 'background-color: #f3e295;'));
   }
 */
+/*
   private handleChangeNaturalLegalPerson(
     naturalLegalPerson: NaturalLegalPersonBody | null
   ): void {
@@ -471,7 +474,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       .get('municipioRem')
       ?.setValue(this.isRemPNJ ? this.form.value.municipioPNJ : null);
   }
-
+*/
   ngOnDestroy(): void {}
 
   progress: number = 0;
