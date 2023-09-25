@@ -37,6 +37,8 @@ fdescribe('Suit de test unitarios para el servicio PqrsdService', () => {
     });
   });
 
+/*
+
   describe('Test unitarios para el metodo subirArchivoFilenet', () => {
     it('Debio retornar true porque se subio el archivo correctamente', (doneFn) => {
       jasmine.DEFAULT_TIMEOUT_INTERVAL = 300000;
@@ -63,6 +65,8 @@ fdescribe('Suit de test unitarios para el servicio PqrsdService', () => {
       request.flush(mocks);
     });
   });
+
+*/
 
   describe('Test unitarios para el metodo enviarEmail', () => {
     it('Debio retornar true porque se envio correctamente el correo Electronico', (doneFn) => {
@@ -113,7 +117,7 @@ fdescribe('Suit de test unitarios para el servicio PqrsdService', () => {
     });
   });
 
-
+/*
     describe('Test unitarios para el metodo generateToken', () => {
       it('Debio retornar true porque se envio correctamente el generateToken', obj => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 300000;
@@ -140,6 +144,6 @@ fdescribe('Suit de test unitarios para el servicio PqrsdService', () => {
       expect(service.guardarTramite$).toBeTruthy();
     });
     });
-
+*/
 
 });

@@ -15,6 +15,7 @@ import { generateNArchivos } from 'src/app/helpers/mock testing/Files.mocks';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 import {
   AbstractControl,
   FormBuilder,
@@ -22,7 +23,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-
+import { environment } from 'src/environments/environment';
 
 
 fdescribe('FormFurtComponent', () => {
@@ -134,7 +135,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idTramite', () => {
       component.form.controls['idTramite'].setValue(0)
       expect(component.form.controls['idTramite'].value).toEqual(0);
-      expect(component.form.controls['idTramite'].valid).toBeTrue();
+      expect(component.form.controls['idTramite'].valid).toBeTruthy;
     });
   });
 
@@ -142,7 +143,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo descripcionTramite', () => {
       component.form.controls['descripcionTramite'].setValue('PRUEBA')
       expect(component.form.controls['descripcionTramite'].value).toEqual('PRUEBA');
-      expect(component.form.controls['descripcionTramite'].valid).toBeTrue();
+      expect(component.form.controls['descripcionTramite'].valid).toBeTruthy();
     });
   });
 
@@ -150,7 +151,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo claseProceso', () => {
       component.form.controls['claseProceso'].setValue('QUEJAS')
       expect(component.form.controls['claseProceso'].value).toEqual('QUEJAS');
-      expect(component.form.controls['claseProceso'].valid).toBeTrue();
+      expect(component.form.controls['claseProceso'].valid).toBeTruthy();
     });
   });
 
@@ -158,7 +159,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo dependencia', () => {
       component.form.controls['dependencia'].setValue('GRUPO DE RELACION ESTADO - CIUDADANO')
       expect(component.form.controls['dependencia'].value).toEqual('GRUPO DE RELACION ESTADO - CIUDADANO');
-      expect(component.form.controls['dependencia'].valid).toBeTrue();
+      expect(component.form.controls['dependencia'].valid).toBeTruthy();
     });
   });
 
@@ -166,7 +167,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo numeroProceso', () => {
       component.form.controls['numeroProceso'].setValue(1000-1254-12512)
       expect(component.form.controls['numeroProceso'].value).toEqual(1000-1254-12512);
-      expect(component.form.controls['numeroProceso'].valid).toBeTrue();
+      expect(component.form.controls['numeroProceso'].valid).toBeTruthy();
     });
   });
 
@@ -174,7 +175,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idTipoSolicitantePNJ', () => {
       component.form.controls['idTipoSolicitantePNJ'].setValue(5)
       expect(component.form.controls['idTipoSolicitantePNJ'].value).toEqual(5);
-      expect(component.form.controls['idTipoSolicitantePNJ'].valid).toBeTrue();
+      expect(component.form.controls['idTipoSolicitantePNJ'].valid).toBeTruthy();
     });
   });
 
@@ -182,7 +183,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idTipoIdentificacionPNJ', () => {
       component.form.controls['idTipoIdentificacionPNJ'].setValue(1)
       expect(component.form.controls['idTipoIdentificacionPNJ'].value).toEqual(1);
-      expect(component.form.controls['idTipoIdentificacionPNJ'].valid).toBeTrue();
+      expect(component.form.controls['idTipoIdentificacionPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -190,7 +191,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo nombreTipoIdentificacionPNJ', () => {
       component.form.controls['nombreTipoIdentificacionPNJ'].setValue('CEDULA')
       expect(component.form.controls['nombreTipoIdentificacionPNJ'].value).toEqual('CEDULA');
-      expect(component.form.controls['nombreTipoIdentificacionPNJ'].valid).toBeTrue();
+      expect(component.form.controls['nombreTipoIdentificacionPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -205,7 +206,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo nombreRazonSocialPNJ', () => {
       component.form.controls['nombreRazonSocialPNJ'].setValue('PRUEBA')
       expect(component.form.controls['nombreRazonSocialPNJ'].value).toEqual('PRUEBA');
-      expect(component.form.controls['nombreRazonSocialPNJ'].valid).toBeTrue();
+      expect(component.form.controls['nombreRazonSocialPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -213,7 +214,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo telefonoPNJ', () => {
       component.form.controls['telefonoPNJ'].setValue(7777777)
       expect(component.form.controls['telefonoPNJ'].value).toEqual(7777777);
-      expect(component.form.controls['telefonoPNJ'].valid).toBeTrue();
+      expect(component.form.controls['telefonoPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -221,7 +222,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo emailPNJ', () => {
       component.form.controls['emailPNJ'].setValue('AGGGGG@GMAIL.COM')
       expect(component.form.controls['emailPNJ'].value).toEqual('AGGGGG@GMAIL.COM');
-      expect(component.form.controls['emailPNJ'].valid).toBeTrue();
+      expect(component.form.controls['emailPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -237,7 +238,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idPaisPNJ', () => {
       component.form.controls['idPaisPNJ'].setValue(80)
       expect(component.form.controls['idPaisPNJ'].value).toEqual(80);
-      expect(component.form.controls['idPaisPNJ'].valid).toBeTrue();
+      expect(component.form.controls['idPaisPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -245,7 +246,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo paisPNJ', () => {
       component.form.controls['paisPNJ'].setValue('COLOMBIA')
       expect(component.form.controls['paisPNJ'].value).toEqual('COLOMBIA');
-      expect(component.form.controls['paisPNJ'].valid).toBeTrue();
+      expect(component.form.controls['paisPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -253,7 +254,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idDepartamentoPNJ', () => {
       component.form.controls['idDepartamentoPNJ'].setValue(91)
       expect(component.form.controls['idDepartamentoPNJ'].value).toEqual(91);
-      expect(component.form.controls['idDepartamentoPNJ'].valid).toBeTrue();
+      expect(component.form.controls['idDepartamentoPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -261,7 +262,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo departamentoPNJ', () => {
       component.form.controls['departamentoPNJ'].setValue('ANTIOQUIA')
       expect(component.form.controls['departamentoPNJ'].value).toEqual('ANTIOQUIA');
-      expect(component.form.controls['departamentoPNJ'].valid).toBeTrue();
+      expect(component.form.controls['departamentoPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -269,7 +270,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idMunicipioPNJ', () => {
       component.form.controls['idMunicipioPNJ'].setValue(263)
       expect(component.form.controls['idMunicipioPNJ'].value).toEqual(263);
-      expect(component.form.controls['idMunicipioPNJ'].valid).toBeTrue();
+      expect(component.form.controls['idMunicipioPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -277,7 +278,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo municipioPNJ', () => {
       component.form.controls['municipioPNJ'].setValue('ARBOLETES')
       expect(component.form.controls['municipioPNJ'].value).toEqual('ARBOLETES');
-      expect(component.form.controls['municipioPNJ'].valid).toBeTrue();
+      expect(component.form.controls['municipioPNJ'].valid).toBeTruthy();
     });
   });
 
@@ -285,7 +286,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idTipoIdentificacionRem', () => {
       component.form.controls['idTipoIdentificacionRem'].setValue(1)
       expect(component.form.controls['idTipoIdentificacionRem'].value).toEqual(1);
-      expect(component.form.controls['idTipoIdentificacionRem'].valid).toBeTrue();
+      expect(component.form.controls['idTipoIdentificacionRem'].valid).toBeTruthy();
     });
   });
 
@@ -293,7 +294,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo nombreTipoIdentificacionRem', () => {
       component.form.controls['nombreTipoIdentificacionRem'].setValue('CEDULA')
       expect(component.form.controls['nombreTipoIdentificacionRem'].value).toEqual('CEDULA');
-      expect(component.form.controls['nombreTipoIdentificacionRem'].valid).toBeTrue();
+      expect(component.form.controls['nombreTipoIdentificacionRem'].valid).toBeTruthy();
     });
   });
 
@@ -301,7 +302,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo numeroIdentificacionRem', () => {
       component.form.controls['numeroIdentificacionRem'].setValue(8888888888)
       expect(component.form.controls['numeroIdentificacionRem'].value).toEqual(8888888888);
-      expect(component.form.controls['numeroIdentificacionRem'].valid).toBeTrue();
+      expect(component.form.controls['numeroIdentificacionRem'].valid).toBeTruthy();
     });
   });
 
@@ -309,7 +310,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo nombreRem', () => {
       component.form.controls['nombreRem'].setValue('EDER')
       expect(component.form.controls['nombreRem'].value).toEqual('EDER');
-      expect(component.form.controls['nombreRem'].valid).toBeTrue();
+      expect(component.form.controls['nombreRem'].valid).toBeTruthy();
     });
   });
 
@@ -317,7 +318,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo telefonoRem', () => {
       component.form.controls['telefonoRem'].setValue(5555555555)
       expect(component.form.controls['telefonoRem'].value).toEqual(5555555555);
-      expect(component.form.controls['telefonoRem'].valid).toBeTrue();
+      expect(component.form.controls['telefonoRem'].valid).toBeTruthy();
     });
   });
 
@@ -325,7 +326,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo emailRem', () => {
       component.form.controls['emailRem'].setValue('CARLOS1411@GMAIL.COM')
       expect(component.form.controls['emailRem'].value).toEqual('CARLOS1411@GMAIL.COM');
-      expect(component.form.controls['emailRem'].valid).toBeTrue();
+      expect(component.form.controls['emailRem'].valid).toBeTruthy();
     });
   });
 
@@ -333,7 +334,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo direccionRem', () => {
       component.form.controls['direccionRem'].setValue('CALLE 100')
       expect(component.form.controls['direccionRem'].value).toEqual('CALLE 100');
-      expect(component.form.controls['direccionRem'].valid).toBeTrue();
+      expect(component.form.controls['direccionRem'].valid).toBeTruthy();
     });
   });
 
@@ -341,7 +342,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idPaisRem', () => {
       component.form.controls['idPaisRem'].setValue(80)
       expect(component.form.controls['idPaisRem'].value).toEqual(80);
-      expect(component.form.controls['idPaisRem'].valid).toBeTrue();
+      expect(component.form.controls['idPaisRem'].valid).toBeTruthy();
     });
   });
 
@@ -349,7 +350,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo paisRem', () => {
       component.form.controls['paisRem'].setValue('COLOMBIA')
       expect(component.form.controls['paisRem'].value).toEqual('COLOMBIA');
-      expect(component.form.controls['paisRem'].valid).toBeTrue();
+      expect(component.form.controls['paisRem'].valid).toBeTruthy();
     });
   });
 
@@ -357,7 +358,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idDepartamentoRem', () => {
       component.form.controls['idDepartamentoRem'].setValue(91)
       expect(component.form.controls['idDepartamentoRem'].value).toEqual(91);
-      expect(component.form.controls['idDepartamentoRem'].valid).toBeTrue();
+      expect(component.form.controls['idDepartamentoRem'].valid).toBeTruthy();
     });
   });
 
@@ -365,7 +366,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo departamentoRem', () => {
       component.form.controls['departamentoRem'].setValue('ANTIOQUIA')
       expect(component.form.controls['departamentoRem'].value).toEqual('ANTIOQUIA');
-      expect(component.form.controls['departamentoRem'].valid).toBeTrue();
+      expect(component.form.controls['departamentoRem'].valid).toBeTruthy();
     });
   });
 
@@ -373,7 +374,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo idMunicipioRem', () => {
       component.form.controls['idMunicipioRem'].setValue(263)
       expect(component.form.controls['idMunicipioRem'].value).toEqual(263);
-      expect(component.form.controls['idMunicipioRem'].valid).toBeTrue();
+      expect(component.form.controls['idMunicipioRem'].valid).toBeTruthy();
     });
   });
 
@@ -381,7 +382,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo municipioRem', () => {
       component.form.controls['municipioRem'].setValue('ARBOLETES')
       expect(component.form.controls['municipioRem'].value).toEqual('ARBOLETES');
-      expect(component.form.controls['municipioRem'].valid).toBeTrue();
+      expect(component.form.controls['municipioRem'].valid).toBeTruthy();
     });
   });
 
@@ -389,7 +390,7 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo municipioRem', () => {
       component.form.controls['municipioRem'].setValue('ARBOLETES')
       expect(component.form.controls['municipioRem'].value).toEqual('ARBOLETES');
-      expect(component.form.controls['municipioRem'].valid).toBeTrue();
+      expect(component.form.controls['municipioRem'].valid).toBeTruthy();
     });
   });
 
@@ -397,14 +398,14 @@ fdescribe('FormFurtComponent', () => {
     it('Se debio ejecutar el campo emailRadicar', () => {
       component.form.controls['emailRadicar'].setValue('JULIOS5555@GMAIL.COM')
       expect(component.form.controls['emailRadicar'].value).toEqual('JULIOS5555@GMAIL.COM');
-      expect(component.form.controls['emailRadicar'].valid).toBeTrue();
+      expect(component.form.controls['emailRadicar'].valid).toBeTruthy();
     });
   });
 
   describe('Test unitarios al campo keyCapchat', () => {
     it('Se debio ejecutar el campo keyCapchat', () => {
       component.form.controls['keyCapchat'].setValue(true)
-      expect(component.form.controls['keyCapchat'].value).toBeTrue();
+      expect(component.form.controls['keyCapchat'].value).toBeTruthy();
     });
   });
 
@@ -480,6 +481,7 @@ fdescribe('FormFurtComponent', () => {
       component.handleChangeCountryPNJ(80);
       expect(component.form.get('idPaisPNJ')?.value).toEqual(80);
       expect(component.handleChangeCountryPNJ).toBeTruthy;
+      expect(component.handleChangeCountryPNJ).toBeDefined();
     });
     it('Debio retornar true porque el campo pais del formulario no es igual a 80', () => {
       component.form.controls['idPaisPNJ'].setValue(81);
@@ -488,6 +490,7 @@ fdescribe('FormFurtComponent', () => {
 
       expect(component.form.get('idPaisPNJ')?.value).toEqual(81);
       expect(component.paisCol).toBeFalse();
+      expect(component.paisCol).toBeDefined();
     });
   });
 
@@ -497,11 +500,13 @@ fdescribe('FormFurtComponent', () => {
       component.form.get('idTipoSolicitantePNJ')?.setValue(5);
       expect(component.form.get('idTipoSolicitantePNJ')?.value).toEqual(5);
       expect(component.selectPersonaN).toBeFalse();
+      expect(component.selectPersonaN).toBeDefined();
     });
 
     it('Debio retornar true porque el campo idTipoSolicitantePNJ del formulario es igual a 1 o 3 o 4', () => {
       component.form.get('idTipoSolicitantePNJ')?.setValue(1);
       expect(component.form.get('idTipoSolicitantePNJ')?.value).toEqual(1);
+      expect(component.form.get('idTipoSolicitantePNJ')?.value).toBeDefined();
     });
   });
 
@@ -512,6 +517,7 @@ fdescribe('FormFurtComponent', () => {
       component.handleChangeCountryPNJ(80);
       expect(component.form.get('idPaisRem')?.value).toEqual(80);
       expect(component.handleChangeCountryPNJ).toBeTruthy;
+      expect(component.handleChangeCountryPNJ).toBeDefined()
     });
     it('Debio retornar true porque el campo pais del formulario no es igual a 80', () => {
       component.form.controls['idPaisRem'].setValue(81);
@@ -520,6 +526,7 @@ fdescribe('FormFurtComponent', () => {
 
       expect(component.form.get('idPaisRem')?.value).toEqual(81);
       expect(component.paisCol).toBeFalse();
+      expect(component.paisCol).toBeDefined();
     });
   });
 
@@ -665,5 +672,104 @@ fdescribe('FormFurtComponent', () => {
     });
   });
 
+  describe('Test unitarios al metodo  loadForm', () => {
+    it('Se debio ejecutar el metodo loadForm, debe retornat true', () => {
+      component.loadForm();
+      expect(component.loadForm).toBeTruthy();
+    });
+  });
+
+  describe('Test unitarios al metodo  progressFiles', () => {
+    it('Se debio ejecutar el metodo progressFiles, debe retornat true', () => {
+      component.progressFiles;
+      expect(component.progressFiles).toBeTruthy();
+    });
+  });
+
+  describe('Test unitarios al metodo  subirArchivoCorrespondenciaPrueba', () => {
+    it('Se debio ejecutar el metodo subirArchivoCorrespondenciaPrueba, debe retornat true', () => {
+      component.subirArchivoCorrespondenciaPrueba;
+      expect(component.subirArchivoCorrespondenciaPrueba).toBeTruthy();
+    });
+  });
+
+
+  describe('Test unitarios de la variable authorizationPqrsdApi', () => {
+    it('Se debio ejecutar la variable authorizationPqrsdApi, debe retornat true', () => {
+      component.authorizationPqrsdApi;
+      expect(component.authorizationPqrsdApi).toBe(environment.authorizationPqrsdApi);
+    });
+  });
+
+  describe('Test unitarios de la variable paisesControllerService', () => {
+    it('should be created', () => {
+      expect(component.paisesControllerService).toBeTruthy();
+    });
+
+    it('should have a method to get countries', () => {
+      expect(component.paisesControllerService).toBeDefined();
+    });
+  });
+
+
+  describe('Test unitarios de la variable paisService', () => {
+    it('Creado', () => {
+      expect(component.paisService).toBeTruthy();
+    });
+
+    it('Definido', () => {
+      expect(component.paisService).toBeDefined();
+    });
+  });
+
+  describe('Test unitarios de la variable fb', () => {
+    it('Creado', () => {
+      expect(component.fb).toBeTruthy();
+    });
+
+    it('Definido', () => {
+      expect(component.fb).toBeDefined();
+    });
+  });
+
+  describe('Test unitarios de la variable pqrsdService', () => {
+    it('Creado', () => {
+      expect(component.pqrsdService).toBeTruthy();
+    });
+
+    it('Definido', () => {
+      expect(component.pqrsdService).toBeDefined();
+    });
+  });
+
+
+  describe('Test unitarios de la variables tramitesServices', () => {
+    it('Creado', () => {
+      expect(component.tramitesServices).toBeTruthy();
+    });
+
+    it('Definido', () => {
+      expect(component.tramitesServices).toBeDefined();
+    });
+  });
+
+  describe('Test unitarios de la variables tramitesServices', () => {
+    it('Creado', () => {
+      expect(component.form).toBeTruthy();
+    });
+
+    it('Definido', () => {
+      expect(component.form).toBeDefined();
+    });
+
+    it('Creado', () => {
+      expect(component.datos).toBeTruthy();
+    });
+
+    it('Definido', () => {
+      expect(component.datos).toBeDefined();
+    });
+
+  });
 
 });

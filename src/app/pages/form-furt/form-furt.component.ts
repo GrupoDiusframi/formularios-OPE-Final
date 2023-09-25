@@ -1,4 +1,3 @@
-
 import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -9,9 +8,7 @@ import {
 } from '@angular/forms';
 
 // PRIMENG
-import {
-  InputSwitchOnChangeEvent,
-} from 'primeng/inputswitch';
+import { InputSwitchOnChangeEvent } from 'primeng/inputswitch';
 
 import { NaturalLegalPersonService } from 'src/app/services/natural-legal-person.service';
 import { Observable, Subject, Subscription, take, timer } from 'rxjs';
@@ -31,9 +28,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { PaisesControllerService, PqrsdControllerService } from 'src/pqrsd-api/src/src/services';
+import {
+  PaisesControllerService,
+  PqrsdControllerService,
+} from 'src/pqrsd-api/src/src/services';
 import { environment } from 'src/environments/environment';
-import { CiudadDTO, DepartamentoDTO, PaisDTO } from 'src/pqrsd-api/src/src/models';
+import {
+  CiudadDTO,
+  DepartamentoDTO,
+  PaisDTO,
+} from 'src/pqrsd-api/src/src/models';
 import { formatDate } from '@angular/common';
 
 @Component({
@@ -42,19 +46,19 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./form-furt.component.scss'],
 })
 export class FormFurtComponent implements OnInit, OnDestroy {
-  private readonly authorizationPqrsdApi = environment.authorizationPqrsdApi;
-  private paisesControllerService: PaisesControllerService = inject(
+  readonly authorizationPqrsdApi = environment.authorizationPqrsdApi;
+  paisesControllerService: PaisesControllerService = inject(
     PaisesControllerService
   );
-  private paisService = inject(PaisesControllerService);
+  paisService = inject(PaisesControllerService);
   /*
   private naturalLegalPersonService: NaturalLegalPersonService = inject(
     NaturalLegalPersonService
   );
   */
-  private fb: FormBuilder = inject(FormBuilder);
-  private pqrsdService = inject(PqrsdControllerService);
-  private tramitesServices = inject(TramitesServices);
+  fb: FormBuilder = inject(FormBuilder);
+  pqrsdService = inject(PqrsdControllerService);
+  tramitesServices = inject(TramitesServices);
 
   private destroy$ = new Subject<void>();
   loaderFile!: boolean;
@@ -93,7 +97,6 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   selectPersonaN: boolean = false;
   indicativo: string = ' ';
 
-
   subirArchivo: ISubirArchivo = {
     radicacion: '',
     archivo: '',
@@ -109,7 +112,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     this.getListTipoIdentificacion();
   }
 
-  handleChangeProcedure(idTramite: number) {}
+  //handleChangeProcedure(idTramite: number) {}
   getListTipoIdentificacion(): void {
     this.pqrsdService
       .tiposIdentificacionAllUsingGET(this.authorizationPqrsdApi)
@@ -198,7 +201,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       this.municipalitiesRem = [];
     }
   }
-/*
+  /*
   handleChangeNumeroIdentificacionPNJ(): void {
     this.getNaturalLegalPerson();
   }
@@ -220,7 +223,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     return ctrl.hasValidator(Validators.required);
   }
 
-  private loadForm(): void {
+  loadForm(): void {
     this.tipoSolicitante = this.procedure?.tiposSolicitante;
     this.documents = this.procedure?.documentos;
     this.form = this.fb.group({
@@ -308,11 +311,9 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     });
   }
 
-  agregarOQuitarValidadorCamposObligatorios(
-    campos: string[],
-  ): void {
+  agregarOQuitarValidadorCamposObligatorios(campos: string[]): void {
     for (let campo of campos) {
-        this.form.controls[campo].addValidators(Validators.required);
+      this.form.controls[campo].addValidators(Validators.required);
     }
   }
 
@@ -325,8 +326,6 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       disableClose: true,
     });
   }
-
-
 
   subirArchivoFilenet(): void {
     this.tramitesServices.subirArchivoFilenet(this.subirArchivo).subscribe(
@@ -360,7 +359,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
         },
       });
   }
-/*
+  /*
   private getNaturalLegalPerson(): void {
     if (
       !this.form.value.idTipoIdentificacionPNJ ||
@@ -393,7 +392,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       .catch((err) => console.log(`%c ${err}`, 'background-color: #f3e295;'));
   }
 */
-/*
+  /*
   private handleChangeNaturalLegalPerson(
     naturalLegalPerson: NaturalLegalPersonBody | null
   ): void {
@@ -580,7 +579,6 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   }
 
   guardarTramite() {
-    this.loader = true;
     let DateFormulario;
     DateFormulario = new Date();
     const fechaFormulario = formatDate(DateFormulario, 'yyyy-MM-dd', 'en-US');
