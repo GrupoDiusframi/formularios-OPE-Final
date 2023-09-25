@@ -339,7 +339,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getListPais(): void {
+  getListPais(): void {
     this.paisService
       .obtenerPaisesHandlerUsingGET(this.authorizationPqrsdApi)
       .pipe(take(1))
@@ -349,7 +349,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     console.log(this.countries);
   }
 
-  private getDepartments(): void {
+  getDepartments(): void {
     this.paisesControllerService
       .obtenerDepartamentosHandlerUsingGET(this.authorizationPqrsdApi)
       .subscribe({
@@ -577,6 +577,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   }
 
   guardarTramite() {
+    this.loader = true;
     let DateFormulario;
     DateFormulario = new Date();
     const fechaFormulario = formatDate(DateFormulario, 'yyyy-MM-dd', 'en-US');
