@@ -201,14 +201,9 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       this.municipalitiesRem = [];
     }
   }
-  /*
-  handleChangeNumeroIdentificacionPNJ(): void {
-    this.getNaturalLegalPerson();
-  }
-*/
+
   onChangeRemPNJ(isPNJ: boolean): void {
     this.isRemPNJ = isPNJ;
-    //this.handleChangeRemPNJ();
   }
 
   showResponse(resp: any): void {
@@ -359,121 +354,8 @@ export class FormFurtComponent implements OnInit, OnDestroy {
         },
       });
   }
-  /*
-  private getNaturalLegalPerson(): void {
-    if (
-      !this.form.value.idTipoIdentificacionPNJ ||
-      !this.form.value.numeroIdentificacionPNJ
-    )
-      return;
-    const params = {
-      idTipoIdentificacion: this.form.value.idTipoIdentificacionPNJ,
-      numeroIdentificacion: this.form.value.numeroIdentificacionPNJ,
-    };
-    this.naturalLegalPersonService
-      .naturalLegalPerson$(params)
-      .then(
-        (
-          observable: Observable<
-            Array<NaturalLegalPersonBody> | WithoutResponseBody
-          >
-        ) => {
-          observable.subscribe({
-            next: (data) => {
-              const naturalLegalPerson: NaturalLegalPersonBody | null =
-                data && (data as Array<NaturalLegalPersonBody>)[0];
-              this.handleChangeNaturalLegalPerson(naturalLegalPerson);
-            },
-            complete: () =>
-              (this.isReadonly = !!this.form.value.nombreRazonSocialPNJ),
-          });
-        }
-      )
-      .catch((err) => console.log(`%c ${err}`, 'background-color: #f3e295;'));
-  }
-*/
-  /*
-  private handleChangeNaturalLegalPerson(
-    naturalLegalPerson: NaturalLegalPersonBody | null
-  ): void {
-    this.form
-      .get('nombreRazonSocialPNJ')
-      ?.setValue(naturalLegalPerson?.razonSocial);
-    this.form
-      .get('telefonoPNJ')
-      ?.setValue(naturalLegalPerson?.telefonosResidencia);
-    this.form.get('emailPNJ')?.setValue(naturalLegalPerson?.correoElectronico);
-    this.form
-      .get('direccionPNJ')
-      ?.setValue(naturalLegalPerson?.direccionResidencia);
-    this.form.get('idPaisPNJ')?.setValue(naturalLegalPerson?.idPaisDomicilio);
-    //this.form.get('codigoPaisPNJ')?.setValue(naturalLegalPerson.);
-    this.form.get('paisPNJ')?.setValue(naturalLegalPerson?.paisDomicilio);
-    this.form
-      .get('idDepartamentoPNJ')
-      ?.setValue(naturalLegalPerson?.idDepartamentoDomicilio);
-    //this.form.get('codigoDepartamentoPNJ')?.setValue(naturalLegalPerson.);
-    this.form
-      .get('departamentoPNJ')
-      ?.setValue(naturalLegalPerson?.departamentoDomicilio);
-    this.form
-      .get('idMunicipioPNJ')
-      ?.setValue(naturalLegalPerson?.idCiudadDomicilio);
-    //this.form.get('codigoMunicipioPNJ')?.setValue(naturalLegalPerson.);
-    this.form
-      .get('municipioPNJ')
-      ?.setValue(naturalLegalPerson?.ciudadDomicilio);
-    this.handleChangeRemPNJ();
-  }
 
-  private handleChangeRemPNJ(): void {
-    this.form
-      .get('idTipoIdentificacionRem')
-      ?.setValue(
-        this.isRemPNJ ? this.form.value.idTipoIdentificacionPNJ : null
-      );
-    this.form
-      .get('nombreTipoIdentificacionRem')
-      ?.setValue(
-        this.isRemPNJ ? this.form.value.nombreTipoIdentificacionPNJ : null
-      );
-    this.form
-      .get('numeroIdentificacionRem')
-      ?.setValue(
-        this.isRemPNJ ? this.form.value.numeroIdentificacionPNJ : null
-      );
-    this.form
-      .get('nombreRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.nombreRazonSocialPNJ : null);
-    this.form
-      .get('telefonoRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.telefonoPNJ : null);
-    this.form
-      .get('emailRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.emailPNJ : null);
-    this.form
-      .get('direccionRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.direccionPNJ : null);
-    this.form
-      .get('idPaisRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.idPaisPNJ : null);
-    this.form
-      .get('paisRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.paisPNJ : null);
-    this.form
-      .get('idDepartamentoRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.idDepartamentoPNJ : null);
-    this.form
-      .get('departamentoRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.departamentoPNJ : null);
-    this.form
-      .get('idMunicipioRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.idMunicipioPNJ : null);
-    this.form
-      .get('municipioRem')
-      ?.setValue(this.isRemPNJ ? this.form.value.municipioPNJ : null);
-  }
-*/
+
   ngOnDestroy(): void {}
 
   progress: number = 0;
