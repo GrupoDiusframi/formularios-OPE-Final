@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 
 import { FormFurtComponent } from './form-furt.component';
 import {
@@ -44,6 +49,12 @@ import { environment } from 'src/environments/environment';
 import { ModalComponent } from '../modal/modal.component';
 import { of, throwError } from 'rxjs';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { DepartamentoDTO, PaisDTO } from 'src/pqrsd-api/src/src/models';
+import {
+  PaisesControllerService,
+  PqrsdControllerService,
+} from 'src/pqrsd-api/src/src/services';
+import { TipoIdentificacion } from 'src/app/interfaces/natural-legal-person';
 
 fdescribe('FormFurtComponent', () => {
   let component: FormFurtComponent;
@@ -124,6 +135,106 @@ fdescribe('FormFurtComponent', () => {
 
       expect(
         component.form.controls['idTipoSolicitantePNJ'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['idTipoIdentificacionPNJ'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['numeroIdentificacionPNJ'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['nombreRazonSocialPNJ'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['telefonoPNJ'].hasValidator(Validators.required)
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['emailPNJ'].hasValidator(Validators.required)
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['direccionPNJ'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['idPaisPNJ'].hasValidator(Validators.required)
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['idDepartamentoPNJ'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['idMunicipioPNJ'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['idTipoIdentificacionRem'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['numeroIdentificacionRem'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['nombreRem'].hasValidator(Validators.required)
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['telefonoRem'].hasValidator(Validators.required)
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['emailRem'].hasValidator(Validators.required)
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['direccionRem'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['idPaisRem'].hasValidator(Validators.required)
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['idDepartamentoRem'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['idMunicipioRem'].hasValidator(
+          Validators.required
+        )
+      ).toBeTruthy();
+
+      expect(
+        component.form.controls['emailRadicar'].hasValidator(
           Validators.required
         )
       ).toBeTruthy();
@@ -710,16 +821,44 @@ fdescribe('FormFurtComponent', () => {
   });
 
   describe('Test unitarios al metodo  getListPais', () => {
-    it('Se debio ejecutar el metodo getListPais, debe retornat true', () => {
+    it('debería cargar la lista de países correctamente', () => {
+      const paisService = TestBed.inject(PaisesControllerService);
+      const mockData: PaisDTO[] = [
+        // Define aquí un conjunto de datos de muestra para simular la respuesta del servicio
+        { nombre: 'País 1' },
+        { nombre: 'País 2' },
+      ];
+
+      spyOn(paisService, 'obtenerPaisesHandlerUsingGET').and.returnValue(
+        of(mockData) // Simula la respuesta del servicio usando RxJS 'of'
+      );
+
       component.getListPais();
-      expect(component.getListPais).toBeTruthy();
+
+      expect(component.countries).toEqual(mockData); // Verifica si la propiedad 'countries' se actualizó correctamente
     });
   });
 
   describe('Test unitarios al metodo  getDepartments', () => {
-    it('Se debio ejecutar el metodo getDepartments, debe retornat true', () => {
+    it('debería cargar la lista de departamentos correctamente', () => {
+      const paisesControllerService = TestBed.inject(PaisesControllerService);
+      const mockData: DepartamentoDTO[] = [
+        // Define aquí un conjunto de datos de muestra para simular la respuesta del servicio
+        { idDepartamento: 1 },
+        { idPais: 1 },
+        { nombreDepartamento: 'Departamento 1' },
+        { nombrePais: 'Departamento 2' },
+      ];
+      spyOn(
+        paisesControllerService,
+        'obtenerDepartamentosHandlerUsingGET'
+      ).and.returnValue(
+        of(mockData) // Simula la respuesta del servicio usando RxJS 'of'
+      );
+
       component.getDepartments();
-      expect(component.getDepartments).toBeTruthy();
+
+      expect(component.departments).toEqual(mockData); // Verifica si la propiedad 'departments' se actualizó correctamente
     });
   });
 
@@ -917,4 +1056,63 @@ fdescribe('FormFurtComponent', () => {
       );
     });
   });
+
+  describe('Test unitarios del metodo loadForm()', () => {
+    it('should create the form with loadForm() values', () => {
+      component.procedure = {
+        id: 1,
+        nombreGrupoTrabajo: 'GRUPO DE RELACION ESTADO - CIUDADANO',
+        codigoGrupoTrabajo: '548',
+        tiposSolicitante: [
+          {
+            codigo: '1',
+            nombre: 'Ciudadano',
+          },
+        ],
+        tipoSeguridadRadicacion: {
+          codigo: 'ABIERTA',
+          nombre: 'ABIERTA',
+        },
+        descripcionSolicitud: 'soli 2',
+        nombreAmigable: 'feli 1',
+        nombre: 'FELICITACIONES',
+        codigo: '94049',
+        proceso: {
+          codigo: '940',
+          nombre: 'QUEJAS',
+        },
+        documentos: [
+          {
+            extensiones: [
+              {
+                codigo: '4',
+                nombre: 'pdf',
+              },
+            ],
+            nombre: '1',
+            descripcion: '1',
+          },
+        ],
+        estado: true,
+        obligatorio: true,
+        documentoPrincipal: false,
+        funcionario: '29543633 - MELISSA LUCIO SAAVEDRA',
+      };
+
+      component.loadForm();
+
+      expect(component.form.get('validarCheck')).toBeTruthy();
+      expect(component.form.get('idTramite')?.value).toBe(1);
+      expect(component.form.get('descripcionTramite')?.value).toBe('soli 2');
+      // Aquí debes continuar con las expectativas para los otros campos
+    });
+  });
+
+  describe('Test unitarios del array cargaAnexos()', () => {
+    it('debería inicializar cargaAnexos como un array vacío', () => {
+      // Verifica que cargaAnexos se inicialice como un array vacío
+      expect(component.cargaAnexos).toEqual([]);
+    });
+  });
+
 });
