@@ -580,14 +580,23 @@
         <app-modal-term-cond
           (confirm)="confirmTermAndCond($event)"
         ></app-modal-term-cond>
-        <div class="field col-4">
-          <p-captcha
-            siteKey="6Le5DYoUAAAAALiF-eaGvTW180QVAdg6kMSewya6"
-            (onResponse)="showResponse($event)"
-          ></p-captcha>
+        <div>
+          <div class="field col-4">
+            <p-captcha
+              siteKey="6Le5DYoUAAAAALiF-eaGvTW180QVAdg6kMSewya6"
+              (onResponse)="showResponse($event)"
+            ></p-captcha>
+          </div>
         </div>
         <div class="field col-12">
-          <p-button [disabled]="!isCaptchaResolved || form.invalid || !confirmTermAndCond" label="Radicar" (click)="guardarTramite()"></p-button>
+          <p-button [disabled]="form.invalid || !confirmTermAndCond" label="Radicar" (click)="guardarTramite()"></p-button>
+          <div class="loader-container" *ngIf="saving">
+            <mat-progress-spinner
+              class="loader"
+              [diameter]="32"
+              [mode]="'indeterminate'"
+            ></mat-progress-spinner>
+          </div>
         </div>
       </div>
     </div>

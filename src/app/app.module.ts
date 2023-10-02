@@ -85,7 +85,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatFormFieldModule
 
   ],
-  providers: [TramitesServices,
+  providers: [TramitesServices, MessageService
   ],
   bootstrap: [AppComponent]
 })
