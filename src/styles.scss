@@ -1,5 +1,7 @@
-html, body app-modal{ height: 100%; }
-body app-modal{ margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+}
 
 body app-root {
   min-height: 100vh;
@@ -8,3 +10,31 @@ body app-root {
   font-family: "Open Sans", sans-serif;
 }
 
+.p-dropdown-item.p-ripple {
+  white-space: normal;
+}
+
+.container-input-file {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.85rem;
+  color: white;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+input[type="file"] + label {
+  background-color: #3b82f6;
+  border: 1px solid #3b82f6;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  display: inline;
+  padding: 0.7rem;
+}
+
+input[type="file"] + label:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}

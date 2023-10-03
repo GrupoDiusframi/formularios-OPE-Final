@@ -14,3 +14,20 @@
 .loader {
   /* Estilos adicionales para el mat-progress-spinner, si es necesario */
 }
+
+.body {
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+/* Reduce la altura de las pestañas */
+.p-accordionTab .p-accordionTab-header {
+  height: 30px; /* Cambia este valor según tus necesidades */
+  line-height: 30px; /* Ajusta la alineación vertical del texto dentro de la pestaña */
+}
+
+/* Reduce la altura del contenido de las pestañas */
+.p-accordionTab .p-accordionTab-content {
+  padding: 10px; /* Agrega relleno adicional si es necesario */
+  height: 150px; /* Cambia este valor según tus necesidades */
+}

@@ -1,4 +1,4 @@
-<div class="card md:mx-12 mb-2">
+<div class="body">
   <form [formGroup]="form" class="card-container">
     <p-accordion [multiple]="true">
       <p-accordionTab header="Información General" [selected]="true">
@@ -560,7 +560,6 @@
         </div>
       </p-accordionTab>
     </p-accordion>
-    <div class="card mt-2">
       <div class="p-fluid card-container px-3">
         <div class="field col-12">
           <span
@@ -577,19 +576,17 @@
               El campo correo es requerido.
           </small>
         </div>
-        <app-modal-term-cond
-          (confirm)="confirmTermAndCond($event)"
-        ></app-modal-term-cond>
-        <div>
+        <app-modal-term-cond (confirm)="confirmTermAndCond($event)" ></app-modal-term-cond>
           <div class="field col-4">
             <p-captcha
               siteKey="6Le5DYoUAAAAALiF-eaGvTW180QVAdg6kMSewya6"
               (onResponse)="showResponse($event)"
             ></p-captcha>
           </div>
-        </div>
         <div class="field col-12">
-          <p-button [disabled]="form.invalid || !confirmTermAndCond" label="Radicar" (click)="guardarTramite()"></p-button>
+          <p-button [disabled]="form.invalid || !confirmTermAndCond" label="Radicar"
+          class="btn btn-round btn-high" id="btnRadicar" style="font-size: 12px;"
+           (click)="guardarTramite()"></p-button>
           <div class="loader-container" *ngIf="saving">
             <mat-progress-spinner
               class="loader"
@@ -599,6 +596,5 @@
           </div>
         </div>
       </div>
-    </div>
   </form>
 </div>
