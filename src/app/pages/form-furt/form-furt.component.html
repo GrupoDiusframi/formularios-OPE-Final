@@ -576,7 +576,8 @@
               El campo correo es requerido.
           </small>
         </div>
-        <app-modal-term-cond (confirm)="confirmTermAndCond($event)" ></app-modal-term-cond>
+        <mat-checkbox #miCheckbox  class="example-margin" (change)="openDialogPrograma()">Autorizo a la Superintendencia de Sociedades para el uso de mis datos personales según los términos y condiciones disponibles Aquí</mat-checkbox>
+       <!--app-modal-term-cond (confirm)="confirmTermAndCond($event)" ></app-modal-term-cond>-->
           <div class="field col-4">
             <p-captcha
               siteKey="6Le5DYoUAAAAALiF-eaGvTW180QVAdg6kMSewya6"

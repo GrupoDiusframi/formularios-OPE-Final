@@ -1,3 +1,41 @@
 .p-dialog-content {
   height: 300px !important;
 }
+
+.scrollable-dialog {
+  max-height: 80%; /* Ajusta la altura máxima según tus necesidades */
+}
+
+.scrollable-content {
+  overflow-y: auto; /* Activa la barra de desplazamiento vertical cuando sea necesario */
+}
+.body {
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 5%;
+  border-radius: 50%;
+}
+
+.botones{
+  text-align: center;
+}
+
+.cancelar {
+  border: none;
+  background-color: #007bff;
+  padding: 14px 28px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.guardar {
+  margin-left: 20px;
+  border: none;
+  background-color: #007bff;
+  padding: 14px 28px;
+  cursor: pointer;
+  border-radius: 5px;
+
+}
+hover {
+  background: #0b7dda;
+}

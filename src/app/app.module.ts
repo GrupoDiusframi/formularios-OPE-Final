@@ -38,6 +38,7 @@ import { AuthService } from './services/auth.service';
 import { NgModule, forwardRef } from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 
@@ -82,7 +83,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     FileUploadModule,
     ToastModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatCheckboxModule
 
   ],
   providers: [TramitesServices, MessageService,

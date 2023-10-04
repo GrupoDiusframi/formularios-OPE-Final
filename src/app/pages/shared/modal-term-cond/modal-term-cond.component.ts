@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
+import { HttpClient } from '@angular/common/http';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-modal-term-cond',
@@ -28,7 +30,10 @@ export class ModalTermCondComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
   }
-  
+
+  constructor(private http: HttpClient,
+    public _dialogRef: MatDialogRef<ModalTermCondComponent>,) { }
+
   showDialogTermCond(event: Event): void {
     const target = event.target as HTMLInputElement;
     target.checked = false;
@@ -42,7 +47,7 @@ export class ModalTermCondComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
+
   private closeDialogTermCond(confirm: boolean): void {
     if (!confirm || (confirm && this.enabledButtonConfirm)) {
       this.valueCheckBox = confirm;
@@ -65,4 +70,13 @@ export class ModalTermCondComponent implements OnInit, OnDestroy {
       this.notifier.complete();
   }
 
+  save(): void {
+    const respuesta:boolean = true;
+    this._dialogRef.close(respuesta);
+  }
+
+  cerrar(){
+    const respuesta:boolean = false;
+    this._dialogRef.close(respuesta);
+  }
 }

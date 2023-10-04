@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -39,6 +39,8 @@ import {
   PaisDTO,
 } from 'src/pqrsd-api/src/src/models';
 import { formatDate } from '@angular/common';
+import { ModalTermCondComponent } from '../shared/modal-term-cond/modal-term-cond.component';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-form-furt',
@@ -67,6 +69,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   loader!: boolean;
   numeroTramite!: string;
   readonly processNumberRegex: RegExp = /[0-9]{4}-[0-9]{3}-[0-9]{3}$/;
+  @ViewChild('miCheckbox') miCheckbox!: MatCheckbox;
 
   form!: FormGroup;
   datos: Array<Tramites> = [];
@@ -112,6 +115,28 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     this.getDepartments();
     this.getListTipoIdentificacion();
   }
+
+  cambiarEstadoCheckbox(estado: boolean): void {
+    this.miCheckbox.checked = estado; // Establece el estado del checkbox
+  }
+
+  openDialogPrograma(): void {
+    const dialogRef = this.dialog.open(ModalTermCondComponent, {
+      width: '70%',
+      height: '80%',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.cambiarEstadoCheckbox(true); // Marcar el checkbox programáticamente
+      }
+      if(!result){
+        this.cambiarEstadoCheckbox(false);
+      }
+    });
+
+  }
+
 
   //handleChangeProcedure(idTramite: number) {}
   getListTipoIdentificacion(): void {
