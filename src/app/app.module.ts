@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CaptchaModule } from 'primeng/captcha';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -26,7 +26,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
-import { CaptchaModule } from 'primeng/captcha';
 import { ModalTermCondComponent } from './pages/shared/modal-term-cond/modal-term-cond.component';
 import { MessageService } from 'primeng/api';
 import { PanelModule } from 'primeng/panel';

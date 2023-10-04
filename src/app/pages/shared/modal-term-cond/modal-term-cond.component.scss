@@ -3,11 +3,12 @@
 }
 
 .scrollable-dialog {
-  max-height: 80%; /* Ajusta la altura máxima según tus necesidades */
+  max-height: 80%;
+  margin-right: 3%;
 }
-
 .scrollable-content {
-  overflow-y: auto; /* Activa la barra de desplazamiento vertical cuando sea necesario */
+  overflow-y: auto;
+  margin-right: 3%;
 }
 .body {
   margin-left: 5%;

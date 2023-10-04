@@ -128,7 +128,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        this.cambiarEstadoCheckbox(true); // Marcar el checkbox programáticamente
+        this.cambiarEstadoCheckbox(true);
       }
       if(!result){
         this.cambiarEstadoCheckbox(false);
