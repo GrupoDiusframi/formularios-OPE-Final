@@ -14,17 +14,6 @@ body app-root {
   white-space: normal;
 }
 
-.container-input-file {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 0.85rem;
-  color: white;
-}
-
-input[type="file"] {
-  display: none;
-}
-
 input[type="file"] + label {
   background-color: #3b82f6;
   border: 1px solid #3b82f6;

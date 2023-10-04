@@ -1,21 +1,6 @@
-.p-dialog-content {
-  height: 300px !important;
-}
-
-.scrollable-dialog {
-  max-height: 80%;
-  margin-right: 3%;
-}
-.scrollable-content {
-  overflow-y: auto;
-  margin-right: 3%;
-}
 
 
-  .modal-content {
-    padding: 20px; /* Ajusta el valor según tus necesidades */
-    border: 1px solid #ccc; /* Solo para fines de demostración */
-  }
+
 
 .body {
   margin-left: 5%;
@@ -30,6 +15,7 @@
   font-weight: 600;
   color: #004884;
   line-height: 1.5 !important;
+  text-align: left;
 }
 
 .texto{
@@ -39,14 +25,14 @@
 }
 
 .botones{
-  text-align: center;
+  text-align: right;
+  margin-top: 2%;
 }
 
 .cancelar {
   border: none;
   background-color: #007bff;
   padding: 14px 28px;
-  cursor: pointer;
   border-radius: 5px;
 }
 .guardar {
@@ -54,10 +40,37 @@
   border: none;
   background-color: #007bff;
   padding: 14px 28px;
-  cursor: pointer;
   border-radius: 5px;
 
 }
 hover {
   background: #0b7dda;
+}
+
+.header {
+  color: #004884;
+  position: fixed;
+  text-align: center;
+
+}
+
+.scrollable-content {
+  margin-top: 60px;
+  height: 400px;
+  border: 1px solid #ccc;
+  padding: 20px;
+  overflow-y: scroll;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+  /* Estilo personalizado para el pulgar de la barra de desplazamiento (puede omitirse si no es necesario) */
+  background-color: #888;
+  border-radius: 6px;
+}
+
+:host {
+  display: block;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }

@@ -1,8 +1,7 @@
 <div class="body">
   <form [formGroup]="form" class="card-container">
-    <p-accordion [multiple]="true">
-      <p-accordionTab header="Información General" [selected]="true">
-        <div class="card p-fluid">
+      <p-accordion [multiple]="true">
+        <p-accordionTab header="Información General" [selected]="true">
           <div class="grid p-fluid card-container pt-2">
             <div class="field col-12">
               <span class="p-float-label">
@@ -95,10 +94,8 @@
               </span>
             </div>
           </div>
-        </div>
-      </p-accordionTab>
-      <p-accordionTab header="Información persona natural / jurídica">
-        <div class="card">
+        </p-accordionTab>
+        <p-accordionTab header="Información persona natural / jurídica">
           <div class="grid p-fluid card-container pt-2">
             <div class="field col-12 md:col-4">
               <span class="p-float-label">
@@ -479,10 +476,8 @@
               </p>
             </div>
           </div>
-        </div>
-      </p-accordionTab>
-      <p-accordionTab header="Información remitente">
-        <div class="card">
+        </p-accordionTab>
+        <p-accordionTab header="Información remitente">
           <div class="grid p-fluid card-container pt-2">
             <div class="field col-12">
               <div class="flex flex-wrap flex-justify-content">
@@ -845,46 +840,45 @@
               </p>
             </div>
           </div>
-        </div>
-      </p-accordionTab>
-      <p-accordionTab header="Cargue de documentos">
-        <div class="card">
-          <div class="card-container">
-            <p-table [value]="documents">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Selección</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-document>
-                <tr>
-                  <td>{{ document.nombre }}</td>
-                  <td>{{ document.descripcion }}</td>
-                  <td>
-                    <div class="row">
-                      <div
-                        class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5"
-                      >
-                        <button
-                          color="primary"
-                          mat-button
-                          (click)="openDialog()"
-                          class="btn btn-outline-info"
+        </p-accordionTab>
+        <p-accordionTab header="Cargue de documentos">
+          <div class="card">
+            <div class="card-container">
+              <p-table [value]="documents">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Selección</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-document>
+                  <tr>
+                    <td>{{ document.nombre }}</td>
+                    <td>{{ document.descripcion }}</td>
+                    <td>
+                      <div class="row">
+                        <div
+                          class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5"
                         >
-                          Adjuntar archivo
-                        </button>
+                          <button
+                            color="primary"
+                            mat-button
+                            (click)="openDialog()"
+                            class="btn btn-outline-info"
+                          >
+                            Adjuntar archivo
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
           </div>
-        </div>
-      </p-accordionTab>
-    </p-accordion>
+        </p-accordionTab>
+      </p-accordion>
     <div class="p-fluid card-container px-3">
       <div class="field col-12">
         <span>Correo al que desea se le envíe el soporte de la radicación</span>
