@@ -928,7 +928,6 @@
           siteKey="6Le5DYoUAAAAALiF-eaGvTW180QVAdg6kMSewya6"
           (success)="showResponse($event)"
           [useGlobalDomain]="false"
-          formControlName="recaptcha"
         >
         </ngx-recaptcha2>
       </div>
@@ -939,7 +938,6 @@
           label="Radicar"
           class="btn btn-round btn-high"
           id="btnRadicar"
-          style="font-size: 12px"
           (click)="guardarTramite()"
         ></p-button>
         <div class="loader-container" *ngIf="saving">

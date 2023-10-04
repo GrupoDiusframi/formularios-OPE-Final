@@ -79,38 +79,6 @@ export class TramitesServices {
     });
   }
 
-/*
-  listaTramites$ = async (): Promise<Observable<Array<Tramites>>> => {
-    const userValidated = await this._authService.checkLogin();
-    //const  userValidated = await lastValueFrom(this.signIn$);
-    if (userValidated) {
-      const headers = new HttpHeaders()
-        .set('Authorization', `Bearer ${userValidated.token}`)
-        .set('Content-Type', 'application/json');
-      return this.http.post<Array<Tramites>>(
-        `${this.apiCorrespondenciaUrlBase}tramites/api/v1/buscarTramites`,
-        JSON.stringify({}),
-        { headers }
-      );
-    } else {
-      throw new Error('No fue posible auntenticarse');
-    }
-  };
-*/
-  /*
-  guardarTramite$ = async  (orderRequest: RadicacionRequestDto): Promise<Observable<RadicacionRequestDto>> =>{
-    const userValidated = await this._authService.checkLogin();
-    if (userValidated) {
-      const headers = new HttpHeaders() .set('Authorization', `Bearer ${userValidated.token}`).set('Content-Type', 'application/json');
-      return this.http.post<RadicacionRequestDto>(`${this.apiCorrespondenciaUrlBaseRadicar}desacople-services/api/v3/radicacionEntrada`,
-        orderRequest, { headers });
-    }
-    else {
-      throw new Error('No fue posible auntenticarse');
-    }
-
-  }
-*/
   guardarTramite$(orderRequest: RadicacionRequestDto): Observable<any> {
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${this.token}`)
@@ -183,7 +151,6 @@ export class TramitesServices {
         {
         next: (res:any) => {
           this.token = res.token;
-          console.log(res);
         },
       }),(error:any) => {
         console.error('Error al obtener la lista de trámites:', error);
