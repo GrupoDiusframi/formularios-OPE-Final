@@ -1,4 +1,5 @@
-import { CaptchaModule } from 'primeng/captcha';
+
+
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -38,6 +39,7 @@ import { NgModule, forwardRef } from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 
 
@@ -74,7 +76,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     TooltipModule,
     KeyFilterModule,
     TableModule,
-    CaptchaModule,
+    NgxCaptchaModule,
     CheckboxModule,
     ModalTermCondComponent,
     PanelModule,

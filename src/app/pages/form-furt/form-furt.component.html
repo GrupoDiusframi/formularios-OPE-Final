@@ -6,29 +6,52 @@
           <div class="grid p-fluid card-container pt-2">
             <div class="field col-12">
               <span class="p-float-label">
-                <textarea readonly
+                <textarea
+                  readonly
                   id="float-input"
                   rows="5"
                   cols="30"
-                  pInputTextarea formControlName="descripcionTramite"
+                  pInputTextarea
+                  formControlName="descripcionTramite"
                 ></textarea>
                 <label for="float-input">Descripción del Trámite:</label>
               </span>
             </div>
             <div class="field col-12 md:col-6">
               <span class="p-float-label">
-                <input readonly id="float-input" type="text" pInputText  formControlName="claseProceso"/>
+                <input
+                  readonly
+                  id="float-input"
+                  type="text"
+                  pInputText
+                  formControlName="claseProceso"
+                />
                 <label for="float-input">Proceso</label>
               </span>
             </div>
             <div class="field col-12 md:col-6">
               <span class="p-float-label">
-                <input readonly id="float-input" type="text" pInputText descripcion="dependencia"  formControlName="dependencia"/>
-                <label for="float-input">Dependencia <small class="p-error">*</small></label>
+                <input
+                  readonly
+                  id="float-input"
+                  type="text"
+                  pInputText
+                  descripcion="dependencia"
+                  formControlName="dependencia"
+                />
+                <label for="float-input"
+                  >Dependencia <small class="p-error">*</small></label
+                >
               </span>
-              <small *ngIf="form.controls['dependencia'].hasError('required')
-                && (form.controls['dependencia'].dirty || form.controls['dependencia'].touched)">
-                El campo dependencia es requerido.</small>
+              <small
+                *ngIf="
+                  form.controls['dependencia'].hasError('required') &&
+                  (form.controls['dependencia'].dirty ||
+                    form.controls['dependencia'].touched)
+                "
+              >
+                El campo dependencia es requerido.</small
+              >
             </div>
             <div class="field col-12 md:col-6">
               <span class="flex flex-wrap align-content-center p-label">
@@ -52,9 +75,13 @@
             <div class="field col-12 md:col-6">
               <span>
                 <div class="flex flex-row">
-                  <label for="processNumber" class="mr-2">Número de proceso</label>
-                  <i class="flex align-items-center pi pi-info-circle"
-                    pTooltip="Ingrese el número del proceso existente en la superintendencia de sociedades, ejemplo: 1234-123-123"></i>
+                  <label for="processNumber" class="mr-2"
+                    >Número de proceso</label
+                  >
+                  <i
+                    class="flex align-items-center pi pi-info-circle"
+                    pTooltip="Ingrese el número del proceso existente en la superintendencia de sociedades, ejemplo: 1234-123-123"
+                  ></i>
                 </div>
                 <input
                   id="processNumber"
@@ -86,10 +113,18 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   formControlName="idTipoSolicitantePNJ"
                 ></p-dropdown>
-                <label for="applicantType">Tipo solicitante <small class="p-error">*</small></label>
+                <label for="applicantType"
+                  >Tipo solicitante <small class="p-error">*</small></label
+                >
               </span>
-              <small *ngIf="form.controls['idTipoSolicitantePNJ'].hasError('required')
-                && (form.controls['idTipoSolicitantePNJ'].dirty || form.controls['idTipoSolicitantePNJ'].touched)" class="p-error block">
+              <small
+                *ngIf="
+                  form.controls['idTipoSolicitantePNJ'].hasError('required') &&
+                  (form.controls['idTipoSolicitantePNJ'].dirty ||
+                    form.controls['idTipoSolicitantePNJ'].touched)
+                "
+                class="p-error block"
+              >
                 El campo tipo solicitante es requerido.
               </small>
             </div>
@@ -106,11 +141,21 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   formControlName="idTipoIdentificacionPNJ"
                 ></p-dropdown>
-                <label for="documentType">Tipo identificación <small class="p-error">*</small></label>
+                <label for="documentType"
+                  >Tipo identificación <small class="p-error">*</small></label
+                >
               </span>
-              <small *ngIf="form.controls['idTipoIdentificacionPNJ'].hasError('required')
-                && (form.controls['idTipoIdentificacionPNJ'].dirty || form.controls['idTipoIdentificacionPNJ'].touched)"
-                class="p-error block">El campo tipo identificación es requerido.</small>
+              <small
+                *ngIf="
+                  form.controls['idTipoIdentificacionPNJ'].hasError(
+                    'required'
+                  ) &&
+                  (form.controls['idTipoIdentificacionPNJ'].dirty ||
+                    form.controls['idTipoIdentificacionPNJ'].touched)
+                "
+                class="p-error block"
+                >El campo tipo identificación es requerido.</small
+              >
             </div>
             <div class="field col-12 md:col-4">
               <span class="p-float-label">
@@ -122,15 +167,38 @@
                   pKeyFilter="int"
                   maxlength="15"
                 />
-                <label for="documentNumber">No. identificación <small class="p-error">*</small></label>
+                <label for="documentNumber"
+                  >No. identificación <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['numeroIdentificacionPNJ'].value?.length || 0 }} / 15</small>
-                <small *ngIf="form.controls['numeroIdentificacionPNJ'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{
+                    form.controls["numeroIdentificacionPNJ"].value?.length || 0
+                  }}
+                  / 15</small
+                >
+                <small
+                  *ngIf="
+                    form.controls['numeroIdentificacionPNJ'].hasError(
+                      'minlength'
+                    )
+                  "
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitido es 7.
                 </small>
-                <small *ngIf="form.controls['numeroIdentificacionPNJ'].hasError('required')
-                  && (form.controls['numeroIdentificacionPNJ'].dirty || form.controls['numeroIdentificacionPNJ'].touched)">
+                <small
+                  *ngIf="
+                    form.controls['numeroIdentificacionPNJ'].hasError(
+                      'required'
+                    ) &&
+                    (form.controls['numeroIdentificacionPNJ'].dirty ||
+                      form.controls['numeroIdentificacionPNJ'].touched)
+                  "
+                >
                   El campo número de identificación es requerido.
                 </small>
               </div>
@@ -145,15 +213,37 @@
                   maxlength="100"
                   [readonly]="isReadonly"
                 />
-                <label for="float-input">Nombre/Razón social <small class="p-error">*</small></label>
+                <label for="float-input"
+                  >Nombre/Razón social <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['nombreRazonSocialPNJ'].value?.length || 0 }} / 100</small>
-                <small *ngIf="form.controls['nombreRazonSocialPNJ'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{
+                    form.controls["nombreRazonSocialPNJ"].value?.length || 0
+                  }}
+                  / 100</small
+                >
+                <small
+                  *ngIf="
+                    form.controls['nombreRazonSocialPNJ'].hasError('minlength')
+                  "
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitido es 3.
                 </small>
-                <small *ngIf="form.controls['nombreRazonSocialPNJ'].hasError('required')
-                  && (form.controls['nombreRazonSocialPNJ'].dirty || form.controls['nombreRazonSocialPNJ'].touched)" class="p-error block">
+                <small
+                  *ngIf="
+                    form.controls['nombreRazonSocialPNJ'].hasError(
+                      'required'
+                    ) &&
+                    (form.controls['nombreRazonSocialPNJ'].dirty ||
+                      form.controls['nombreRazonSocialPNJ'].touched)
+                  "
+                  class="p-error block"
+                >
                   El campo Nombre/Razón Social es requerido.
                 </small>
               </div>
@@ -169,15 +259,31 @@
                   maxlength="10"
                   [readonly]="isReadonly"
                 />
-                <label for="float-input">Teléfono <small class="p-error">*</small></label>
+                <label for="float-input"
+                  >Teléfono <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['telefonoPNJ'].value?.length || 0 }} / 10</small>
-                <small *ngIf="form.controls['telefonoPNJ'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{ form.controls["telefonoPNJ"].value?.length || 0 }} /
+                  10</small
+                >
+                <small
+                  *ngIf="form.controls['telefonoPNJ'].hasError('minlength')"
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitido es 7.
                 </small>
-                <small *ngIf="form.controls['telefonoPNJ'].hasError('required')
-                  && (form.controls['telefonoPNJ'].dirty || form.controls['telefonoPNJ'].touched)" class="p-error block">
+                <small
+                  *ngIf="
+                    form.controls['telefonoPNJ'].hasError('required') &&
+                    (form.controls['telefonoPNJ'].dirty ||
+                      form.controls['telefonoPNJ'].touched)
+                  "
+                  class="p-error block"
+                >
                   El campo teléfono es requerido.
                 </small>
               </div>
@@ -192,15 +298,31 @@
                   maxlength="50"
                   [readonly]="isReadonly"
                 />
-                <label for="float-input">Email <small class="p-error">*</small></label>
+                <label for="float-input"
+                  >Email <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['emailPNJ'].value?.length || 0 }} / 50</small>
-                <small *ngIf="form.controls['emailPNJ'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{ form.controls["emailPNJ"].value?.length || 0 }} /
+                  50</small
+                >
+                <small
+                  *ngIf="form.controls['emailPNJ'].hasError('minlength')"
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitido es 7.
                 </small>
-                <small *ngIf="form.controls['emailPNJ'].hasError('required')
-                  && (form.controls['emailPNJ'].dirty || form.controls['emailPNJ'].touched)" class="p-error block">
+                <small
+                  *ngIf="
+                    form.controls['emailPNJ'].hasError('required') &&
+                    (form.controls['emailPNJ'].dirty ||
+                      form.controls['emailPNJ'].touched)
+                  "
+                  class="p-error block"
+                >
                   El campo Email es requerido.
                 </small>
               </div>
@@ -215,15 +337,31 @@
                   maxlength="50"
                   [readonly]="isReadonly"
                 />
-                <label for="float-input">Dirección <small class="p-error">*</small></label>
+                <label for="float-input"
+                  >Dirección <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['direccionPNJ'].value?.length || 0 }} / 50</small>
-                <small *ngIf="form.controls['direccionPNJ'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{ form.controls["direccionPNJ"].value?.length || 0 }} /
+                  50</small
+                >
+                <small
+                  *ngIf="form.controls['direccionPNJ'].hasError('minlength')"
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitido es 5.
                 </small>
-                <small *ngIf="form.controls['direccionPNJ'].hasError('required')
-                  && (form.controls['direccionPNJ'].dirty || form.controls['direccionPNJ'].touched)" class="p-error block">
+                <small
+                  *ngIf="
+                    form.controls['direccionPNJ'].hasError('required') &&
+                    (form.controls['direccionPNJ'].dirty ||
+                      form.controls['direccionPNJ'].touched)
+                  "
+                  class="p-error block"
+                >
                   El campo dirección es requerido.
                 </small>
               </div>
@@ -242,11 +380,19 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   (ngModelChange)="handleChangeCountryPNJ($event)"
                 ></p-dropdown>
-                <label for="countries">País <small class="p-error">*</small></label>
+                <label for="countries"
+                  >País <small class="p-error">*</small></label
+                >
               </span>
-              <small *ngIf="form.controls['idPaisPNJ'].hasError('required')
-                  && (form.controls['idPaisPNJ'].dirty || form.controls['idPaisPNJ'].touched)" class="p-error block">
-                  El campo país es requerido.
+              <small
+                *ngIf="
+                  form.controls['idPaisPNJ'].hasError('required') &&
+                  (form.controls['idPaisPNJ'].dirty ||
+                    form.controls['idPaisPNJ'].touched)
+                "
+                class="p-error block"
+              >
+                El campo país es requerido.
               </small>
             </div>
             <div class="field col-12 md:col-4">
@@ -263,11 +409,25 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   (ngModelChange)="handleChangeDepartmentPNJ($event)"
                 ></p-dropdown>
-                <label for="departments">Departamento <small *ngIf="isRequiredFormControl(form.controls['idDepartamentoPNJ'])"
-                  class="p-error">*</small></label>
+                <label for="departments"
+                  >Departamento
+                  <small
+                    *ngIf="
+                      isRequiredFormControl(form.controls['idDepartamentoPNJ'])
+                    "
+                    class="p-error"
+                    >*</small
+                  ></label
+                >
               </span>
-              <small *ngIf="form.controls['idDepartamentoPNJ'].hasError('required')
-                && (form.controls['idDepartamentoPNJ'].dirty || form.controls['idDepartamentoPNJ'].touched)" class="p-error block">
+              <small
+                *ngIf="
+                  form.controls['idDepartamentoPNJ'].hasError('required') &&
+                  (form.controls['idDepartamentoPNJ'].dirty ||
+                    form.controls['idDepartamentoPNJ'].touched)
+                "
+                class="p-error block"
+              >
                 El campo departamento es requerido.
               </small>
             </div>
@@ -284,16 +444,39 @@
                   formControlName="idMunicipioPNJ"
                   emptyFilterMessage="No se encontró ningún resultado"
                 ></p-dropdown>
-                <label for="municipalities">Municipio <small *ngIf="isRequiredFormControl(form.controls['idMunicipioPNJ'])"
-                  class="p-error">*</small></label>
+                <label for="municipalities"
+                  >Municipio
+                  <small
+                    *ngIf="
+                      isRequiredFormControl(form.controls['idMunicipioPNJ'])
+                    "
+                    class="p-error"
+                    >*</small
+                  ></label
+                >
               </span>
-              <small *ngIf="form.controls['idMunicipioPNJ'].hasError('required')
-                && (form.controls['idMunicipioPNJ'].dirty || form.controls['idMunicipioPNJ'].touched)" class="p-error block">
+              <small
+                *ngIf="
+                  form.controls['idMunicipioPNJ'].hasError('required') &&
+                  (form.controls['idMunicipioPNJ'].dirty ||
+                    form.controls['idMunicipioPNJ'].touched)
+                "
+                class="p-error block"
+              >
                 El campo municipio es requerido.
               </small>
             </div>
             <div class="field col-12">
-              <p>Señor usuario por favor antes de realizar el trámite verifique que sus datos se encuentren actualizados, si desea realizar alguna modificación siga el procedimiento <a href="https://www.supersociedades.gov.co/documents/20122/369705/Actualizacion-informacion-basica-Sociedades.pdf" target="_blank">AQUI</a>.</p>
+              <p>
+                Señor usuario por favor antes de realizar el trámite verifique
+                que sus datos se encuentren actualizados, si desea realizar
+                alguna modificación siga el procedimiento
+                <a
+                  href="https://www.supersociedades.gov.co/documents/20122/369705/Actualizacion-informacion-basica-Sociedades.pdf"
+                  target="_blank"
+                  >AQUI</a
+                >.
+              </p>
             </div>
           </div>
         </div>
@@ -304,14 +487,15 @@
             <div class="field col-12">
               <div class="flex flex-wrap flex-justify-content">
                 <p-checkbox
-                inputId="correspondePNJ"
-                [binary]="true"
-                [(ngModel)]="isRemPNJ"
-                [ngModelOptions]="{ standalone: true }"
-                (ngModelChange)="onChangeRemPNJ($event)"
+                  inputId="correspondePNJ"
+                  [binary]="true"
+                  [(ngModel)]="isRemPNJ"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="onChangeRemPNJ($event)"
                 ></p-checkbox>
                 <label for="correspondePNJ" class="ml-1"
-                  >Remitente corresponde a la persona natural / jurídica ingresada</label
+                  >Remitente corresponde a la persona natural / jurídica
+                  ingresada</label
                 >
               </div>
             </div>
@@ -329,10 +513,19 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   [readonly]="isRemPNJ"
                 ></p-dropdown>
-                <label for="remDocumentType">Tipo identificación <small class="p-error">*</small></label>
+                <label for="remDocumentType"
+                  >Tipo identificación <small class="p-error">*</small></label
+                >
               </span>
-              <small *ngIf="form.controls['idTipoIdentificacionRem'].hasError('required')
-                && (form.controls['idTipoIdentificacionRem'].dirty || form.controls['idTipoIdentificacionRem'].touched)">
+              <small
+                *ngIf="
+                  form.controls['idTipoIdentificacionRem'].hasError(
+                    'required'
+                  ) &&
+                  (form.controls['idTipoIdentificacionRem'].dirty ||
+                    form.controls['idTipoIdentificacionRem'].touched)
+                "
+              >
                 El campo tipo identificación es requerido.
               </small>
             </div>
@@ -347,15 +540,38 @@
                   maxlength="15"
                   [readonly]="isRemPNJ"
                 />
-                <label for="documentNumber">No. identificación <small class="p-error">*</small></label>
+                <label for="documentNumber"
+                  >No. identificación <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['numeroIdentificacionRem'].value?.length || 0 }} / 15</small>
-                <small *ngIf="form.controls['numeroIdentificacionRem'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{
+                    form.controls["numeroIdentificacionRem"].value?.length || 0
+                  }}
+                  / 15</small
+                >
+                <small
+                  *ngIf="
+                    form.controls['numeroIdentificacionRem'].hasError(
+                      'minlength'
+                    )
+                  "
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitidos es 7.
                 </small>
-                <small *ngIf="form.controls['numeroIdentificacionRem'].hasError('required')
-                  && (form.controls['numeroIdentificacionRem'].dirty || form.controls['numeroIdentificacionRem'].touched)">
+                <small
+                  *ngIf="
+                    form.controls['numeroIdentificacionRem'].hasError(
+                      'required'
+                    ) &&
+                    (form.controls['numeroIdentificacionRem'].dirty ||
+                      form.controls['numeroIdentificacionRem'].touched)
+                  "
+                >
                   El campo número de identificacion del remitente es requerido.
                 </small>
               </div>
@@ -370,15 +586,31 @@
                   maxlength="100"
                   [readonly]="isRemPNJ"
                 />
-                <label for="float-input">Nombre <small class="p-error">*</small></label>
+                <label for="float-input"
+                  >Nombre <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['nombreRem'].value?.length || 0 }} / 100</small>
-                <small *ngIf="form.controls['nombreRem'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{ form.controls["nombreRem"].value?.length || 0 }} /
+                  100</small
+                >
+                <small
+                  *ngIf="form.controls['nombreRem'].hasError('minlength')"
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitido es 3.
                 </small>
-                <small *ngIf="form.controls['nombreRem'].hasError('required')
-                  && (form.controls['nombreRem'].dirty || form.controls['nombreRem'].touched)" class="p-error block">
+                <small
+                  *ngIf="
+                    form.controls['nombreRem'].hasError('required') &&
+                    (form.controls['nombreRem'].dirty ||
+                      form.controls['nombreRem'].touched)
+                  "
+                  class="p-error block"
+                >
                   El campo nombre remitente es requerido.
                 </small>
               </div>
@@ -393,15 +625,31 @@
                   maxlength="15"
                   [readonly]="isRemPNJ"
                 />
-                <label for="float-input">Teléfono <small class="p-error">*</small></label>
+                <label for="float-input"
+                  >Teléfono <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['telefonoRem'].value?.length || 0 }} / 15</small>
-                <small *ngIf="form.controls['telefonoRem'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{ form.controls["telefonoRem"].value?.length || 0 }} /
+                  15</small
+                >
+                <small
+                  *ngIf="form.controls['telefonoRem'].hasError('minlength')"
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitido es 7.
                 </small>
-                <small *ngIf="form.controls['telefonoRem'].hasError('required')
-                  && (form.controls['telefonoRem'].dirty || form.controls['telefonoRem'].touched)" class="p-error block">
+                <small
+                  *ngIf="
+                    form.controls['telefonoRem'].hasError('required') &&
+                    (form.controls['telefonoRem'].dirty ||
+                      form.controls['telefonoRem'].touched)
+                  "
+                  class="p-error block"
+                >
                   El campo teléfono es requerido.
                 </small>
               </div>
@@ -415,15 +663,31 @@
                   formControlName="emailRem"
                   [readonly]="isRemPNJ"
                 />
-                <label for="float-input">Email <small class="p-error">*</small></label>
+                <label for="float-input"
+                  >Email <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['emailRem'].value?.length || 0 }} / 50</small>
-                <small *ngIf="form.controls['emailRem'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{ form.controls["emailRem"].value?.length || 0 }} /
+                  50</small
+                >
+                <small
+                  *ngIf="form.controls['emailRem'].hasError('minlength')"
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitido es 7.
                 </small>
-                <small *ngIf="form.controls['emailRem'].hasError('required')
-                  && (form.controls['emailRem'].dirty || form.controls['emailRem'].touched)" class="p-error block">
+                <small
+                  *ngIf="
+                    form.controls['emailRem'].hasError('required') &&
+                    (form.controls['emailRem'].dirty ||
+                      form.controls['emailRem'].touched)
+                  "
+                  class="p-error block"
+                >
                   El campo Email es requerido.
                 </small>
               </div>
@@ -437,15 +701,31 @@
                   formControlName="direccionRem"
                   [readonly]="isRemPNJ"
                 />
-                <label for="float-input">Dirección <small class="p-error">*</small></label>
+                <label for="float-input"
+                  >Dirección <small class="p-error">*</small></label
+                >
               </span>
-              <div class="flex flex-row-reverse flex-wrap justify-content-between">
-                <small>{{ form.controls['direccionRem'].value?.length || 0 }} / 50</small>
-                <small *ngIf="form.controls['direccionRem'].hasError('minlength')" class="p-error block">
+              <div
+                class="flex flex-row-reverse flex-wrap justify-content-between"
+              >
+                <small
+                  >{{ form.controls["direccionRem"].value?.length || 0 }} /
+                  50</small
+                >
+                <small
+                  *ngIf="form.controls['direccionRem'].hasError('minlength')"
+                  class="p-error block"
+                >
                   El mínimo de caracteres permitido es 5.
                 </small>
-                <small *ngIf="form.controls['direccionRem'].hasError('required')
-                  && (form.controls['direccionRem'].dirty || form.controls['direccionRem'].touched)" class="p-error block">
+                <small
+                  *ngIf="
+                    form.controls['direccionRem'].hasError('required') &&
+                    (form.controls['direccionRem'].dirty ||
+                      form.controls['direccionRem'].touched)
+                  "
+                  class="p-error block"
+                >
                   El campo dirección es requerido.
                 </small>
               </div>
@@ -465,11 +745,19 @@
                   (ngModelChange)="handleChangeCountryRem($event)"
                   [readonly]="isRemPNJ"
                 ></p-dropdown>
-                <label for="remCountry">País <small class="p-error">*</small></label>
+                <label for="remCountry"
+                  >País <small class="p-error">*</small></label
+                >
               </span>
-              <small *ngIf="form.controls['idPaisRem'].hasError('required')
-                  && (form.controls['idPaisRem'].dirty || form.controls['idPaisRem'].touched)" class="p-error block">
-                  El campo país es requerido.
+              <small
+                *ngIf="
+                  form.controls['idPaisRem'].hasError('required') &&
+                  (form.controls['idPaisRem'].dirty ||
+                    form.controls['idPaisRem'].touched)
+                "
+                class="p-error block"
+              >
+                El campo país es requerido.
               </small>
             </div>
             <div class="field col-12 md:col-4">
@@ -487,12 +775,26 @@
                   (ngModelChange)="handleChangeDepartmentRem($event)"
                   [readonly]="isRemPNJ"
                 ></p-dropdown>
-                <label for="remDepartments">Departamento <small *ngIf="isRequiredFormControl(form.controls['idDepartamentoRem'])"
-                  class="p-error">*</small></label>
+                <label for="remDepartments"
+                  >Departamento
+                  <small
+                    *ngIf="
+                      isRequiredFormControl(form.controls['idDepartamentoRem'])
+                    "
+                    class="p-error"
+                    >*</small
+                  ></label
+                >
               </span>
-              <small *ngIf="form.controls['idDepartamentoRem'].hasError('required')
-                  && (form.controls['idDepartamentoRem'].dirty || form.controls['idDepartamentoRem'].touched)" class="p-error block">
-                  El campo departamento es requerido.
+              <small
+                *ngIf="
+                  form.controls['idDepartamentoRem'].hasError('required') &&
+                  (form.controls['idDepartamentoRem'].dirty ||
+                    form.controls['idDepartamentoRem'].touched)
+                "
+                class="p-error block"
+              >
+                El campo departamento es requerido.
               </small>
             </div>
             <div class="field col-12 md:col-4">
@@ -508,17 +810,33 @@
                   formControlName="idMunicipioRem"
                   emptyFilterMessage="No se encontró ningún resultado"
                 ></p-dropdown>
-                <label for="remMunicipalities">Municipio <small *ngIf="isRequiredFormControl(form.controls['idDepartamentoRem'])"
-                  class="p-error">*</small></label>
+                <label for="remMunicipalities"
+                  >Municipio
+                  <small
+                    *ngIf="
+                      isRequiredFormControl(form.controls['idDepartamentoRem'])
+                    "
+                    class="p-error"
+                    >*</small
+                  ></label
+                >
               </span>
-              <small *ngIf="form.controls['idMunicipioRem'].hasError('required')
-                  && (form.controls['idMunicipioRem'].dirty || form.controls['idMunicipioRem'].touched)" class="p-error block">
-                  El campo municipio es requerido.
+              <small
+                *ngIf="
+                  form.controls['idMunicipioRem'].hasError('required') &&
+                  (form.controls['idMunicipioRem'].dirty ||
+                    form.controls['idMunicipioRem'].touched)
+                "
+                class="p-error block"
+              >
+                El campo municipio es requerido.
               </small>
             </div>
             <div class="field col-12">
               <p>
-                Señor usuario por favor antes de realizar el trámite verifique que sus datos se encuentren actualizados, si desea realizar alguna modificación siga el procedimiento
+                Señor usuario por favor antes de realizar el trámite verifique
+                que sus datos se encuentren actualizados, si desea realizar
+                alguna modificación siga el procedimiento
                 <a
                   href="https://www.supersociedades.gov.co/documents/20122/369705/Actualizacion-informacion-basica-Sociedades.pdf"
                   target="_blank"
@@ -546,12 +864,19 @@
                   <td>{{ document.descripcion }}</td>
                   <td>
                     <div class="row">
-                      <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5">
-                          <button color="primary" mat-button (click)="openDialog()" class="btn btn-outline-info">
-                              Adjuntar archivo
-                          </button>
+                      <div
+                        class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5"
+                      >
+                        <button
+                          color="primary"
+                          mat-button
+                          (click)="openDialog()"
+                          class="btn btn-outline-info"
+                        >
+                          Adjuntar archivo
+                        </button>
                       </div>
-                  </div>
+                    </div>
                   </td>
                 </tr>
               </ng-template>
@@ -560,42 +885,71 @@
         </div>
       </p-accordionTab>
     </p-accordion>
-      <div class="p-fluid card-container px-3">
-        <div class="field col-12">
-          <span
-            >Correo al que desea se le envíe el soporte de la radicación</span
+    <div class="p-fluid card-container px-3">
+      <div class="field col-12">
+        <span>Correo al que desea se le envíe el soporte de la radicación</span>
+      </div>
+      <div class="field col-12">
+        <span class="p-float-label">
+          <input
+            type="text"
+            pInputText
+            inputId="emails"
+            formControlName="emailRadicar"
+          />
+          <label for="emails"
+            >Diligencie el correo aquí <small class="p-error">*</small></label
           >
-        </div>
-        <div class="field col-12">
-          <span class="p-float-label">
-            <input type="text" pInputText inputId="emails" formControlName="emailRadicar" />
-            <label for="emails">Diligencie el correo aquí <small class="p-error">*</small></label>
-          </span>
-          <small *ngIf="form.controls['emailRadicar'].hasError('required')
-              && (form.controls['emailRadicar'].dirty || form.controls['emailRadicar'].touched)" class="p-error block">
-              El campo correo es requerido.
-          </small>
-        </div>
-        <mat-checkbox #miCheckbox  class="example-margin" (change)="openDialogPrograma()">Autorizo a la Superintendencia de Sociedades para el uso de mis datos personales según los términos y condiciones disponibles Aquí</mat-checkbox>
-       <!--app-modal-term-cond (confirm)="confirmTermAndCond($event)" ></app-modal-term-cond>-->
-          <div class="field col-4">
-            <p-captcha
-            siteKey="6Le5DYoUAAAAALiF-eaGvTW180QVAdg6kMSewya6"
-              (onResponse)="showResponse($event)"
-            ></p-captcha>
-          </div>
-        <div class="field col-12">
-          <p-button [disabled]="form.invalid || !confirmTermAndCond" label="Radicar"
-          class="btn btn-round btn-high" id="btnRadicar" style="font-size: 12px;"
-           (click)="guardarTramite()"></p-button>
-          <div class="loader-container" *ngIf="saving">
-            <mat-progress-spinner
-              class="loader"
-              [diameter]="32"
-              [mode]="'indeterminate'"
-            ></mat-progress-spinner>
-          </div>
+        </span>
+        <small
+          *ngIf="
+            form.controls['emailRadicar'].hasError('required') &&
+            (form.controls['emailRadicar'].dirty ||
+              form.controls['emailRadicar'].touched)
+          "
+          class="p-error block"
+        >
+          El campo correo es requerido.
+        </small>
+      </div>
+      <mat-checkbox
+        #miCheckbox
+        class="example-margin"
+        (change)="openDialogPrograma()"
+        >Autorizo a la Superintendencia de Sociedades para el uso de mis datos
+        personales según los términos y condiciones disponibles
+        Aquí</mat-checkbox
+      >
+      <!--app-modal-term-cond (confirm)="confirmTermAndCond($event)" ></app-modal-term-cond>-->
+
+      <div class="field col-4">
+        <ngx-recaptcha2
+          #captchaElem
+          siteKey="6Le5DYoUAAAAALiF-eaGvTW180QVAdg6kMSewya6"
+          (success)="showResponse($event)"
+          [useGlobalDomain]="false"
+          formControlName="recaptcha"
+        >
+        </ngx-recaptcha2>
+      </div>
+
+      <div class="field col-12">
+        <p-button
+          [disabled]="form.invalid || !confirmTermAndCond"
+          label="Radicar"
+          class="btn btn-round btn-high"
+          id="btnRadicar"
+          style="font-size: 12px"
+          (click)="guardarTramite()"
+        ></p-button>
+        <div class="loader-container" *ngIf="saving">
+          <mat-progress-spinner
+            class="loader"
+            [diameter]="32"
+            [mode]="'indeterminate'"
+          ></mat-progress-spinner>
         </div>
       </div>
+    </div>
   </form>
 </div>
