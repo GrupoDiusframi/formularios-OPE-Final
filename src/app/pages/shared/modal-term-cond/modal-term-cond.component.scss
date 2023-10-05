@@ -1,12 +1,10 @@
 
-
-
-
 .body {
   margin-left: 5%;
   margin-right: 5%;
   margin-top: 5%;
   border-radius: 50%;
+  width: 800px;
 }
 
 .titulos{
@@ -16,12 +14,13 @@
   color: #004884;
   line-height: 1.5 !important;
   text-align: left;
+  font-size: 20px;
 }
 
 .texto{
   color: #0b7dda;
   font-family: "Work Sans",sans-serif;
-  font-size: 13px;
+  font-size: 10px;
 }
 
 .botones{
@@ -31,9 +30,10 @@
 
 .cancelar {
   border: none;
-  background-color: #007bff;
+  background-color: #f7f8fa;
   padding: 14px 28px;
   border-radius: 5px;
+  text-align: center;
 }
 .guardar {
   margin-left: 20px;
@@ -56,21 +56,8 @@ hover {
 
 .scrollable-content {
   margin-top: 60px;
-  height: 400px;
+  height: 380px;
   border: 1px solid #ccc;
   padding: 20px;
-  overflow-y: scroll;
-}
-
-.scrollable-content::-webkit-scrollbar-thumb {
-  /* Estilo personalizado para el pulgar de la barra de desplazamiento (puede omitirse si no es necesario) */
-  background-color: #888;
-  border-radius: 6px;
-}
-
-:host {
-  display: block;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+  overflow-y: auto; /* Cambia 'scroll' a 'auto' */
 }

@@ -27,3 +27,13 @@ input[type="file"] + label:hover {
   background-color: #2563eb;
   border-color: #2563eb;
 }
+
+.p-accordion .p-accordion-header .p-accordion-header-link {
+  padding: 1.25vh;
+  border: 1px solid #dee2e6;
+  color: #6c757d;
+  background: #f8f9fa;
+  font-weight: 700;
+  border-radius: 6px;
+  transition: box-shadow 0.2s;
+}
