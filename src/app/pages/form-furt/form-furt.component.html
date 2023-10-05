@@ -4,7 +4,7 @@
         <p-accordionTab header="Información General" [selected]="true" class="general">
           <div class="grid p-fluid card-container pt-2">
             <div class="field col-12">
-              <span class="p-float-label">
+              <label for="float-input" style="color: #93bbf3 ;">Descripción del Trámite:</label>
                 <textarea
                   readonly
                   id="float-input"
@@ -13,11 +13,9 @@
                   pInputTextarea
                   formControlName="descripcionTramite"
                 ></textarea>
-                <label for="float-input">Descripción del Trámite:</label>
-              </span>
             </div>
             <div class="field col-12 md:col-6">
-              <span class="p-float-label">
+              <label for="float-input" style="color: #93bbf3 ;">Proceso</label>
                 <input
                   readonly
                   id="float-input"
@@ -25,11 +23,10 @@
                   pInputText
                   formControlName="claseProceso"
                 />
-                <label for="float-input">Proceso</label>
-              </span>
             </div>
             <div class="field col-12 md:col-6">
-              <span class="p-float-label">
+              <label for="float-input" style="color: #93bbf3 ;"
+              >Dependencia <small class="p-error">*</small></label>
                 <input
                   readonly
                   id="float-input"
@@ -38,10 +35,6 @@
                   descripcion="dependencia"
                   formControlName="dependencia"
                 />
-                <label for="float-input"
-                  >Dependencia <small class="p-error">*</small></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['dependencia'].hasError('required') &&
@@ -56,7 +49,7 @@
               <span class="flex flex-wrap align-content-center p-label">
                 <label
                   class="flex flex-wrap align-content-center mr-2"
-                  for="isExistProcess"
+                  for="isExistProcess" style="color: #93bbf3 ;"
                   >Proceso Existente:</label
                 >
                 <p-inputSwitch
@@ -74,7 +67,7 @@
             <div class="field col-12 md:col-6">
               <span>
                 <div class="flex flex-row">
-                  <label for="processNumber" class="mr-2"
+                  <label for="processNumber" class="mr-2" style="color: #93bbf3 ;"
                     >Número de proceso</label
                   >
                   <i
@@ -97,8 +90,10 @@
         </p-accordionTab>
         <p-accordionTab header="Información persona natural / jurídica">
           <div class="grid p-fluid card-container pt-2">
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -2%;">
+              <label for="applicantType" style="color: #93bbf3 ;"
+              >Tipo solicitante <small class="p-error">*</small></label
+            >
                 <p-dropdown
                   inputId="applicantType"
                   [options]="tipoSolicitante"
@@ -110,10 +105,6 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   formControlName="idTipoSolicitantePNJ"
                 ></p-dropdown>
-                <label for="applicantType"
-                  >Tipo solicitante <small class="p-error">*</small></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['idTipoSolicitantePNJ'].hasError('required') &&
@@ -125,8 +116,10 @@
                 El campo tipo solicitante es requerido.
               </small>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -2%;">
+              <label for="documentType" style="color: #93bbf3 ;"
+              >Tipo identificación <small class="p-error">*</small></label
+            >
                 <p-dropdown
                   inputId="documentType"
                   [options]="tiposIdentificacion"
@@ -138,10 +131,6 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   formControlName="idTipoIdentificacionPNJ"
                 ></p-dropdown>
-                <label for="documentType"
-                  >Tipo identificación <small class="p-error">*</small></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['idTipoIdentificacionPNJ'].hasError(
@@ -154,8 +143,10 @@
                 >El campo tipo identificación es requerido.</small
               >
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -2%;">
+              <label for="documentNumber" style="color: #93bbf3 ;"
+                  >No. identificación <small class="p-error">*</small></label
+                >
                 <input
                   type="text"
                   pInputText
@@ -164,10 +155,6 @@
                   pKeyFilter="int"
                   maxlength="15"
                 />
-                <label for="documentNumber"
-                  >No. identificación <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -200,8 +187,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12">
-              <span class="p-float-label">
+            <div class="field col-12" style="margin-top: -4%;">
+              <label for="float-input" style="color: #93bbf3 ;"
+                  >Nombre/Razón social <small class="p-error">*</small></label
+                >
                 <input
                   id="float-input"
                   type="text"
@@ -210,10 +199,6 @@
                   maxlength="100"
                   [readonly]="isReadonly"
                 />
-                <label for="float-input"
-                  >Nombre/Razón social <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -245,8 +230,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="float-input" style="color: #93bbf3 ;"
+                  >Teléfono <small class="p-error">*</small></label
+                >
                 <input
                   id="float-input"
                   type="text"
@@ -256,10 +243,6 @@
                   maxlength="10"
                   [readonly]="isReadonly"
                 />
-                <label for="float-input"
-                  >Teléfono <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -285,8 +268,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="float-input" style="color: #93bbf3 ;"
+                  >Email <small class="p-error">*</small></label
+                >
                 <input
                   id="float-input"
                   type="text"
@@ -295,10 +280,6 @@
                   maxlength="50"
                   [readonly]="isReadonly"
                 />
-                <label for="float-input"
-                  >Email <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -324,8 +305,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="float-input" style="color: #93bbf3 ;"
+                  >Dirección <small class="p-error">*</small></label
+                >
                 <input
                   id="float-input"
                   type="text"
@@ -334,10 +317,6 @@
                   maxlength="50"
                   [readonly]="isReadonly"
                 />
-                <label for="float-input"
-                  >Dirección <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -363,8 +342,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="countries" style="color: #93bbf3 ;"
+              >País <small class="p-error">*</small></label
+            >
                 <p-dropdown
                   inputId="countries"
                   [options]="countries"
@@ -377,10 +358,6 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   (ngModelChange)="handleChangeCountryPNJ($event)"
                 ></p-dropdown>
-                <label for="countries"
-                  >País <small class="p-error">*</small></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['idPaisPNJ'].hasError('required') &&
@@ -392,8 +369,17 @@
                 El campo país es requerido.
               </small>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="departments" style="color: #93bbf3 ;"
+              >Departamento
+              <small
+                *ngIf="
+                  isRequiredFormControl(form.controls['idDepartamentoPNJ'])
+                "
+                class="p-error"
+                >*</small
+              ></label
+            >
                 <p-dropdown
                   inputId="departments"
                   [options]="departmentsPNJ"
@@ -406,17 +392,6 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   (ngModelChange)="handleChangeDepartmentPNJ($event)"
                 ></p-dropdown>
-                <label for="departments"
-                  >Departamento
-                  <small
-                    *ngIf="
-                      isRequiredFormControl(form.controls['idDepartamentoPNJ'])
-                    "
-                    class="p-error"
-                    >*</small
-                  ></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['idDepartamentoPNJ'].hasError('required') &&
@@ -428,8 +403,17 @@
                 El campo departamento es requerido.
               </small>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="municipalities" style="color: #93bbf3 ;"
+                  >Municipio
+                  <small
+                    *ngIf="
+                      isRequiredFormControl(form.controls['idMunicipioPNJ'])
+                    "
+                    class="p-error"
+                    >*</small
+                  ></label
+                >
                 <p-dropdown
                   inputId="municipalities"
                   [options]="municipalitiesPNJ"
@@ -441,17 +425,6 @@
                   formControlName="idMunicipioPNJ"
                   emptyFilterMessage="No se encontró ningún resultado"
                 ></p-dropdown>
-                <label for="municipalities"
-                  >Municipio
-                  <small
-                    *ngIf="
-                      isRequiredFormControl(form.controls['idMunicipioPNJ'])
-                    "
-                    class="p-error"
-                    >*</small
-                  ></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['idMunicipioPNJ'].hasError('required') &&
@@ -464,7 +437,7 @@
               </small>
             </div>
             <div class="field col-12">
-              <p>
+              <p class="verificar">
                 Señor usuario por favor antes de realizar el trámite verifique
                 que sus datos se encuentren actualizados, si desea realizar
                 alguna modificación siga el procedimiento
@@ -488,14 +461,16 @@
                   [ngModelOptions]="{ standalone: true }"
                   (ngModelChange)="onChangeRemPNJ($event)"
                 ></p-checkbox>
-                <label for="correspondePNJ" class="ml-1"
+                <label for="correspondePNJ" class="ml-1" style="color: #93bbf3 ;"
                   >Remitente corresponde a la persona natural / jurídica
                   ingresada</label
                 >
               </div>
             </div>
-            <div class="field col-12 md:col-6">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-6" style="margin-top: -2%;">
+              <label for="remDocumentType" style="color: #93bbf3 ;"
+              >Tipo identificación <small class="p-error">*</small></label
+            >
                 <p-dropdown
                   inputId="remDocumentType"
                   [options]="tiposIdentificacion"
@@ -508,10 +483,6 @@
                   emptyFilterMessage="No se encontró ningún resultado"
                   [readonly]="isRemPNJ"
                 ></p-dropdown>
-                <label for="remDocumentType"
-                  >Tipo identificación <small class="p-error">*</small></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['idTipoIdentificacionRem'].hasError(
@@ -524,8 +495,10 @@
                 El campo tipo identificación es requerido.
               </small>
             </div>
-            <div class="field col-12 md:col-6">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-6" style="margin-top: -2%;">
+              <label for="documentNumber" style="color: #93bbf3 ;"
+                  >No. identificación <small class="p-error">*</small></label
+                >
                 <input
                   type="text"
                   pInputText
@@ -535,10 +508,6 @@
                   maxlength="15"
                   [readonly]="isRemPNJ"
                 />
-                <label for="documentNumber"
-                  >No. identificación <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -571,8 +540,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12">
-              <span class="p-float-label">
+            <div class="field col-12" style="margin-top: -4%;">
+              <label for="float-input" style="color: #93bbf3 ;"
+                  >Nombre <small class="p-error">*</small></label
+                >
                 <input
                   id="float-input"
                   type="text"
@@ -581,10 +552,6 @@
                   maxlength="100"
                   [readonly]="isRemPNJ"
                 />
-                <label for="float-input"
-                  >Nombre <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -610,8 +577,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="float-input" style="color: #93bbf3 ;"
+                  >Teléfono <small class="p-error">*</small></label
+                >
                 <input
                   id="float-input"
                   type="text"
@@ -620,10 +589,6 @@
                   maxlength="15"
                   [readonly]="isRemPNJ"
                 />
-                <label for="float-input"
-                  >Teléfono <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -649,8 +614,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="float-input" style="color: #93bbf3 ;"
+                  >Email <small class="p-error">*</small></label
+                >
                 <input
                   id="float-input"
                   type="text"
@@ -658,10 +625,6 @@
                   formControlName="emailRem"
                   [readonly]="isRemPNJ"
                 />
-                <label for="float-input"
-                  >Email <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -687,8 +650,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="float-input" style="color: #93bbf3 ;"
+              >Dirección <small class="p-error">*</small></label
+            >
                 <input
                   id="float-input"
                   type="text"
@@ -696,10 +661,6 @@
                   formControlName="direccionRem"
                   [readonly]="isRemPNJ"
                 />
-                <label for="float-input"
-                  >Dirección <small class="p-error">*</small></label
-                >
-              </span>
               <div
                 class="flex flex-row-reverse flex-wrap justify-content-between"
               >
@@ -725,8 +686,10 @@
                 </small>
               </div>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="remCountry" style="color: #93bbf3 ;"
+                  >País <small class="p-error">*</small></label
+                >
                 <p-dropdown
                   inputId="remCountries"
                   [options]="countries"
@@ -740,10 +703,6 @@
                   (ngModelChange)="handleChangeCountryRem($event)"
                   [readonly]="isRemPNJ"
                 ></p-dropdown>
-                <label for="remCountry"
-                  >País <small class="p-error">*</small></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['idPaisRem'].hasError('required') &&
@@ -755,8 +714,17 @@
                 El campo país es requerido.
               </small>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="remDepartments" style="color: #93bbf3 ;"
+                  >Departamento
+                  <small
+                    *ngIf="
+                      isRequiredFormControl(form.controls['idDepartamentoRem'])
+                    "
+                    class="p-error"
+                    >*</small
+                  ></label
+                >
                 <p-dropdown
                   inputId="remDepartments"
                   [options]="departmentsRem"
@@ -770,17 +738,6 @@
                   (ngModelChange)="handleChangeDepartmentRem($event)"
                   [readonly]="isRemPNJ"
                 ></p-dropdown>
-                <label for="remDepartments"
-                  >Departamento
-                  <small
-                    *ngIf="
-                      isRequiredFormControl(form.controls['idDepartamentoRem'])
-                    "
-                    class="p-error"
-                    >*</small
-                  ></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['idDepartamentoRem'].hasError('required') &&
@@ -792,8 +749,17 @@
                 El campo departamento es requerido.
               </small>
             </div>
-            <div class="field col-12 md:col-4">
-              <span class="p-float-label">
+            <div class="field col-12 md:col-4" style="margin-top: -4%;">
+              <label for="remMunicipalities" style="color: #93bbf3 ;"
+                  >Municipio
+                  <small
+                    *ngIf="
+                      isRequiredFormControl(form.controls['idDepartamentoRem'])
+                    "
+                    class="p-error"
+                    >*</small
+                  ></label
+                >
                 <p-dropdown
                   inputId="remMunicipalities"
                   [options]="municipalitiesRem"
@@ -805,17 +771,6 @@
                   formControlName="idMunicipioRem"
                   emptyFilterMessage="No se encontró ningún resultado"
                 ></p-dropdown>
-                <label for="remMunicipalities"
-                  >Municipio
-                  <small
-                    *ngIf="
-                      isRequiredFormControl(form.controls['idDepartamentoRem'])
-                    "
-                    class="p-error"
-                    >*</small
-                  ></label
-                >
-              </span>
               <small
                 *ngIf="
                   form.controls['idMunicipioRem'].hasError('required') &&
@@ -828,7 +783,7 @@
               </small>
             </div>
             <div class="field col-12">
-              <p>
+              <p class="verificar">
                 Señor usuario por favor antes de realizar el trámite verifique
                 que sus datos se encuentren actualizados, si desea realizar
                 alguna modificación siga el procedimiento
@@ -881,20 +836,18 @@
       </p-accordion>
     <div class="p-fluid card-container px-3">
       <div class="field col-12">
-        <span>Correo al que desea se le envíe el soporte de la radicación</span>
+        <span style="color: #93bbf3 ;">Correo al que desea se le envíe el soporte de la radicación</span>
       </div>
       <div class="field col-12">
-        <span class="p-float-label">
+        <label for="emails" style="color: #93bbf3 ;"
+        >Diligencie el correo aquí <small class="p-error">*</small></label
+      >
           <input
             type="text"
             pInputText
             inputId="emails"
             formControlName="emailRadicar"
           />
-          <label for="emails"
-            >Diligencie el correo aquí <small class="p-error">*</small></label
-          >
-        </span>
         <small
           *ngIf="
             form.controls['emailRadicar'].hasError('required') &&
@@ -906,7 +859,7 @@
           El campo correo es requerido.
         </small>
       </div>
-      <mat-checkbox
+      <mat-checkbox style="color: #93bbf3 ;"
         #miCheckbox
         class="example-margin"
         (change)="openDialogPrograma()"

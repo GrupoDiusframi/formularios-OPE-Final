@@ -2,15 +2,13 @@
 <div class="body">
   <div class="grid p-fluid card-container">
     <div class="field col-12">
-      <p>
-        Por favor seleccione la solicitud que desea diligenciar. A continuación
-        se cargará el formulario correspondiente, recuerde completar los campos
-        que son obligatorios identificados con el símbolo
+      <p style="color: #004884;">
+        Formulario Único de Radicación de Trámites
         <span class="p-error">*</span>
       </p>
     </div>
     <div class="field col-12">
-      <span class="p-float-label">
+      <label for="procedureDropdown" style="color: #93bbf3 ;">Trámite</label>
         <p-dropdown
           [options]="datos"
           [autoDisplayFirst]="false"
@@ -22,8 +20,6 @@
           inputId="procedureDropdown"
         >
         </p-dropdown>
-        <label for="procedureDropdown">Tipo solicitud</label>
-      </span>
     </div>
   </div>
 </div>

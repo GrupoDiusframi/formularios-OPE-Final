@@ -11,17 +11,18 @@
   z-index: 9999; /* Asegúrate de que esté en la parte superior de otros elementos */
 }
 
-.loader {
-  /* Estilos adicionales para el mat-progress-spinner, si es necesario */
-}
 
 .body {
   padding-left: 13%;
   padding-right: 13%;
 }
 
-label {
+.label {
   font-size: 16px; /* Establece el tamaño de fuente deseado, por ejemplo, 16px */
+}
+.verificar{
+  color: #0b7dda;
+  font-size: 12px;
 }
 
 

@@ -31,9 +31,21 @@ input[type="file"] + label:hover {
 .p-accordion .p-accordion-header .p-accordion-header-link {
   padding: 1.25vh;
   border: 1px solid #dee2e6;
-  color: #6c757d;
-  background: #f8f9fa;
+  color: white;
+  background: #004884 ;
   font-weight: 700;
   border-radius: 6px;
   transition: box-shadow 0.2s;
 }
+
+.p-inputtext {
+  padding: 0.75vh 0.75vh;
+  background: #e5eefb !important;
+  color: #004884 !important;
+}
+.p-dropdown {
+  background: #e5eefb !important;
+  color: #004884 !important;
+}
+
+
