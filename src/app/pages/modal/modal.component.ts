@@ -41,7 +41,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { subirArchivo: Files },
+    @Inject(MAT_DIALOG_DATA) public data: { subirArchivo: Files, tipoDocumento:Boolean },
     public dialogRef: MatDialogRef<ModalComponent>,
     public dialog: MatDialog,
     private pqrsdService: TramitesServices,
@@ -99,6 +99,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   }
 
   onUploadFile($event: any, isPrincipalFile: boolean = false) {
+    console.log(this.data.tipoDocumento);
     let fileInBase64: string = '';
     if (isPrincipalFile) {
       this.cargarchivos = true;
@@ -141,6 +142,9 @@ export class ModalComponent implements OnInit, OnDestroy {
           tamanio: tamanioMb,
           //     tamanio: `${file.size}`,
         } as ISubirArchivoByte;
+        if(this.data.tipoDocumento){
+          anexo.tipoDocumento = 'Principal';
+        }
         const image = {
           name: file.name.split('.')[0],
           type: file.name.split('.')[1],

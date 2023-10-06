@@ -18,6 +18,5 @@ export interface Tramites {
   documentos: Array<Documentos>;
   estado: Boolean;
   obligatorio: Boolean;
-  documentoPrincipal: Boolean;
   funcionario:string;
 }

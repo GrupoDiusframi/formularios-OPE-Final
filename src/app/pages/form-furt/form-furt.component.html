@@ -808,7 +808,7 @@
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-document>
-                  <tr>
+                  <tr style="color: #93bbf3 ;">
                     <td>{{ document.nombre }}</td>
                     <td>{{ document.descripcion }}</td>
                     <td>
@@ -819,7 +819,7 @@
                           <button
                             color="primary"
                             mat-button
-                            (click)="openDialog()"
+                            (click)="openDialog(document.documentoPrincipal)"
                             class="btn btn-outline-info"
                           >
                             Adjuntar archivo

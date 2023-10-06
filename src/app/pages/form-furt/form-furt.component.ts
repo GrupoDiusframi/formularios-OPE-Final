@@ -339,11 +339,12 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog() {
+  openDialog(tipoDocumento:Boolean) {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '700px',
       data: {
         subirArchivo: this.tramitesServices.subirArchivo,
+        tipoDocumento: tipoDocumento,
       },
       disableClose: true,
     });

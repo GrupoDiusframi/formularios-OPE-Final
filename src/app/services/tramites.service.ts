@@ -11,6 +11,8 @@ import { UserValidated } from '../interfaces/user-validated';
 import { Injectable, inject } from '@angular/core';
 import { Tramite } from '../interfaces/radicacion-radicar';
 import { ProfesorResponse } from '../interfaces/ProfesorResponse';
+import { GenerarSticker } from '../interfaces/generarSticker';
+import { EstamparSticker } from '../interfaces/estamparSticker';
 const httpOptions = {
   headers: new HttpHeaders({
     Authorization: 'Basic c3NvYy1wcXJzZDpDTEF2ZV8wOTg=',
@@ -126,6 +128,34 @@ export class TramitesServices {
     return this.httpClient.post<any>(
       `${this.correspondenciaPrueba}filenet/api/v1/archivoSubirMultiparts`,
       subirArchivo,
+      {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${this.token}`,
+        }),
+        reportProgress: true,
+        observe: 'events',
+      }
+    );
+  }
+
+  generateStickerUsingPOST(generarSticker: GenerarSticker): Observable<any> {
+    return this.httpClient.post<any>(
+      `${this.correspondenciaPrueba}correspondencia/api/v1/generateSticker`,
+      generarSticker,
+      {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${this.token}`,
+        }),
+        reportProgress: true,
+        observe: 'events',
+      }
+    );
+  }
+
+  estamparStickerRequestDTO(estamparSticker: EstamparSticker): Observable<any> {
+    return this.httpClient.post<any>(
+      `${this.correspondenciaPrueba}correspondencia/api/v1/estamparSticker`,
+      estamparSticker,
       {
         headers: new HttpHeaders({
           Authorization: `Bearer ${this.token}`,
