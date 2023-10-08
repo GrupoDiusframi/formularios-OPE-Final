@@ -99,7 +99,6 @@ export class ModalComponent implements OnInit, OnDestroy {
   }
 
   onUploadFile($event: any, isPrincipalFile: boolean = false) {
-    console.log(this.data.tipoDocumento);
     let fileInBase64: string = '';
     if (isPrincipalFile) {
       this.cargarchivos = true;

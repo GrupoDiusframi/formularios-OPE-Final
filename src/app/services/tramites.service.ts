@@ -13,6 +13,7 @@ import { Tramite } from '../interfaces/radicacion-radicar';
 import { ProfesorResponse } from '../interfaces/ProfesorResponse';
 import { GenerarSticker } from '../interfaces/generarSticker';
 import { EstamparSticker } from '../interfaces/estamparSticker';
+import { InstanciarRadicacion } from '../interfaces/instanciaRadicado';
 const httpOptions = {
   headers: new HttpHeaders({
     Authorization: 'Basic c3NvYy1wcXJzZDpDTEF2ZV8wOTg=',
@@ -43,6 +44,9 @@ export class TramitesServices {
   password = environment.password;
   username = environment.username;
   component = environment.component;
+  usuarioInstanciarRadicacion = environment.usuarioInstancia;
+  claveInstanciarRadicacion = environment.claveInstancia;
+  urlInstanciarRadicacion = environment.apiUrlInstanciarRadicacion;
   subirArchivo!: Files;
   archivoCargados: any[] = [];
   token: string = '';
@@ -53,7 +57,6 @@ export class TramitesServices {
   constructor(private httpClient: HttpClient) {
     this.generateToken();
   }
-
 
   signIn$ = <Observable<UserValidated>>this.http.post<UserValidated>(
     `${this.apiCorrespondenciaUrlBase}auth/api/v1/signin`,
@@ -74,7 +77,7 @@ export class TramitesServices {
           `${this.apiCorrespondenciaUrlBase}tramites/api/v1/buscarTramites`,
           JSON.stringify({}),
           { headers }
-        )
+        );
       } else {
         throw new Error('No fue posible autenticarse');
       }
@@ -166,6 +169,21 @@ export class TramitesServices {
     );
   }
 
+  instanciarRadicacion(data: InstanciarRadicacion) {
+    // Define las credenciales de usuario y contraseña
+    const username = this.usuarioInstanciarRadicacion;
+    const password = this.claveInstanciarRadicacion;
+    // Codifica las credenciales en base64
+    const base64Credentials = btoa(username + ':' + password);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Basic ' + base64Credentials,
+    });
+    // Realiza la solicitud HTTP POST con las cabeceras de autorización
+    return this.http.post(this.urlInstanciarRadicacion, data, {
+      headers: headers,
+    });
+  }
 
   generateToken(): void {
     let body = {
@@ -177,15 +195,15 @@ export class TramitesServices {
     this.httpClient
       .post<any>(`${this.apiCorrespondenciaUrlBase}auth/api/v1/signin`, body)
       .pipe(retry(3))
-      .subscribe(
-        {
-        next: (res:any) => {
+      .subscribe({
+        next: (res: any) => {
           this.token = res.token;
         },
-      }),(error:any) => {
+      }),
+      (error: any) => {
         console.error('Error al obtener la lista de trámites:', error);
-                // Puedes agregar aquí código adicional para manejar el error, como mostrar un mensaje al usuario
-          }
+        // Puedes agregar aquí código adicional para manejar el error, como mostrar un mensaje al usuario
+      };
   }
 
   getFilestoUpload(isubirArchivo: any) {
@@ -195,5 +213,4 @@ export class TramitesServices {
   getArchivosCargados(uploadArchivo: any[]) {
     this.archivoCargados = uploadArchivo;
   }
-
 }

@@ -41,6 +41,9 @@ import {
 import { formatDate } from '@angular/common';
 import { ModalTermCondComponent } from '../shared/modal-term-cond/modal-term-cond.component';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { GenerarSticker } from 'src/app/interfaces/generarSticker';
+import { EstamparSticker } from 'src/app/interfaces/estamparSticker';
+import { InstanciarRadicacion } from 'src/app/interfaces/instanciaRadicado';
 
 @Component({
   selector: 'app-form-furt',
@@ -82,6 +85,10 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   isRemPNJ!: boolean;
   token: string = '';
   saving = false;
+  generarSticker!:GenerarSticker;
+  estamparSticker!:EstamparSticker;
+  instanciarRadicacion!:InstanciarRadicacion;
+  archivosCargadosExitoso!:Boolean;
 
   countries!: Array<PaisDTO>;
   departments!: Array<DepartamentoDTO>;
@@ -418,12 +425,14 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     this.form
       .get('paisRem')
       ?.setValue(this.isRemPNJ ? this.form.value.paisPNJ : null);
+
     this.form
       .get('idDepartamentoRem')
       ?.setValue(this.isRemPNJ ? this.form.value.idDepartamentoPNJ : null);
     this.form
       .get('departamentoRem')
       ?.setValue(this.isRemPNJ ? this.form.value.departamentoPNJ : null);
+
     this.form
       .get('idMunicipioRem')
       ?.setValue(this.isRemPNJ ? this.form.value.idMunicipioPNJ : null);
@@ -446,6 +455,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       const errores = this.cargaAnexos.findIndex((e) => e['codigo'] != 0);
       //   console.log(this.cargaAnexos + 'carga total anexos');
       if (-1 < errores) {
+        this.archivosCargadosExitoso = false;
         Swal.fire({
           icon: 'error',
           text: 'Error al subir el ANEXO al filenet',
@@ -453,6 +463,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
           confirmButtonText: 'Aceptar',
         });
       } else {
+        this.archivosCargadosExitoso = false;
         this.loaderFile = false;
         Swal.fire({
           position: 'center',
@@ -524,7 +535,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     if (this.tramitesServices.subirArchivo.anexos.length !== 0) {
       this.tramitesServices.subirArchivo.anexos =
         this.tramitesServices.subirArchivo.anexos.map((archivo) => {
-          archivo.radicacion = this.numeroTramite;
+          archivo.radicacion = '2023-01-006799';
           delete archivo.nombre;
           return archivo;
         });
@@ -610,6 +621,23 @@ export class FormFurtComponent implements OnInit, OnDestroy {
           this.numeroTramite = res.message;
           console.log(res);
           this.loader = false;
+          this.generarSticker  = {
+            cantidadSticker: 1,
+            formatoRequerido: 'PDF',
+            generadoPor: '',
+            numRadicado: res.message,
+            numeroProceso: '',
+          }
+          this.estamparSticker = {
+            base64Sticker: '',
+            numeroRadicado: res.message,
+          }
+          this.instanciarRadicacion = {
+            numeroRadicado: res.message,
+            tipoRadicacion: 'Radicación Entrada',
+            fechaVencimientoTarea: '2023-10-025',
+          }
+          /*
           Swal.fire({
             icon: 'success',
             text:
@@ -624,14 +652,37 @@ export class FormFurtComponent implements OnInit, OnDestroy {
             confirmButtonColor: '#045cab',
             confirmButtonText: 'Aceptar',
           });
+          */
           if (this.tramitesServices.subirArchivo.anexos.length > 0) {
             this.uploadFileToFileNet();
           }
-          this.sendEmail(
-            this.form.value.emailRadicar,
-            this.form.value.nombreRazonSocialPNJ,
-            this.numeroTramite
-          );
+          if(this.archivosCargadosExitoso){
+            this.tramitesServices.generateStickerUsingPOST(this.generarSticker).subscribe(genSticker =>{
+              this.tramitesServices.estamparStickerRequestDTO(this.estamparSticker).subscribe(estSticker =>{
+                this.tramitesServices.instanciarRadicacion(this.instanciarRadicacion).subscribe(insRadicacion =>{
+                  this.sendEmail(
+                    this.form.value.emailRadicar,
+                    this.form.value.nombreRazonSocialPNJ,
+                    this.numeroTramite
+                  );
+                  Swal.fire({
+                    icon: 'success',
+                    text:
+                      'Su TRAMITE fue radicado con éxito con los siguientes datos: ' +
+                      ' N° de Tramite ' +
+                      res.message +
+                      '\n' +
+                      '. Fecha: ' +
+                      fechaFormulario +
+                      '\n' +
+                      '. La información de su TRAMITE fue enviada al correo electrónico principal registrado en el formulario.',
+                    confirmButtonColor: '#045cab',
+                    confirmButtonText: 'Aceptar',
+                  });
+                });
+              });
+            });
+          }
           this.resetFormulario();
         },
         error: (err: any) => {
@@ -669,6 +720,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   }
   resetFormulario() {
     this.form.reset();
+    this.isRemPNJ = false;
     this.ArchivosFormulario = undefined;
     this.tramitesServices.subirArchivo.anexos = this.limpiarArchivos;
     this.statusCarga = false;

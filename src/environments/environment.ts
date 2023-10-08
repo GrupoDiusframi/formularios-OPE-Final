@@ -14,6 +14,9 @@ export const environment = {
   username: 'BGONZALEZ',
   password: '8a2a4c86c1502d6df907259a04ec2354485da7059d3f37cbce54e713e44a3bed',
   authorizationPqrsdApi: 'Basic c3NvYy1wcXJzZDpDTEF2ZV8wOTg=',
+  usuarioInstancia:'cp4baadmindllo',
+  claveInstancia:'SD0cum3nt4ld',
+  apiUrlInstanciarRadicacion:'https://cpd-cp4badllo.apps.ssrhv-ops01.supersociedades.local/bawaut/automationservices/rest/RDE/REST_RADICACION/InstanciarRadicacion',
   procedures: [
       {value:5, name: 'Aprobación de colocación de acciones ordinarias', type: 'furt'},
       {value:7, name: 'Aprobación de los estudios actuariales por pensiones de jubilación, bonos y/o títulos pensionales', type: 'furt'},
