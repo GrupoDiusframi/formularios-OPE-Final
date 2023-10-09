@@ -881,7 +881,7 @@
 
       <div class="field col-12">
         <p-button
-          [disabled]="form.invalid || !confirmTermAndCond"
+          [disabled]="form.invalid || !confirmTermAndCond || !isCaptchaResolved"
           label="Radicar"
           class="btn btn-round btn-high"
           id="btnRadicar"

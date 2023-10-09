@@ -635,7 +635,9 @@ export class FormFurtComponent implements OnInit, OnDestroy {
           this.instanciarRadicacion = {
             numeroRadicado: res.message,
             tipoRadicacion: 'Radicación Entrada',
-            fechaVencimientoTarea: '2023-10-025',
+            fechaVencimientoTarea: '2023-10-25',
+            funcionarioAsignado: this.procedure.funcionario,
+            codigoDependencia: '313',
           }
           /*
           Swal.fire({
@@ -653,13 +655,18 @@ export class FormFurtComponent implements OnInit, OnDestroy {
             confirmButtonText: 'Aceptar',
           });
           */
+          console.log("se creo Tramite");
           if (this.tramitesServices.subirArchivo.anexos.length > 0) {
             this.uploadFileToFileNet();
           }
           if(this.archivosCargadosExitoso){
+            console.log("se subieron Archivos");
             this.tramitesServices.generateStickerUsingPOST(this.generarSticker).subscribe(genSticker =>{
+              console.log("se genero Sticker");
               this.tramitesServices.estamparStickerRequestDTO(this.estamparSticker).subscribe(estSticker =>{
+                console.log("se estampo Sticker");
                 this.tramitesServices.instanciarRadicacion(this.instanciarRadicacion).subscribe(insRadicacion =>{
+                  console.log("se instancio Radicacion");
                   this.sendEmail(
                     this.form.value.emailRadicar,
                     this.form.value.nombreRazonSocialPNJ,
@@ -684,7 +691,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
             });
           }
           this.resetFormulario();
-        },
+      },
         error: (err: any) => {
           this.saving = false;
           Swal.fire({
