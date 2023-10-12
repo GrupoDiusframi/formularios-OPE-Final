@@ -88,32 +88,54 @@ fdescribe('Suit de test unitarios para el servicio PqrsdService', () => {
   });
 
   describe('Test unitarios para el metodo getFilestoUpload', () => {
-    it('Debio retornar true porque se actualizo la propiedad subirArchivo cuando se ejecuto el metodo', () => {
-      const mockArchivo: File = new File(['testing'], 'testing.pdf', {
-        type: 'application/pdf',
-      });
+    it('debería asignar el valor de isubirArchivo a subirArchivo', () => {
+      // Configura tus datos de prueba
+      const isubirArchivoMock = {
+        archivo: new File(['contenido'], 'archivo.pdf'),
+        extension: 'pdf',
+        radicacion: '12345',
+        tipoDocumento: 'documento',
+        uploadBy: 'usuario',
+      };
 
-      expect(service.subirArchivo).toBeUndefined();
-      expect(service.subirArchivo).toBeFalsy();
+      // Llama al método que deseas probar
+      service.getFilestoUpload(isubirArchivoMock);
 
-      service.getFilestoUpload(mockArchivo);
-
-      expect(service.subirArchivo).toBeDefined();
+      // Aserción: Verifica que el valor de subirArchivo se haya asignado correctamente
       expect(service.subirArchivo).toBeTruthy();
+      expect(service.subirArchivo).toBeDefined();
     });
   });
 
   describe('Test unitarios para el metodo getArchivosCargados', () => {
 
-    it('Se debio actualizar el valor de la variable archivoCargados', () => {
-      const mockUploadArchivo: any[] = [];
-      spyOn(service, 'getArchivosCargados');
+    it('debería asignar el valor de uploadArchivo a archivoCargados', () => {
+      // Configura tus datos de prueba
+      const uploadArchivoMock = [
+         {
+          archivo: new File(['contenido'], 'archivo.pdf'),
+          extension: 'pdf',
+          radicacion: '123456',
+          tipoDocumento: 'documento',
+          uploadBy: 'usuario',
+        },
+        {
+          archivo: new File(['contenido'], 'archivo2.pdf'),
+          extension: 'pdf',
+          radicacion: '1234567',
+          tipoDocumento: 'documento',
+          uploadBy: 'usuario',
+        },
+        // Agrega otros elementos según sea necesario
+      ];
 
-      service.getArchivosCargados(mockUploadArchivo);
+      // Llama al método que deseas probar
+      service.getArchivosCargados(uploadArchivoMock);
 
+      // Aserción: Verifica que el valor de archivoCargados se haya asignado correctamente
+      expect(service.archivoCargados).toEqual(uploadArchivoMock);
       expect(service.archivoCargados).toBeTruthy();
-      expect(service.getArchivosCargados).toHaveBeenCalled();
-      expect(service.archivoCargados.length).toEqual(0);
+      expect(service.archivoCargados).toBeDefined();
     });
   });
 

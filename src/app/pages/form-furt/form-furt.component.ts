@@ -391,7 +391,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   }
 
 
-  private handleChangeRemPNJ(): void {
+  handleChangeRemPNJ(): void {
     this.form
       .get('idTipoIdentificacionRem')
       ?.setValue(
@@ -463,7 +463,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
           confirmButtonText: 'Aceptar',
         });
       } else {
-        this.archivosCargadosExitoso = false;
+        this.archivosCargadosExitoso = true;
         this.loaderFile = false;
         Swal.fire({
           position: 'center',
@@ -542,7 +542,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
 
       let numeroArchivos = 0;
       const cantidadArchivos = this.tramitesServices.subirArchivo.anexos.length;
-      const fsubs = this.subirArchivoCorrespondenciaPrueba();
+
     }
   }
 
@@ -637,7 +637,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
             tipoRadicacion: 'Radicación Entrada',
             fechaVencimientoTarea: '2023-10-25',
             funcionarioAsignado: this.procedure.funcionario,
-            codigoDependencia: '313',
+            codigoDependencia: this.procedure.codigoGrupoTrabajo,
           }
           /*
           Swal.fire({
@@ -728,6 +728,8 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   resetFormulario() {
     this.form.reset();
     this.isRemPNJ = false;
+    this.isCaptchaResolved = false;
+    this.confirmTermCond = false;
     this.ArchivosFormulario = undefined;
     this.tramitesServices.subirArchivo.anexos = this.limpiarArchivos;
     this.statusCarga = false;

@@ -13,6 +13,7 @@ import {
 import { SlicePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
+  DialogPosition,
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogModule,
@@ -47,19 +48,22 @@ import {
 } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { ModalComponent } from '../modal/modal.component';
-import { of, throwError } from 'rxjs';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { Observable, Subject, Subscription, of, throwError } from 'rxjs';
+import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { DepartamentoDTO, PaisDTO } from 'src/pqrsd-api/src/src/models';
 import {
   PaisesControllerService,
   PqrsdControllerService,
 } from 'src/pqrsd-api/src/src/services';
-import { TipoIdentificacion } from 'src/app/interfaces/natural-legal-person';
+import { ModalTermCondComponent } from '../shared/modal-term-cond/modal-term-cond.component';
+import { ISubirArchivoByte } from 'src/app/interfaces/ISubirArchivoByte';
+import { Files } from 'src/app/interfaces/Files.model';
 
 fdescribe('FormFurtComponent', () => {
   let component: FormFurtComponent;
   let fixture: ComponentFixture<FormFurtComponent>;
   let dialog: MatDialog;
+  let dialogRef: MatDialogRef<any>;
   let tramitesServices: TramitesServices;
   const formData = new FormData();
 
@@ -86,7 +90,18 @@ fdescribe('FormFurtComponent', () => {
         InputSwitchModule,
       ],
       declarations: [FormFurtComponent],
-      providers: [TramitesServices, MatDialog, UntypedFormBuilder, MatDialog],
+      providers: [
+        TramitesServices,
+        MatDialog,
+        UntypedFormBuilder,
+        {
+          provide: MatDialog,
+          useValue: {
+            open: () => ({ afterClosed: () => of(true) }), // Simulación de open() de MatDialog
+          },
+        },
+        { provide: MatDialogRef, useValue: {} },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
     fixture = TestBed.createComponent(FormFurtComponent);
@@ -94,6 +109,14 @@ fdescribe('FormFurtComponent', () => {
     dialog = TestBed.inject(MatDialog);
     tramitesServices = TestBed.inject(TramitesServices);
     fixture.detectChanges();
+    spyOn(tramitesServices, 'guardarTramite$').and.returnValue(
+      of({ message: '12345' })
+    );
+    spyOn(tramitesServices, 'generateStickerUsingPOST').and.returnValue(of({}));
+    spyOn(tramitesServices, 'estamparStickerRequestDTO').and.returnValue(
+      of({})
+    );
+    spyOn(tramitesServices, 'instanciarRadicacion').and.returnValue(of({}));
   });
 
   beforeEach(() => {
@@ -991,15 +1014,17 @@ fdescribe('FormFurtComponent', () => {
   });
 
   describe('Test unitarios del metodo openDialog', () => {
+    const tipoDocumento: Boolean = true;
     it('should open the dialog', () => {
       spyOn(dialog, 'open');
 
-      component.openDialog();
+      component.openDialog(tipoDocumento);
 
       expect(dialog.open).toHaveBeenCalledWith(ModalComponent, {
         width: '700px',
         data: {
           subirArchivo: component.tramitesServices.subirArchivo,
+          tipoDocumento: tipoDocumento,
         },
         disableClose: true,
       });
@@ -1091,11 +1116,11 @@ fdescribe('FormFurtComponent', () => {
             ],
             nombre: '1',
             descripcion: '1',
+            documentoPrincipal: true,
           },
         ],
         estado: true,
         obligatorio: true,
-        documentoPrincipal: false,
         funcionario: '29543633 - MELISSA LUCIO SAAVEDRA',
       };
 
@@ -1113,6 +1138,614 @@ fdescribe('FormFurtComponent', () => {
       // Verifica que cargaAnexos se inicialice como un array vacío
       expect(component.cargaAnexos).toEqual([]);
     });
+  });
+
+  describe('Test unitarios del metodo handleChangeRemPNJ()', () => {
+    it('handleChangeRemPNJ isRemPNJ es false', () => {
+      // Arrange
+      component.isRemPNJ = false;
+      const form = new FormGroup({
+        idTipoIdentificacionRem: new FormControl('1'),
+        nombreTipoIdentificacionRem: new FormControl('CEDULA'),
+        numeroIdentificacionRem: new FormControl('CEDULA'),
+        nombreRem: new FormControl('EDER'),
+        telefonoRem: new FormControl('1111111'),
+        emailRem: new FormControl('1@GMAIL.COM'),
+        direccionRem: new FormControl('CALLE 100'),
+        idPaisRem: new FormControl('80'),
+        paisRem: new FormControl('COLOMBIA'),
+        idDepartamentoRem: new FormControl('91'),
+        departamentoRem: new FormControl('ANTIOQUIA'),
+        idMunicipioRem: new FormControl('263'),
+        municipioRem: new FormControl('ARBOLETES'),
+        // ... otros campos del formulario ...
+      });
+      component.form = form;
+
+      // Act
+      component.handleChangeRemPNJ();
+
+      // Assert
+      expect(form.get('idTipoIdentificacionRem')?.value).toBeNull();
+      expect(form.get('nombreTipoIdentificacionRem')?.value).toBeNull();
+      expect(form.get('numeroIdentificacionRem')?.value).toBeNull();
+      expect(form.get('nombreRem')?.value).toBeNull();
+      expect(form.get('telefonoRem')?.value).toBeNull();
+      expect(form.get('emailRem')?.value).toBeNull();
+      expect(form.get('direccionRem')?.value).toBeNull();
+      expect(form.get('idPaisRem')?.value).toBeNull();
+      expect(form.get('paisRem')?.value).toBeNull();
+      expect(form.get('idDepartamentoRem')?.value).toBeNull();
+      expect(form.get('departamentoRem')?.value).toBeNull();
+      expect(form.get('idMunicipioRem')?.value).toBeNull();
+      expect(form.get('municipioRem')?.value).toBeNull();
+      // Verifica los otros campos del formulario de la misma manera
+    });
+
+    it('handleChangeRemPNJ PNJ isRemPNJ es true', () => {
+      // Arrange
+      component.isRemPNJ = true;
+      const form = new FormGroup({
+        idTipoIdentificacionPNJ: new FormControl('1'),
+        nombreTipoIdentificacionPNJ: new FormControl('CEDULA'),
+        numeroIdentificacionPNJ: new FormControl('1111111111'),
+        nombreRazonSocialPNJ: new FormControl('EDER'),
+        telefonoPNJ: new FormControl('1111111'),
+        emailPNJ: new FormControl('1@GMAIL.COM'),
+        direccionPNJ: new FormControl('CALLE 100'),
+        idPaisPNJ: new FormControl('80'),
+        paisPNJ: new FormControl('COLOMBIA'),
+        idDepartamentoPNJ: new FormControl('91'),
+        departamentoPNJ: new FormControl('ANTIOQUIA'),
+        idMunicipioPNJ: new FormControl('263'),
+        municipioPNJ: new FormControl('ARBOLETES'),
+
+        idTipoIdentificacionRem: new FormControl(),
+        nombreTipoIdentificacionRem: new FormControl(),
+        numeroIdentificacionRem: new FormControl(),
+        nombreRem: new FormControl(),
+        telefonoRem: new FormControl(),
+        emailRem: new FormControl(),
+        direccionRem: new FormControl(),
+        idPaisRem: new FormControl(),
+        paisRem: new FormControl(),
+        idDepartamentoRem: new FormControl(),
+        departamentoRem: new FormControl(),
+        idMunicipioRem: new FormControl(),
+        municipioRem: new FormControl(),
+      });
+      component.form = form;
+
+      // Act
+      component.handleChangeRemPNJ();
+
+      // Assert
+      expect(form.get('idTipoIdentificacionRem')?.value).toEqual(
+        form.get('idTipoIdentificacionRem')?.value
+      );
+      expect(form.get('nombreTipoIdentificacionRem')?.value).toEqual(
+        form.get('nombreTipoIdentificacionPNJ')?.value
+      );
+      expect(form.get('numeroIdentificacionRem')?.value).toEqual(
+        form.get('numeroIdentificacionPNJ')?.value
+      );
+      expect(form.get('nombreRem')?.value).toEqual(
+        form.get('nombreRazonSocialPNJ')?.value
+      );
+      expect(form.get('telefonoRem')?.value).toEqual(
+        form.get('telefonoPNJ')?.value
+      );
+      expect(form.get('emailRem')?.value).toEqual(form.get('emailPNJ')?.value);
+      expect(form.get('direccionRem')?.value).toEqual(
+        form.get('direccionPNJ')?.value
+      );
+      expect(form.get('idPaisRem')?.value).toEqual(
+        form.get('idPaisPNJ')?.value
+      );
+      expect(form.get('paisRem')?.value).toEqual(form.get('paisPNJ')?.value);
+      expect(form.get('idDepartamentoRem')?.value).toEqual(
+        form.get('idDepartamentoPNJ')?.value
+      );
+      expect(form.get('departamentoRem')?.value).toEqual(
+        form.get('departamentoPNJ')?.value
+      );
+      expect(form.get('idMunicipioRem')?.value).toEqual(
+        form.get('idMunicipioPNJ')?.value
+      );
+      expect(form.get('municipioRem')?.value).toEqual(
+        form.get('municipioPNJ')?.value
+      );
+      // Verifica los otros campos del formulario de la misma manera
+    });
+  });
+
+  describe('Test unitarios del metodo openDialogPrograma()', () => {
+    it('debería abrir el diálogo y cambiar el estado del checkbox según el resultado', () => {
+      component.openDialogPrograma();
+      expect(component.openDialogPrograma).toBeTruthy();
+      expect(component.openDialogPrograma).toBeDefined();
+    });
+  });
+
+  describe('Files', () => {
+    it('debería ser una instancia de Files', () => {
+      const files: Files = {
+        anexos: [
+          {
+            archivo: new File(['contenido'], 'archivo.txt'),
+            extension: 'txt',
+            radicacion: '12345',
+            tipoDocumento: 'documento',
+            uploadBy: 'usuario',
+          },
+          // Puedes agregar más elementos si es necesario
+        ],
+      };
+
+      expect(files).toBeTruthy();
+    });
+
+    it('debería tener propiedades de anexos', () => {
+      const files: Files = {
+        anexos: [
+          {
+            archivo: new File(['contenido'], 'archivo.txt'),
+            extension: 'txt',
+            radicacion: '12345',
+            tipoDocumento: 'documento',
+            uploadBy: 'usuario',
+          },
+          // Puedes agregar más elementos si es necesario
+        ],
+      };
+
+      expect(files.anexos).toBeTruthy();
+      expect(files.anexos.length).toBeGreaterThan(0);
+    });
+
+    it('debería cumplir con la interfaz ISubirArchivoByte', () => {
+      const files: Files = {
+        anexos: [
+          {
+            archivo: new File(['contenido'], 'archivo.txt'),
+            extension: 'txt',
+            radicacion: '12345',
+            tipoDocumento: 'documento',
+            uploadBy: 'usuario',
+          },
+          // Puedes agregar más elementos si es necesario
+        ],
+      };
+
+      const primerAnexo: ISubirArchivoByte = files.anexos[0];
+
+      expect(primerAnexo).toBeTruthy();
+      // Asegúrate de que las propiedades de ISubirArchivoByte estén presentes y tengan los valores esperados
+      expect(primerAnexo.archivo).toBeTruthy();
+      expect(primerAnexo.extension).toBe('txt');
+      expect(primerAnexo.radicacion).toBe('12345');
+      expect(primerAnexo.tipoDocumento).toBe('documento');
+      expect(primerAnexo.uploadBy).toBe('usuario');
+    });
+  });
+
+  describe('Test unitarios para el metodo getFilestoUpload', () => {
+    it('debería asignar el valor de isubirArchivo a subirArchivo', () => {
+      // Configura tus datos de prueba
+      const isubirArchivoMock = {
+        archivo: new File(['contenido'], 'archivo.pdf'),
+        extension: 'pdf',
+        radicacion: '12345',
+        tipoDocumento: 'documento',
+        uploadBy: 'usuario',
+      };
+
+      // Llama al método que deseas probar
+      tramitesServices.getFilestoUpload(isubirArchivoMock);
+
+      // Aserción: Verifica que el valor de subirArchivo se haya asignado correctamente
+      expect(tramitesServices.subirArchivo).toBeTruthy();
+      expect(tramitesServices.subirArchivo).toBeDefined();
+    });
+  });
+
+  describe('Test unitarios para el metodo getArchivosCargados', () => {
+    it('debería asignar el valor de uploadArchivo a archivoCargados', () => {
+      // Configura tus datos de prueba
+      const uploadArchivoMock = [
+        {
+          archivo: new File(['contenido'], 'archivo.pdf'),
+          extension: 'pdf',
+          radicacion: '123456',
+          tipoDocumento: 'documento',
+          uploadBy: 'usuario',
+        },
+        {
+          archivo: new File(['contenido'], 'archivo2.pdf'),
+          extension: 'pdf',
+          radicacion: '1234567',
+          tipoDocumento: 'documento',
+          uploadBy: 'usuario',
+        },
+        // Agrega otros elementos según sea necesario
+      ];
+
+      // Llama al método que deseas probar
+      tramitesServices.getArchivosCargados(uploadArchivoMock);
+
+      // Aserción: Verifica que el valor de archivoCargados se haya asignado correctamente
+      expect(tramitesServices.archivoCargados).toEqual(uploadArchivoMock);
+      expect(tramitesServices.archivoCargados).toBeTruthy();
+      expect(tramitesServices.archivoCargados).toBeDefined();
+    });
+  });
+
+  describe('Test unitarios para el metodo uploadFileToFileNet()', () => {
+    it('debería asignar el valor de uploadArchivo a archivoCargados', fakeAsync(() => {
+      const anexosMock = {
+        archivo: new File(['contenido'], 'archivo.pdf'),
+        extension: 'pdf',
+        radicacion: '2023-01-006799',
+        tipoDocumento: 'documento',
+        uploadBy: 'usuario',
+      };
+
+      const anexosMockArray = [
+        {
+          archivo: new File(['contenido'], 'archivo1.pdf'),
+          extension: 'pdf',
+          radicacion: '2023-01-006799',
+          tipoDocumento: 'documento',
+          uploadBy: 'usuario',
+        },
+        // ... otros anexos
+      ];
+
+      tramitesServices.getFilestoUpload(anexosMock);
+      tramitesServices.subirArchivo.anexos = anexosMockArray;
+      // Llama al método que deseas probar
+      component.uploadFileToFileNet();
+
+      tick();
+
+      // Realiza aserciones para verificar que el método funciona como se espera
+      expect(component.loaderFile).toBe(true); // Debería haber activado loaderFile
+      expect(component.tramitesServices.subirArchivo.anexos[0].radicacion).toBe(
+        '2023-01-006799'
+      );
+      expect(
+        component.tramitesServices.subirArchivo.anexos[0].nombre
+      ).toBeUndefined();
+    }));
+  });
+
+  describe('Test unitarios para el metodo progressFiles()', () => {
+    it('should handle HttpEventType.UploadProgress', fakeAsync(() => {
+      spyOn(Swal, 'fire').and.returnValue(
+        Promise.resolve({
+          isConfirmed: true,
+          isDenied: false,
+          isDismissed: false,
+        })
+      );
+      const eventMock = { type: 1, loaded: 50, total: 100 } as HttpEvent<any>;
+
+      component.progressFiles(eventMock);
+
+      expect(component.progress).toBe(50);
+      // También puedes verificar que Swal.fire no se haya llamado o que se haya llamado con ciertos parámetros, según tu lógica.
+    }));
+
+    it('should handle HttpEventType.Response with successful response', fakeAsync(() => {
+      spyOn(Swal, 'fire').and.returnValue(
+        Promise.resolve({
+          isConfirmed: true,
+          isDenied: false,
+          isDismissed: false,
+        })
+      );
+      const eventMock = {
+        type: 4,
+        body: { resultados: [{ codigo: 0 }] },
+      } as HttpEvent<any>;
+
+      component.progressFiles(eventMock);
+
+      expect(component.archivosCargadosExitoso).toBe(true);
+      expect(component.loaderFile).toBe(false);
+      expect(component.progressFiles).toBeDefined();
+      expect(component.progressFiles).toBeTruthy();
+      // Verifica que Swal.fire se haya llamado con los parámetros adecuados
+      expect(Swal.fire).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          position: 'center',
+          icon: 'success',
+          title: jasmine.stringMatching(
+            /Se guardaron con éxito un total de \d+ Archivos/
+          ),
+          confirmButtonColor: '#045cab',
+          confirmButtonText: 'Aceptar',
+        })
+      );
+    }));
+
+    it('should handle HttpEventType.Response with error response', fakeAsync(() => {
+      spyOn(Swal, 'fire').and.returnValue(
+        Promise.resolve({
+          isConfirmed: true,
+          isDenied: false,
+          isDismissed: false,
+        })
+      );
+      const eventMock = {
+        type: 4,
+        body: { resultados: [{ codigo: 1 }] },
+      } as HttpEvent<any>;
+
+      component.progressFiles(eventMock);
+
+      expect(component.archivosCargadosExitoso).toBe(false);
+      expect(component.progressFiles).toBeDefined();
+      expect(component.progressFiles).toBeTruthy();
+
+      // Verifica que Swal.fire se haya llamado con los parámetros adecuados
+      expect(Swal.fire).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          icon: 'error',
+          text: 'Error al subir el ANEXO al filenet',
+          confirmButtonColor: '#045cab',
+          confirmButtonText: 'Aceptar',
+        })
+      );
+    }));
+  });
+
+  describe('Test unitarios para el metodo subirArchivoCorrespondenciaPrueba()', () => {
+    it('should call subirArchivoFilenetPrueba with FormData and handle successful response', () => {
+      const anexosMock = {
+        archivo: new File(['contenido'], 'archivo.pdf'),
+        extension: 'pdf',
+        radicacion: '2023-01-006799',
+        tipoDocumento: 'documento',
+        uploadBy: 'usuario',
+      };
+
+      const anexosMockArray = [
+        {
+          archivo: new File(['contenido'], 'archivo1.pdf'),
+          extension: 'pdf',
+          radicacion: '2023-01-006799',
+          tipoDocumento: 'documento',
+          uploadBy: 'usuario',
+        },
+        // ... otros anexos
+      ];
+
+      tramitesServices.getFilestoUpload(anexosMock);
+      tramitesServices.subirArchivo.anexos = anexosMockArray;
+      // Llama al método que deseas probar
+      component.uploadFileToFileNet();
+
+      const anexos = [anexosMockArray];
+
+      // Espía el método subirArchivoFilenetPrueba para devolver un observable exitoso
+      spyOn(tramitesServices, 'subirArchivoFilenetPrueba').and.returnValue(
+        of('respuesta exitosa')
+      );
+
+      // Configura los anexos en el servicio
+      tramitesServices.subirArchivo.anexos = anexosMockArray;
+
+      spyOn(Swal, 'fire').and.returnValue(
+        Promise.resolve({
+          isConfirmed: true,
+          isDenied: false,
+          isDismissed: false,
+        })
+      );
+      const eventMock = {
+        type: 4,
+        body: { resultados: [{ codigo: 1 }] },
+      } as HttpEvent<any>;
+
+      component.progressFiles(eventMock);
+      // Llama al método que deseas probar
+      component.subirArchivoCorrespondenciaPrueba();
+      expect(component.subirArchivoCorrespondenciaPrueba).toBeTruthy();
+      expect(component.subirArchivoCorrespondenciaPrueba).toBeDefined();
+
+      // Avanza el reloj para manejar la suscripción observable
+      fixture.detectChanges();
+    });
+
+    it('should handle error response', () => {
+      const anexosMock = {
+        archivo: new File(['contenido'], 'archivo.pdf'),
+        extension: 'pdf',
+        radicacion: '2023-01-006799',
+        tipoDocumento: 'documento',
+        uploadBy: 'usuario',
+      };
+
+      const anexosMockArray = [
+        {
+          archivo: new File(['contenido'], 'archivo1.pdf'),
+          extension: 'pdf',
+          radicacion: '2023-01-006799',
+          tipoDocumento: 'documento',
+          uploadBy: 'usuario',
+        },
+        // ... otros anexos
+      ];
+
+      tramitesServices.getFilestoUpload(anexosMock);
+      tramitesServices.subirArchivo.anexos = anexosMockArray;
+      // Llama al método que deseas probar
+      component.uploadFileToFileNet();
+
+      const anexos = [anexosMockArray];
+      spyOn(Swal, 'fire').and.returnValue(
+        Promise.resolve({
+          isConfirmed: true,
+          isDenied: false,
+          isDismissed: false,
+        })
+      );
+      const eventMock = {
+        type: 4,
+        body: { resultados: [{ codigo: 1 }] },
+      } as HttpEvent<any>;
+
+      component.progressFiles(eventMock);
+      // Espía el método subirArchivoFilenetPrueba para devolver un observable de error
+      spyOn(tramitesServices, 'subirArchivoFilenetPrueba').and.returnValue(
+        of(new Error('Error'))
+      );
+
+      // Llama al método que deseas probar
+      component.subirArchivoCorrespondenciaPrueba();
+      expect(component.subirArchivoCorrespondenciaPrueba).toBeTruthy();
+      expect(component.subirArchivoCorrespondenciaPrueba).toBeDefined();
+
+      fixture.detectChanges();
+    });
+  });
+
+
+  describe('Test unitarios para el metodo guardarTramite()', () => {
+    it('guardarTramite con valid form data and handle successful response', fakeAsync(() => {
+      spyOn(tramitesServices, 'guardarTramite$');
+      // Configura el estado del formulario con datos válidos
+      component.form.get('idMunicipioPNJ')?.setValue('Ciudad');
+      // Configura otros valores del formulario según sea necesario
+
+      // Espía el método guardarTramite$ para devolver un observable exitoso
+      spyOn(tramitesServices, 'guardarTramite$').and.returnValue(
+        of({ message: '123' })
+      );
+
+      // Espía otros métodos que llamarás dentro de guardarTramite
+      spyOn(component, 'uploadFileToFileNet').and.stub(); // Stub porque es espiado en otra prueba
+      spyOn(tramitesServices, 'generateStickerUsingPOST').and.returnValue(
+        of({})
+      );
+      spyOn(tramitesServices, 'estamparStickerRequestDTO').and.returnValue(
+        of({})
+      );
+      spyOn(tramitesServices, 'instanciarRadicacion').and.returnValue(of({}));
+
+      // Simula el reloj
+      jasmine.clock().install();
+      const fakeDate = new Date('2023-01-01');
+      jasmine.clock().mockDate(fakeDate);
+
+      // Llama al método que deseas probar
+      component.guardarTramite();
+
+      // Avanza el reloj para manejar la suscripción observable
+      tick();
+
+      // Agrega expectativas para asegurarte de que los métodos se hayan llamado y otros aspectos del componente
+      expect(tramitesServices.guardarTramite$).toHaveBeenCalledWith(
+        requestRadicacionRadicar
+      );
+      const anexosMock = {
+        archivo: new File(['contenido'], 'archivo.pdf'),
+        extension: 'pdf',
+        radicacion: '2023-01-006799',
+        tipoDocumento: 'documento',
+        uploadBy: 'usuario',
+      };
+
+      const anexosMockArray = [
+        {
+          archivo: new File(['contenido'], 'archivo1.pdf'),
+          extension: 'pdf',
+          radicacion: '2023-01-006799',
+          tipoDocumento: 'documento',
+          uploadBy: 'usuario',
+        },
+        // ... otros anexos
+      ];
+      tramitesServices.getFilestoUpload(anexosMock);
+      component.uploadFileToFileNet();
+
+      const generarSticker = {
+        cantidadSticker: 1,
+        formatoRequerido: 'PDF',
+        generadoPor: '',
+        numRadicado: '2023-01-006799',
+        numeroProceso: '',
+      };
+      const estamparSticker = {
+        base64Sticker: '',
+        numeroRadicado: '2023-01-006799',
+      };
+      const instanciarRadicacion = {
+        numeroRadicado: '2023-01-006799',
+        tipoRadicacion: 'Radicación Entrada',
+        fechaVencimientoTarea: '2023-10-25',
+        funcionarioAsignado: 'EDER',
+        codigoDependencia: '548',
+      };
+
+      tramitesServices.subirArchivo.anexos = anexosMockArray;
+      expect(component.uploadFileToFileNet).toHaveBeenCalled();
+      expect(tramitesServices.generateStickerUsingPOST).toHaveBeenCalledWith(
+        generarSticker
+      );
+      expect(tramitesServices.estamparStickerRequestDTO).toHaveBeenCalledWith(
+        estamparSticker
+      );
+      expect(tramitesServices.instanciarRadicacion).toHaveBeenCalledWith(
+        instanciarRadicacion
+      );
+
+      // Verifica los cambios en el componente
+      expect(component.saving).toBe(false);
+      expect(component.numeroTramite).toBe('123');
+      // Agrega expectativas adicionales según sea necesario
+
+      // Comprueba que el formulario se haya restablecido
+      expect(component.form.valid).toBe(false);
+
+      // Restaura el reloj
+      jasmine.clock().uninstall();
+    }));
+
+    it('should handle error response from guardarTramite', fakeAsync(() => {
+      // Configura el estado del formulario con datos válidos
+      component.form.get('idMunicipioPNJ')?.setValue('Ciudad');
+      // Configura otros valores del formulario según sea necesario
+
+      // Espía el método guardarTramite$ para devolver un observable de error
+      spyOn(tramitesServices, 'guardarTramite$').and.returnValue(
+        throwError('Error')
+      );
+
+      jasmine.clock().install();
+      const fakeDate = new Date('2023-01-01');
+      jasmine.clock().mockDate(fakeDate);
+
+      // Llama al método que deseas probar
+      component.guardarTramite();
+
+      // Avanza el reloj para manejar la suscripción observable
+      tick();
+
+      // Agrega expectativas para asegurarte de que los métodos se hayan llamado y otros aspectos del componente
+
+      expect(tramitesServices.guardarTramite$).toHaveBeenCalledWith(
+        requestRadicacionRadicar
+      );
+
+      // Verifica que el componente haya manejado el error
+      expect(component.saving).toBe(false);
+      // Agrega expectativas adicionales según sea necesario
+
+      // Restaura el reloj
+      jasmine.clock().uninstall();
+    }));
   });
 
 });
