@@ -44,3 +44,42 @@ export const requestRadicacionRadicar ={
   nombreSerie:'TODAS',
   nombreSubSerie:'TODAS'
 }
+export const InstanciarRadicacion ={
+  numeroRadicado: '2023-01-006096',
+  tipoRadicacion: 'Radicación Entrada',
+  fechaVencimientoTarea: '2023-10-12',
+  funcionarioAsignado: 'OMAR FABIO CUENTAS GONZALEZ',
+  codigoDependencia: '548'
+}
+
+export const generarSticker = {
+  cantidadSticker: 1,
+  formatoRequerido: 'PDF',
+  generadoPor: '',
+  numRadicado: '2023-01-006799',
+  numeroProceso: '',
+}
+export const estamparSticker = {
+  base64Sticker: '',
+  numeroRadicado: '2023-01-006799',
+}
+
+export const anexosMock = {
+  archivo: new File(['contenido'], 'archivo.pdf'),
+  extension: 'pdf',
+  radicacion: '2023-01-006799',
+  tipoDocumento: 'documento',
+  uploadBy: 'usuario',
+};
+
+export const anexosMockArray = [
+  {
+    archivo: new File(['contenido'], 'archivo1.pdf'),
+    extension: 'pdf',
+    radicacion: '2023-01-006799',
+    tipoDocumento: 'documento',
+    uploadBy: 'usuario',
+  },
+  // ... otros anexos
+];
+
