@@ -59,7 +59,9 @@ hover {
 .scrollable-content {
   margin-top: 60px;
   height: 380px;
-  border: 1px solid #ccc;
+  border: white;
   padding: 20px;
   overflow-y: auto; /* Cambia 'scroll' a 'auto' */
+  scrollbar-color: white;
 }
+

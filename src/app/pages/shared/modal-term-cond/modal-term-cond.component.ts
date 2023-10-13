@@ -1,4 +1,6 @@
-import { Component, ElementRef, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, OnDestroy, OnInit, Output, Renderer2, ViewChild, AfterViewInit } from '@angular/core';
+
+
 import { CommonModule } from '@angular/common';
 
 //PRIMENG
@@ -19,7 +21,9 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './modal-term-cond.component.html',
   styleUrls: ['./modal-term-cond.component.scss'],
 })
-export class ModalTermCondComponent implements OnInit, OnDestroy {
+export class ModalTermCondComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('scrollableContent') scrollableContent!: ElementRef;
+  scrollRecorrido: boolean = false;
   private confirmationService: ConfirmationService = inject(ConfirmationService);
   private notifier = new Subject();
   visible!: boolean;
@@ -32,7 +36,11 @@ export class ModalTermCondComponent implements OnInit, OnDestroy {
   }
 
   constructor(private http: HttpClient,
-    public _dialogRef: MatDialogRef<ModalTermCondComponent>,) { }
+    private renderer: Renderer2,
+    public _dialogRef: MatDialogRef<ModalTermCondComponent>,
+    ) { }
+
+
 
   showDialogTermCond(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -79,4 +87,23 @@ export class ModalTermCondComponent implements OnInit, OnDestroy {
     const respuesta:boolean = false;
     this._dialogRef.close(respuesta);
   }
+
+  ngAfterViewInit() {
+    this.scrollableContent.nativeElement.addEventListener('scroll', () => {
+      console.log('Evento de desplazamiento detectado');
+      if (this.isScrolledToBottom(this.scrollableContent.nativeElement)) {
+        // El usuario ha llegado al final del scroll, aquí puedes habilitar tu botón
+        this.scrollRecorrido = true;
+      }
+    });
+  }
+
+  isScrolledToBottom(element: HTMLElement): boolean {
+    const scrollTop = element.scrollTop;
+    const scrollHeight = element.scrollHeight;
+    const clientHeight = element.clientHeight;
+
+    return scrollTop + clientHeight >= scrollHeight;
+  }
+
 }

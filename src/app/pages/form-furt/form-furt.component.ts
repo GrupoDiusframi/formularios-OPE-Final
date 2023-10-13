@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -85,10 +92,10 @@ export class FormFurtComponent implements OnInit, OnDestroy {
   isRemPNJ!: boolean;
   token: string = '';
   saving = false;
-  generarSticker!:GenerarSticker;
-  estamparSticker!:EstamparSticker;
-  instanciarRadicacion!:InstanciarRadicacion;
-  archivosCargadosExitoso!:Boolean;
+  generarSticker!: GenerarSticker;
+  estamparSticker!: EstamparSticker;
+  instanciarRadicacion!: InstanciarRadicacion;
+  archivosCargadosExitoso!: Boolean;
 
   countries!: Array<PaisDTO>;
   departments!: Array<DepartamentoDTO>;
@@ -129,21 +136,19 @@ export class FormFurtComponent implements OnInit, OnDestroy {
 
   openDialogPrograma(): void {
     const dialogRef = this.dialog.open(ModalTermCondComponent, {
-      width: '70%',
-      height: '80%',
+      width: '50%',
+      height: '80vh',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if(result){
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
         this.cambiarEstadoCheckbox(true);
       }
-      if(!result){
+      if (!result) {
         this.cambiarEstadoCheckbox(false);
       }
     });
-
   }
-
 
   //handleChangeProcedure(idTramite: number) {}
   getListTipoIdentificacion(): void {
@@ -286,7 +291,6 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       emailPNJ: new FormControl(null, [
         Validators.required,
         Validators.email,
-        Validators.minLength(7),
       ]),
       direccionPNJ: new FormControl(null, [
         Validators.required,
@@ -319,7 +323,6 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       emailRem: new FormControl(null, [
         Validators.required,
         Validators.email,
-        Validators.minLength(7),
       ]),
       direccionRem: new FormControl(null, [
         Validators.required,
@@ -346,7 +349,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog(tipoDocumento:Boolean) {
+  openDialog(tipoDocumento: Boolean) {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '700px',
       data: {
@@ -390,7 +393,6 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       });
   }
 
-
   handleChangeRemPNJ(): void {
     this.form
       .get('idTipoIdentificacionRem')
@@ -433,9 +435,10 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       .get('departamentoRem')
       ?.setValue(this.isRemPNJ ? this.form.value.departamentoPNJ : null);
 
-    this.form
-      .get('idMunicipioRem')
+    this.form.get('idMunicipioRem')
       ?.setValue(this.isRemPNJ ? this.form.value.idMunicipioPNJ : null);
+      console.log("Ciudad idMunicipioPNJ: "+this.form.value.idMunicipioPNJ);
+      console.log("Ciudad idMunicipioRem ya asignado: "+this.form.value.idMunicipioRem);
     this.form
       .get('municipioRem')
       ?.setValue(this.isRemPNJ ? this.form.value.municipioPNJ : null);
@@ -535,14 +538,13 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     if (this.tramitesServices.subirArchivo.anexos.length !== 0) {
       this.tramitesServices.subirArchivo.anexos =
         this.tramitesServices.subirArchivo.anexos.map((archivo) => {
-          archivo.radicacion = '2023-01-006799';
+          archivo.radicacion = this.numeroTramite;
           delete archivo.nombre;
           return archivo;
         });
 
       let numeroArchivos = 0;
       const cantidadArchivos = this.tramitesServices.subirArchivo.anexos.length;
-
     }
   }
 
@@ -615,30 +617,29 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     };
     if (this.form.valid) {
       const request = this.tramitesServices.guardarTramite$(orderRequest);
-      request.subscribe({
-        next: (res) => {
+      request.subscribe({next: (res) => {
           this.saving = false;
           this.numeroTramite = res.message;
           console.log(res);
           this.loader = false;
-          this.generarSticker  = {
+          this.generarSticker = {
             cantidadSticker: 1,
             formatoRequerido: 'PDF',
             generadoPor: '',
             numRadicado: res.message,
             numeroProceso: '',
-          }
+          };
           this.estamparSticker = {
             base64Sticker: '',
             numeroRadicado: res.message,
-          }
+          };
           this.instanciarRadicacion = {
             numeroRadicado: res.message,
             tipoRadicacion: 'Radicación Entrada',
             fechaVencimientoTarea: '2023-10-25',
             funcionarioAsignado: this.procedure.funcionario,
             codigoDependencia: this.procedure.codigoGrupoTrabajo,
-          }
+          };
           /*
           Swal.fire({
             icon: 'success',
@@ -655,43 +656,49 @@ export class FormFurtComponent implements OnInit, OnDestroy {
             confirmButtonText: 'Aceptar',
           });
           */
-          console.log("se creo Tramite");
+          console.log('se creo Tramite');
           if (this.tramitesServices.subirArchivo.anexos.length > 0) {
             this.uploadFileToFileNet();
           }
-          if(this.archivosCargadosExitoso){
-            console.log("se subieron Archivos");
-            this.tramitesServices.generateStickerUsingPOST(this.generarSticker).subscribe(genSticker =>{
-              console.log("se genero Sticker");
-              this.tramitesServices.estamparStickerRequestDTO(this.estamparSticker).subscribe(estSticker =>{
-                console.log("se estampo Sticker");
-                this.tramitesServices.instanciarRadicacion(this.instanciarRadicacion).subscribe(insRadicacion =>{
-                  console.log("se instancio Radicacion");
-                  this.sendEmail(
-                    this.form.value.emailRadicar,
-                    this.form.value.nombreRazonSocialPNJ,
-                    this.numeroTramite
-                  );
-                  Swal.fire({
-                    icon: 'success',
-                    text:
-                      'Su TRAMITE fue radicado con éxito con los siguientes datos: ' +
-                      ' N° de Tramite ' +
-                      res.message +
-                      '\n' +
-                      '. Fecha: ' +
-                      fechaFormulario +
-                      '\n' +
-                      '. La información de su TRAMITE fue enviada al correo electrónico principal registrado en el formulario.',
-                    confirmButtonColor: '#045cab',
-                    confirmButtonText: 'Aceptar',
+          if (this.archivosCargadosExitoso) {
+            console.log('se subieron Archivos');
+            this.tramitesServices
+              .generateStickerUsingPOST(this.generarSticker)
+              .subscribe((genSticker) => {
+                console.log('se genero Sticker');
+                this.tramitesServices
+                  .estamparStickerRequestDTO(this.estamparSticker)
+                  .subscribe((estSticker) => {
+                    console.log('se estampo Sticker');
+                    this.tramitesServices
+                      .instanciarRadicacion(this.instanciarRadicacion)
+                      .subscribe((insRadicacion) => {
+                        console.log('se instancio Radicacion');
+                        this.sendEmail(
+                          this.form.value.emailRadicar,
+                          this.form.value.nombreRazonSocialPNJ,
+                          this.numeroTramite
+                        );
+                        Swal.fire({
+                          icon: 'success',
+                          text:
+                            'Su TRAMITE fue radicado con éxito con los siguientes datos: ' +
+                            ' N° de Tramite ' +
+                            res.message +
+                            '\n' +
+                            '. Fecha: ' +
+                            fechaFormulario +
+                            '\n' +
+                            '. La información de su TRAMITE fue enviada al correo electrónico principal registrado en el formulario.',
+                          confirmButtonColor: '#045cab',
+                          confirmButtonText: 'Aceptar',
+                        });
+                      });
                   });
-                });
               });
-            });
           }
           this.resetFormulario();
-      },
+        },
         error: (err: any) => {
           this.saving = false;
           Swal.fire({

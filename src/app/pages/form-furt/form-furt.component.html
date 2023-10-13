@@ -1,376 +1,390 @@
 <div class="body">
   <form [formGroup]="form" class="card-container">
-      <p-accordion [multiple]="true">
-        <p-accordionTab header="Información General" [selected]="true" class="general">
-          <div class="grid p-fluid card-container pt-2">
-            <div class="field col-12">
-              <label for="float-input" style="color: #93bbf3 ;">Descripción del Trámite:</label>
-                <textarea
-                  readonly
-                  id="float-input"
-                  rows="5"
-                  cols="30"
-                  pInputTextarea
-                  formControlName="descripcionTramite"
-                ></textarea>
-            </div>
-            <div class="field col-12 md:col-6">
-              <label for="float-input" style="color: #93bbf3 ;">Proceso</label>
-                <input
-                  readonly
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  formControlName="claseProceso"
-                />
-            </div>
-            <div class="field col-12 md:col-6">
-              <label for="float-input" style="color: #93bbf3 ;"
-              >Dependencia <small class="p-error">*</small></label>
-                <input
-                  readonly
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  descripcion="dependencia"
-                  formControlName="dependencia"
-                />
-              <small
-                *ngIf="
-                  form.controls['dependencia'].hasError('required') &&
-                  (form.controls['dependencia'].dirty ||
-                    form.controls['dependencia'].touched)
-                "
+    <p-accordion [multiple]="true">
+      <p-accordionTab
+        header="Información General"
+        [selected]="true"
+        class="general"
+      >
+        <div class="grid p-fluid card-container pt-2">
+          <div class="field col-12">
+            <label for="float-input" style="color: #93bbf3"
+              >Descripción del Trámite:</label
+            >
+            <textarea
+              readonly
+              id="float-input"
+              rows="5"
+              cols="30"
+              pInputTextarea
+              formControlName="descripcionTramite"
+            ></textarea>
+          </div>
+          <div class="field col-12 md:col-6">
+            <label for="float-input" style="color: #93bbf3">Proceso</label>
+            <input
+              readonly
+              id="float-input"
+              type="text"
+              pInputText
+              formControlName="claseProceso"
+            />
+          </div>
+          <div class="field col-12 md:col-6">
+            <label for="float-input" style="color: #93bbf3"
+              >Dependencia <small class="p-error">*</small></label
+            >
+            <input
+              readonly
+              id="float-input"
+              type="text"
+              pInputText
+              descripcion="dependencia"
+              formControlName="dependencia"
+            />
+            <small
+              *ngIf="
+                form.controls['dependencia'].hasError('required') &&
+                (form.controls['dependencia'].dirty ||
+                  form.controls['dependencia'].touched)
+              "
+            >
+              El campo dependencia es requerido.</small
+            >
+          </div>
+          <div class="field col-12 md:col-6">
+            <span class="flex flex-wrap align-content-center p-label">
+              <label
+                class="flex flex-wrap align-content-center mr-2"
+                for="isExistProcess"
+                style="color: #93bbf3"
+                >Proceso Existente:</label
               >
-                El campo dependencia es requerido.</small
-              >
-            </div>
-            <div class="field col-12 md:col-6">
-              <span class="flex flex-wrap align-content-center p-label">
-                <label
-                  class="flex flex-wrap align-content-center mr-2"
-                  for="isExistProcess" style="color: #93bbf3 ;"
-                  >Proceso Existente:</label
+              <p-inputSwitch
+                class="flex align-content-center mr-2"
+                inputId="isExistProcess"
+                (onChange)="handleChangeProcess($event)"
+                [formControl]="isExistProcess"
+              ></p-inputSwitch>
+              <i
+                class="flex align-items-center pi pi-info-circle"
+                pTooltip="Si su trámite corresponde a un proceso existente por favor active el switch y diligencie los campos solicitados"
+              ></i>
+            </span>
+          </div>
+          <div class="field col-12 md:col-6">
+            <span>
+              <div class="flex flex-row">
+                <label for="processNumber" class="mr-2" style="color: #93bbf3"
+                  >Número de proceso</label
                 >
-                <p-inputSwitch
-                  class="flex align-content-center mr-2"
-                  inputId="isExistProcess"
-                  (onChange)="handleChangeProcess($event)"
-                  [formControl]="isExistProcess"
-                ></p-inputSwitch>
                 <i
                   class="flex align-items-center pi pi-info-circle"
-                  pTooltip="Si su trámite corresponde a un proceso existente por favor active el switch y diligencie los campos solicitados"
+                  pTooltip="Ingrese el número del proceso existente en la superintendencia de sociedades, ejemplo: 1234-123-123"
                 ></i>
-              </span>
-            </div>
-            <div class="field col-12 md:col-6">
-              <span>
-                <div class="flex flex-row">
-                  <label for="processNumber" class="mr-2" style="color: #93bbf3 ;"
-                    >Número de proceso</label
-                  >
-                  <i
-                    class="flex align-items-center pi pi-info-circle"
-                    pTooltip="Ingrese el número del proceso existente en la superintendencia de sociedades, ejemplo: 1234-123-123"
-                  ></i>
-                </div>
-                <input
-                  id="processNumber"
-                  formControlName="numeroProceso"
-                  type="text"
-                  pInputText
-                  [pKeyFilter]="processNumberRegex"
-                  [pValidateOnly]="true"
-                  placeholder="1234-123-123"
-                />
-              </span>
-            </div>
+              </div>
+              <input
+                id="processNumber"
+                formControlName="numeroProceso"
+                type="text"
+                pInputText
+                [pKeyFilter]="processNumberRegex"
+                [pValidateOnly]="true"
+                placeholder="1234-123-123"
+              />
+            </span>
           </div>
-        </p-accordionTab>
-        <p-accordionTab header="Información persona natural / jurídica">
-          <div class="grid p-fluid card-container pt-2">
-            <div class="field col-12 md:col-4" style="margin-top: -2%;">
-              <label for="applicantType" style="color: #93bbf3 ;"
+        </div>
+      </p-accordionTab>
+      <p-accordionTab
+        header="Información persona natural / jurídica"
+        [selected]="true"
+      >
+        <div class="grid p-fluid card-container pt-2">
+          <div class="field col-12 md:col-4" style="margin-top: -2%">
+            <label for="applicantType" style="color: #93bbf3"
               >Tipo solicitante <small class="p-error">*</small></label
             >
-                <p-dropdown
-                  inputId="applicantType"
-                  [options]="tipoSolicitante"
-                  [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  [filter]="true"
-                  optionLabel="nombre"
-                  optionValue="codigo"
-                  emptyFilterMessage="No se encontró ningún resultado"
-                  formControlName="idTipoSolicitantePNJ"
-                ></p-dropdown>
-              <small
-                *ngIf="
-                  form.controls['idTipoSolicitantePNJ'].hasError('required') &&
-                  (form.controls['idTipoSolicitantePNJ'].dirty ||
-                    form.controls['idTipoSolicitantePNJ'].touched)
-                "
-                class="p-error block"
-              >
-                El campo tipo solicitante es requerido.
-              </small>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -2%;">
-              <label for="documentType" style="color: #93bbf3 ;"
+            <p-dropdown
+              inputId="applicantType"
+              [options]="tipoSolicitante"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [filter]="true"
+              optionLabel="nombre"
+              optionValue="codigo"
+              emptyFilterMessage="No se encontró ningún resultado"
+              formControlName="idTipoSolicitantePNJ"
+            ></p-dropdown>
+            <small
+              *ngIf="
+                form.controls['idTipoSolicitantePNJ'].hasError('required') &&
+                (form.controls['idTipoSolicitantePNJ'].dirty ||
+                  form.controls['idTipoSolicitantePNJ'].touched)
+              "
+              class="p-error block"
+            >
+              El campo tipo solicitante es requerido.
+            </small>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -2%">
+            <label for="documentType" style="color: #93bbf3"
               >Tipo identificación <small class="p-error">*</small></label
             >
-                <p-dropdown
-                  inputId="documentType"
-                  [options]="tiposIdentificacion"
-                  [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  [filter]="true"
-                  optionLabel="nombre"
-                  optionValue="idTipoIdentificacion"
-                  emptyFilterMessage="No se encontró ningún resultado"
-                  formControlName="idTipoIdentificacionPNJ"
-                ></p-dropdown>
+            <p-dropdown
+              inputId="documentType"
+              [options]="tiposIdentificacion"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [filter]="true"
+              optionLabel="nombre"
+              optionValue="idTipoIdentificacion"
+              emptyFilterMessage="No se encontró ningún resultado"
+              formControlName="idTipoIdentificacionPNJ"
+            ></p-dropdown>
+            <small
+              *ngIf="
+                form.controls['idTipoIdentificacionPNJ'].hasError('required') &&
+                (form.controls['idTipoIdentificacionPNJ'].dirty ||
+                  form.controls['idTipoIdentificacionPNJ'].touched)
+              "
+              class="p-error block"
+              >El campo tipo identificación es requerido.</small
+            >
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -2%">
+            <label for="documentNumber" style="color: #93bbf3"
+              >No. identificación <small class="p-error">*</small></label
+            >
+            <input
+              type="text"
+              pInputText
+              formControlName="numeroIdentificacionPNJ"
+              inputId="documentNumber"
+              pKeyFilter="int"
+              maxlength="20"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{
+                  form.controls["numeroIdentificacionPNJ"].value?.length || 0
+                }}
+                / 20</small
+              >
               <small
                 *ngIf="
-                  form.controls['idTipoIdentificacionPNJ'].hasError(
+                  form.controls['numeroIdentificacionPNJ'].hasError('minlength')
+                "
+                class="p-error block"
+              >
+                El mínimo de caracteres permitido es 7.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['numeroIdentificacionPNJ'].hasError(
                     'required'
                   ) &&
-                  (form.controls['idTipoIdentificacionPNJ'].dirty ||
-                    form.controls['idTipoIdentificacionPNJ'].touched)
+                  (form.controls['numeroIdentificacionPNJ'].dirty ||
+                    form.controls['numeroIdentificacionPNJ'].touched)
                 "
-                class="p-error block"
-                >El campo tipo identificación es requerido.</small
               >
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -2%;">
-              <label for="documentNumber" style="color: #93bbf3 ;"
-                  >No. identificación <small class="p-error">*</small></label
-                >
-                <input
-                  type="text"
-                  pInputText
-                  formControlName="numeroIdentificacionPNJ"
-                  inputId="documentNumber"
-                  pKeyFilter="int"
-                  maxlength="15"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
-              >
-                <small
-                  >{{
-                    form.controls["numeroIdentificacionPNJ"].value?.length || 0
-                  }}
-                  / 15</small
-                >
-                <small
-                  *ngIf="
-                    form.controls['numeroIdentificacionPNJ'].hasError(
-                      'minlength'
-                    )
-                  "
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitido es 7.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['numeroIdentificacionPNJ'].hasError(
-                      'required'
-                    ) &&
-                    (form.controls['numeroIdentificacionPNJ'].dirty ||
-                      form.controls['numeroIdentificacionPNJ'].touched)
-                  "
-                >
-                  El campo número de identificación es requerido.
-                </small>
-              </div>
-            </div>
-            <div class="field col-12" style="margin-top: -4%;">
-              <label for="float-input" style="color: #93bbf3 ;"
-                  >Nombre/Razón social <small class="p-error">*</small></label
-                >
-                <input
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  formControlName="nombreRazonSocialPNJ"
-                  maxlength="100"
-                  [readonly]="isReadonly"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
-              >
-                <small
-                  >{{
-                    form.controls["nombreRazonSocialPNJ"].value?.length || 0
-                  }}
-                  / 100</small
-                >
-                <small
-                  *ngIf="
-                    form.controls['nombreRazonSocialPNJ'].hasError('minlength')
-                  "
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitido es 3.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['nombreRazonSocialPNJ'].hasError(
-                      'required'
-                    ) &&
-                    (form.controls['nombreRazonSocialPNJ'].dirty ||
-                      form.controls['nombreRazonSocialPNJ'].touched)
-                  "
-                  class="p-error block"
-                >
-                  El campo Nombre/Razón Social es requerido.
-                </small>
-              </div>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="float-input" style="color: #93bbf3 ;"
-                  >Teléfono <small class="p-error">*</small></label
-                >
-                <input
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  pKeyFilter="int"
-                  formControlName="telefonoPNJ"
-                  maxlength="10"
-                  [readonly]="isReadonly"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
-              >
-                <small
-                  >{{ form.controls["telefonoPNJ"].value?.length || 0 }} /
-                  10</small
-                >
-                <small
-                  *ngIf="form.controls['telefonoPNJ'].hasError('minlength')"
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitido es 7.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['telefonoPNJ'].hasError('required') &&
-                    (form.controls['telefonoPNJ'].dirty ||
-                      form.controls['telefonoPNJ'].touched)
-                  "
-                  class="p-error block"
-                >
-                  El campo teléfono es requerido.
-                </small>
-              </div>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="float-input" style="color: #93bbf3 ;"
-                  >Email <small class="p-error">*</small></label
-                >
-                <input
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  formControlName="emailPNJ"
-                  maxlength="50"
-                  [readonly]="isReadonly"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
-              >
-                <small
-                  >{{ form.controls["emailPNJ"].value?.length || 0 }} /
-                  50</small
-                >
-                <small
-                  *ngIf="form.controls['emailPNJ'].hasError('minlength')"
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitido es 7.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['emailPNJ'].hasError('required') &&
-                    (form.controls['emailPNJ'].dirty ||
-                      form.controls['emailPNJ'].touched)
-                  "
-                  class="p-error block"
-                >
-                  El campo Email es requerido.
-                </small>
-              </div>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="float-input" style="color: #93bbf3 ;"
-                  >Dirección <small class="p-error">*</small></label
-                >
-                <input
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  formControlName="direccionPNJ"
-                  maxlength="50"
-                  [readonly]="isReadonly"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
-              >
-                <small
-                  >{{ form.controls["direccionPNJ"].value?.length || 0 }} /
-                  50</small
-                >
-                <small
-                  *ngIf="form.controls['direccionPNJ'].hasError('minlength')"
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitido es 5.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['direccionPNJ'].hasError('required') &&
-                    (form.controls['direccionPNJ'].dirty ||
-                      form.controls['direccionPNJ'].touched)
-                  "
-                  class="p-error block"
-                >
-                  El campo dirección es requerido.
-                </small>
-              </div>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="countries" style="color: #93bbf3 ;"
-              >País <small class="p-error">*</small></label
-            >
-                <p-dropdown
-                  inputId="countries"
-                  [options]="countries"
-                  [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  [filter]="true"
-                  optionLabel="nombre"
-                  optionValue="idPais"
-                  formControlName="idPaisPNJ"
-                  emptyFilterMessage="No se encontró ningún resultado"
-                  (ngModelChange)="handleChangeCountryPNJ($event)"
-                ></p-dropdown>
-              <small
-                *ngIf="
-                  form.controls['idPaisPNJ'].hasError('required') &&
-                  (form.controls['idPaisPNJ'].dirty ||
-                    form.controls['idPaisPNJ'].touched)
-                "
-                class="p-error block"
-              >
-                El campo país es requerido.
+                El campo número de identificación es requerido.
               </small>
             </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="departments" style="color: #93bbf3 ;"
+          </div>
+          <div class="field col-12" style="margin-top: -4%">
+            <label for="float-input" style="color: #93bbf3"
+              >Nombre/Razón social <small class="p-error">*</small></label
+            >
+            <input
+              id="float-input"
+              type="text"
+              pInputText
+              formControlName="nombreRazonSocialPNJ"
+              maxlength="100"
+              [readonly]="isReadonly"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{
+                  form.controls["nombreRazonSocialPNJ"].value?.length || 0
+                }}
+                / 100</small
+              >
+              <small
+                *ngIf="
+                  form.controls['nombreRazonSocialPNJ'].hasError('minlength')
+                "
+                class="p-error block"
+              >
+                El mínimo de caracteres permitido es 3.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['nombreRazonSocialPNJ'].hasError('required') &&
+                  (form.controls['nombreRazonSocialPNJ'].dirty ||
+                    form.controls['nombreRazonSocialPNJ'].touched)
+                "
+                class="p-error block"
+              >
+                El campo Nombre/Razón Social es requerido.
+              </small>
+            </div>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="float-input" style="color: #93bbf3"
+              >Teléfono <small class="p-error">*</small></label
+            >
+            <input
+              id="float-input"
+              type="text"
+              pInputText
+              pKeyFilter="int"
+              formControlName="telefonoPNJ"
+              maxlength="10"
+              [readonly]="isReadonly"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{ form.controls["telefonoPNJ"].value?.length || 0 }} /
+                10</small
+              >
+              <small
+                *ngIf="form.controls['telefonoPNJ'].hasError('minlength')"
+                class="p-error block"
+              >
+                El mínimo de caracteres permitido es 7.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['telefonoPNJ'].hasError('required') &&
+                  (form.controls['telefonoPNJ'].dirty ||
+                    form.controls['telefonoPNJ'].touched)
+                "
+                class="p-error block"
+              >
+                El campo teléfono es requerido.
+              </small>
+            </div>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="float-input" style="color: #93bbf3"
+              >Email <small class="p-error">*</small></label
+            >
+            <input
+              id="float-input"
+              type="text"
+              pInputText
+              formControlName="emailPNJ"
+              maxlength="50"
+              [readonly]="isReadonly"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{ form.controls["emailPNJ"].value?.length || 0 }} / 50</small
+              >
+              <small
+                *ngIf="form.controls['emailPNJ'].hasError('minlength')"
+                class="p-error block"
+              >
+                El mínimo de caracteres permitido es 7.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['emailPNJ'].hasError('required') &&
+                  (form.controls['emailPNJ'].dirty ||
+                    form.controls['emailPNJ'].touched)
+                "
+                class="p-error block"
+              >
+                El campo Email es requerido.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['emailPNJ'].hasError('email') &&
+                  (form.controls['emailPNJ'].dirty ||
+                    form.controls['emailPNJ'].touched)
+                "
+                class="p-error block"
+              >
+                El correo electrónico no es válido.
+              </small>
+            </div>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="float-input" style="color: #93bbf3"
+              >Dirección <small class="p-error">*</small></label
+            >
+            <input
+              id="float-input"
+              type="text"
+              pInputText
+              formControlName="direccionPNJ"
+              maxlength="50"
+              [readonly]="isReadonly"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{ form.controls["direccionPNJ"].value?.length || 0 }} /
+                50</small
+              >
+              <small
+                *ngIf="form.controls['direccionPNJ'].hasError('minlength')"
+                class="p-error block"
+              >
+                El mínimo de caracteres permitido es 5.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['direccionPNJ'].hasError('required') &&
+                  (form.controls['direccionPNJ'].dirty ||
+                    form.controls['direccionPNJ'].touched)
+                "
+                class="p-error block"
+              >
+                El campo dirección es requerido.
+              </small>
+            </div>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="countries" style="color: #93bbf3"
+              >País <small class="p-error">*</small></label
+            >
+            <p-dropdown
+              inputId="countries"
+              [options]="countries"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [filter]="true"
+              optionLabel="nombre"
+              optionValue="idPais"
+              formControlName="idPaisPNJ"
+              emptyFilterMessage="No se encontró ningún resultado"
+              (ngModelChange)="handleChangeCountryPNJ($event)"
+            ></p-dropdown>
+            <small
+              *ngIf="
+                form.controls['idPaisPNJ'].hasError('required') &&
+                (form.controls['idPaisPNJ'].dirty ||
+                  form.controls['idPaisPNJ'].touched)
+              "
+              class="p-error block"
+            >
+              El campo país es requerido.
+            </small>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="departments" style="color: #93bbf3"
               >Departamento
               <small
                 *ngIf="
@@ -380,474 +394,479 @@
                 >*</small
               ></label
             >
-                <p-dropdown
-                  inputId="departments"
-                  [options]="departmentsPNJ"
-                  [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  [filter]="true"
-                  optionLabel="nombreDepartamento"
-                  optionValue="idDepartamento"
-                  formControlName="idDepartamentoPNJ"
-                  emptyFilterMessage="No se encontró ningún resultado"
-                  (ngModelChange)="handleChangeDepartmentPNJ($event)"
-                ></p-dropdown>
+            <p-dropdown
+              inputId="departments"
+              [options]="departmentsPNJ"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [filter]="true"
+              optionLabel="nombreDepartamento"
+              optionValue="idDepartamento"
+              formControlName="idDepartamentoPNJ"
+              emptyFilterMessage="No se encontró ningún resultado"
+              (ngModelChange)="handleChangeDepartmentPNJ($event)"
+            ></p-dropdown>
+            <small
+              *ngIf="
+                form.controls['idDepartamentoPNJ'].hasError('required') &&
+                (form.controls['idDepartamentoPNJ'].dirty ||
+                  form.controls['idDepartamentoPNJ'].touched)
+              "
+              class="p-error block"
+            >
+              El campo departamento es requerido.
+            </small>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="municipalities" style="color: #93bbf3"
+              >Municipio
               <small
-                *ngIf="
-                  form.controls['idDepartamentoPNJ'].hasError('required') &&
-                  (form.controls['idDepartamentoPNJ'].dirty ||
-                    form.controls['idDepartamentoPNJ'].touched)
-                "
-                class="p-error block"
+                *ngIf="isRequiredFormControl(form.controls['idMunicipioPNJ'])"
+                class="p-error"
+                >*</small
+              ></label
+            >
+            <p-dropdown
+              inputId="municipalities"
+              [options]="municipalitiesPNJ"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [filter]="true"
+              optionLabel="nombreCiudad"
+              optionValue="idCiudad"
+              formControlName="idMunicipioPNJ"
+              emptyFilterMessage="No se encontró ningún resultado"
+            ></p-dropdown>
+            <small
+              *ngIf="
+                form.controls['idMunicipioPNJ'].hasError('required') &&
+                (form.controls['idMunicipioPNJ'].dirty ||
+                  form.controls['idMunicipioPNJ'].touched)
+              "
+              class="p-error block"
+            >
+              El campo municipio es requerido.
+            </small>
+          </div>
+          <div class="field col-12">
+            <p class="verificar">
+              Señor usuario por favor antes de realizar el trámite verifique que
+              sus datos se encuentren actualizados, si desea realizar alguna
+              modificación siga el procedimiento
+              <a
+                href="https://www.supersociedades.gov.co/documents/20122/369705/Actualizacion-informacion-basica-Sociedades.pdf"
+                target="_blank"
+                >AQUI</a
+              >.
+            </p>
+          </div>
+        </div>
+      </p-accordionTab>
+      <p-accordionTab header="Información remitente" [selected]="true">
+        <div class="grid p-fluid card-container pt-2">
+          <div class="field col-12">
+            <div class="flex flex-wrap flex-justify-content">
+              <p-checkbox
+                inputId="correspondePNJ"
+                [binary]="true"
+                [(ngModel)]="isRemPNJ"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="onChangeRemPNJ($event)"
+              ></p-checkbox>
+              <label for="correspondePNJ" class="ml-1" style="color: #93bbf3"
+                >Remitente corresponde a la persona natural / jurídica
+                ingresada</label
               >
-                El campo departamento es requerido.
-              </small>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="municipalities" style="color: #93bbf3 ;"
-                  >Municipio
-                  <small
-                    *ngIf="
-                      isRequiredFormControl(form.controls['idMunicipioPNJ'])
-                    "
-                    class="p-error"
-                    >*</small
-                  ></label
-                >
-                <p-dropdown
-                  inputId="municipalities"
-                  [options]="municipalitiesPNJ"
-                  [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  [filter]="true"
-                  optionLabel="nombreCiudad"
-                  optionValue="idCiudad"
-                  formControlName="idMunicipioPNJ"
-                  emptyFilterMessage="No se encontró ningún resultado"
-                ></p-dropdown>
-              <small
-                *ngIf="
-                  form.controls['idMunicipioPNJ'].hasError('required') &&
-                  (form.controls['idMunicipioPNJ'].dirty ||
-                    form.controls['idMunicipioPNJ'].touched)
-                "
-                class="p-error block"
-              >
-                El campo municipio es requerido.
-              </small>
-            </div>
-            <div class="field col-12">
-              <p class="verificar">
-                Señor usuario por favor antes de realizar el trámite verifique
-                que sus datos se encuentren actualizados, si desea realizar
-                alguna modificación siga el procedimiento
-                <a
-                  href="https://www.supersociedades.gov.co/documents/20122/369705/Actualizacion-informacion-basica-Sociedades.pdf"
-                  target="_blank"
-                  >AQUI</a
-                >.
-              </p>
             </div>
           </div>
-        </p-accordionTab>
-        <p-accordionTab header="Información remitente">
-          <div class="grid p-fluid card-container pt-2">
-            <div class="field col-12">
-              <div class="flex flex-wrap flex-justify-content">
-                <p-checkbox
-                  inputId="correspondePNJ"
-                  [binary]="true"
-                  [(ngModel)]="isRemPNJ"
-                  [ngModelOptions]="{ standalone: true }"
-                  (ngModelChange)="onChangeRemPNJ($event)"
-                ></p-checkbox>
-                <label for="correspondePNJ" class="ml-1" style="color: #93bbf3 ;"
-                  >Remitente corresponde a la persona natural / jurídica
-                  ingresada</label
-                >
-              </div>
-            </div>
-            <div class="field col-12 md:col-6" style="margin-top: -2%;">
-              <label for="remDocumentType" style="color: #93bbf3 ;"
+          <div class="field col-12 md:col-6" style="margin-top: -2%">
+            <label for="remDocumentType" style="color: #93bbf3"
               >Tipo identificación <small class="p-error">*</small></label
             >
-                <p-dropdown
-                  inputId="remDocumentType"
-                  [options]="tiposIdentificacion"
-                  [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  [filter]="true"
-                  optionLabel="nombre"
-                  optionValue="idTipoIdentificacion"
-                  formControlName="idTipoIdentificacionRem"
-                  emptyFilterMessage="No se encontró ningún resultado"
-                  [readonly]="isRemPNJ"
-                ></p-dropdown>
+            <p-dropdown
+              inputId="remDocumentType"
+              [options]="tiposIdentificacion"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [filter]="true"
+              optionLabel="nombre"
+              optionValue="idTipoIdentificacion"
+              formControlName="idTipoIdentificacionRem"
+              emptyFilterMessage="No se encontró ningún resultado"
+              [readonly]="isRemPNJ"
+            ></p-dropdown>
+            <small
+              *ngIf="
+                form.controls['idTipoIdentificacionRem'].hasError('required') &&
+                (form.controls['idTipoIdentificacionRem'].dirty ||
+                  form.controls['idTipoIdentificacionRem'].touched)
+              "
+            >
+              El campo tipo identificación es requerido.
+            </small>
+          </div>
+          <div class="field col-12 md:col-6" style="margin-top: -2%">
+            <label for="documentNumber" style="color: #93bbf3"
+              >No. identificación <small class="p-error">*</small></label
+            >
+            <input
+              type="text"
+              pInputText
+              pKeyFilter="int"
+              inputId="documentNumber"
+              formControlName="numeroIdentificacionRem"
+              maxlength="20"
+              [readonly]="isRemPNJ"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{
+                  form.controls["numeroIdentificacionRem"].value?.length || 0
+                }}
+                / 20</small
+              >
               <small
                 *ngIf="
-                  form.controls['idTipoIdentificacionRem'].hasError(
+                  form.controls['numeroIdentificacionRem'].hasError('minlength')
+                "
+                class="p-error block"
+              >
+                El mínimo de caracteres permitidos es 7.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['numeroIdentificacionRem'].hasError(
                     'required'
                   ) &&
-                  (form.controls['idTipoIdentificacionRem'].dirty ||
-                    form.controls['idTipoIdentificacionRem'].touched)
+                  (form.controls['numeroIdentificacionRem'].dirty ||
+                    form.controls['numeroIdentificacionRem'].touched)
                 "
               >
-                El campo tipo identificación es requerido.
+                El campo número de identificacion del remitente es requerido.
               </small>
             </div>
-            <div class="field col-12 md:col-6" style="margin-top: -2%;">
-              <label for="documentNumber" style="color: #93bbf3 ;"
-                  >No. identificación <small class="p-error">*</small></label
-                >
-                <input
-                  type="text"
-                  pInputText
-                  pKeyFilter="int"
-                  inputId="documentNumber"
-                  formControlName="numeroIdentificacionRem"
-                  maxlength="15"
-                  [readonly]="isRemPNJ"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
+          </div>
+          <div class="field col-12" style="margin-top: -4%">
+            <label for="float-input" style="color: #93bbf3"
+              >Nombre <small class="p-error">*</small></label
+            >
+            <input
+              id="float-input"
+              type="text"
+              pInputText
+              formControlName="nombreRem"
+              maxlength="100"
+              [readonly]="isRemPNJ"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{ form.controls["nombreRem"].value?.length || 0 }} /
+                100</small
               >
-                <small
-                  >{{
-                    form.controls["numeroIdentificacionRem"].value?.length || 0
-                  }}
-                  / 15</small
-                >
-                <small
-                  *ngIf="
-                    form.controls['numeroIdentificacionRem'].hasError(
-                      'minlength'
-                    )
-                  "
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitidos es 7.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['numeroIdentificacionRem'].hasError(
-                      'required'
-                    ) &&
-                    (form.controls['numeroIdentificacionRem'].dirty ||
-                      form.controls['numeroIdentificacionRem'].touched)
-                  "
-                >
-                  El campo número de identificacion del remitente es requerido.
-                </small>
-              </div>
-            </div>
-            <div class="field col-12" style="margin-top: -4%;">
-              <label for="float-input" style="color: #93bbf3 ;"
-                  >Nombre <small class="p-error">*</small></label
-                >
-                <input
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  formControlName="nombreRem"
-                  maxlength="100"
-                  [readonly]="isRemPNJ"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
+              <small
+                *ngIf="form.controls['nombreRem'].hasError('minlength')"
+                class="p-error block"
               >
-                <small
-                  >{{ form.controls["nombreRem"].value?.length || 0 }} /
-                  100</small
-                >
-                <small
-                  *ngIf="form.controls['nombreRem'].hasError('minlength')"
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitido es 3.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['nombreRem'].hasError('required') &&
-                    (form.controls['nombreRem'].dirty ||
-                      form.controls['nombreRem'].touched)
-                  "
-                  class="p-error block"
-                >
-                  El campo nombre remitente es requerido.
-                </small>
-              </div>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="float-input" style="color: #93bbf3 ;"
-                  >Teléfono <small class="p-error">*</small></label
-                >
-                <input
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  formControlName="telefonoRem"
-                  maxlength="15"
-                  [readonly]="isRemPNJ"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
+                El mínimo de caracteres permitido es 3.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['nombreRem'].hasError('required') &&
+                  (form.controls['nombreRem'].dirty ||
+                    form.controls['nombreRem'].touched)
+                "
+                class="p-error block"
               >
-                <small
-                  >{{ form.controls["telefonoRem"].value?.length || 0 }} /
-                  15</small
-                >
-                <small
-                  *ngIf="form.controls['telefonoRem'].hasError('minlength')"
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitido es 7.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['telefonoRem'].hasError('required') &&
-                    (form.controls['telefonoRem'].dirty ||
-                      form.controls['telefonoRem'].touched)
-                  "
-                  class="p-error block"
-                >
-                  El campo teléfono es requerido.
-                </small>
-              </div>
+                El campo nombre remitente es requerido.
+              </small>
             </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="float-input" style="color: #93bbf3 ;"
-                  >Email <small class="p-error">*</small></label
-                >
-                <input
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  formControlName="emailRem"
-                  [readonly]="isRemPNJ"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="float-input" style="color: #93bbf3"
+              >Teléfono <small class="p-error">*</small></label
+            >
+            <input
+              id="float-input"
+              type="text"
+              pInputText
+              formControlName="telefonoRem"
+              maxlength="15"
+              [readonly]="isRemPNJ"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{ form.controls["telefonoRem"].value?.length || 0 }} /
+                15</small
               >
-                <small
-                  >{{ form.controls["emailRem"].value?.length || 0 }} /
-                  50</small
-                >
-                <small
-                  *ngIf="form.controls['emailRem'].hasError('minlength')"
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitido es 7.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['emailRem'].hasError('required') &&
-                    (form.controls['emailRem'].dirty ||
-                      form.controls['emailRem'].touched)
-                  "
-                  class="p-error block"
-                >
-                  El campo Email es requerido.
-                </small>
-              </div>
+              <small
+                *ngIf="form.controls['telefonoRem'].hasError('minlength')"
+                class="p-error block"
+              >
+                El mínimo de caracteres permitido es 7.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['telefonoRem'].hasError('required') &&
+                  (form.controls['telefonoRem'].dirty ||
+                    form.controls['telefonoRem'].touched)
+                "
+                class="p-error block"
+              >
+                El campo teléfono es requerido.
+              </small>
             </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="float-input" style="color: #93bbf3 ;"
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="float-input" style="color: #93bbf3"
+              >Email <small class="p-error">*</small></label
+            >
+            <input
+              id="float-input"
+              type="text"
+              pInputText
+              formControlName="emailRem"
+              [readonly]="isRemPNJ"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{ form.controls["emailRem"].value?.length || 0 }} / 50</small
+              >
+              <small
+                *ngIf="form.controls['emailRem'].hasError('minlength')"
+                class="p-error block"
+              >
+                El mínimo de caracteres permitido es 7.
+              </small>
+              <small
+                *ngIf="
+                  form.controls['emailRem'].hasError('required') &&
+                  (form.controls['emailRem'].dirty ||
+                    form.controls['emailRem'].touched)
+                "
+                class="p-error block"
+              >
+                El campo Email es requerido.
+              </small>
+              <small
+              *ngIf="
+                form.controls['emailRem'].hasError('email') &&
+                (form.controls['emailRem'].dirty ||
+                  form.controls['emailRem'].touched)
+              "
+              class="p-error block"
+            >
+              El correo electrónico no es válido.
+            </small>
+            </div>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="float-input" style="color: #93bbf3"
               >Dirección <small class="p-error">*</small></label
             >
-                <input
-                  id="float-input"
-                  type="text"
-                  pInputText
-                  formControlName="direccionRem"
-                  [readonly]="isRemPNJ"
-                />
-              <div
-                class="flex flex-row-reverse flex-wrap justify-content-between"
+            <input
+              id="float-input"
+              type="text"
+              pInputText
+              formControlName="direccionRem"
+              [readonly]="isRemPNJ"
+            />
+            <div
+              class="flex flex-row-reverse flex-wrap justify-content-between"
+            >
+              <small
+                >{{ form.controls["direccionRem"].value?.length || 0 }} /
+                50</small
               >
-                <small
-                  >{{ form.controls["direccionRem"].value?.length || 0 }} /
-                  50</small
-                >
-                <small
-                  *ngIf="form.controls['direccionRem'].hasError('minlength')"
-                  class="p-error block"
-                >
-                  El mínimo de caracteres permitido es 5.
-                </small>
-                <small
-                  *ngIf="
-                    form.controls['direccionRem'].hasError('required') &&
-                    (form.controls['direccionRem'].dirty ||
-                      form.controls['direccionRem'].touched)
-                  "
-                  class="p-error block"
-                >
-                  El campo dirección es requerido.
-                </small>
-              </div>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="remCountry" style="color: #93bbf3 ;"
-                  >País <small class="p-error">*</small></label
-                >
-                <p-dropdown
-                  inputId="remCountries"
-                  [options]="countries"
-                  [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  [filter]="true"
-                  optionLabel="nombre"
-                  optionValue="idPais"
-                  formControlName="idPaisRem"
-                  emptyFilterMessage="No se encontró ningún resultado"
-                  (ngModelChange)="handleChangeCountryRem($event)"
-                  [readonly]="isRemPNJ"
-                ></p-dropdown>
+              <small
+                *ngIf="form.controls['direccionRem'].hasError('minlength')"
+                class="p-error block"
+              >
+                El mínimo de caracteres permitido es 5.
+              </small>
               <small
                 *ngIf="
-                  form.controls['idPaisRem'].hasError('required') &&
-                  (form.controls['idPaisRem'].dirty ||
-                    form.controls['idPaisRem'].touched)
+                  form.controls['direccionRem'].hasError('required') &&
+                  (form.controls['direccionRem'].dirty ||
+                    form.controls['direccionRem'].touched)
                 "
                 class="p-error block"
               >
-                El campo país es requerido.
+                El campo dirección es requerido.
               </small>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="remDepartments" style="color: #93bbf3 ;"
-                  >Departamento
-                  <small
-                    *ngIf="
-                      isRequiredFormControl(form.controls['idDepartamentoRem'])
-                    "
-                    class="p-error"
-                    >*</small
-                  ></label
-                >
-                <p-dropdown
-                  inputId="remDepartments"
-                  [options]="departmentsRem"
-                  [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  [filter]="true"
-                  optionLabel="nombreDepartamento"
-                  optionValue="idDepartamento"
-                  formControlName="idDepartamentoRem"
-                  emptyFilterMessage="No se encontró ningún resultado"
-                  (ngModelChange)="handleChangeDepartmentRem($event)"
-                  [readonly]="isRemPNJ"
-                ></p-dropdown>
-              <small
-                *ngIf="
-                  form.controls['idDepartamentoRem'].hasError('required') &&
-                  (form.controls['idDepartamentoRem'].dirty ||
-                    form.controls['idDepartamentoRem'].touched)
-                "
-                class="p-error block"
-              >
-                El campo departamento es requerido.
-              </small>
-            </div>
-            <div class="field col-12 md:col-4" style="margin-top: -4%;">
-              <label for="remMunicipalities" style="color: #93bbf3 ;"
-                  >Municipio
-                  <small
-                    *ngIf="
-                      isRequiredFormControl(form.controls['idDepartamentoRem'])
-                    "
-                    class="p-error"
-                    >*</small
-                  ></label
-                >
-                <p-dropdown
-                  inputId="remMunicipalities"
-                  [options]="municipalitiesRem"
-                  [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  [filter]="true"
-                  optionLabel="nombreCiudad"
-                  optionValue="idCiudad"
-                  formControlName="idMunicipioRem"
-                  emptyFilterMessage="No se encontró ningún resultado"
-                ></p-dropdown>
-              <small
-                *ngIf="
-                  form.controls['idMunicipioRem'].hasError('required') &&
-                  (form.controls['idMunicipioRem'].dirty ||
-                    form.controls['idMunicipioRem'].touched)
-                "
-                class="p-error block"
-              >
-                El campo municipio es requerido.
-              </small>
-            </div>
-            <div class="field col-12">
-              <p class="verificar">
-                Señor usuario por favor antes de realizar el trámite verifique
-                que sus datos se encuentren actualizados, si desea realizar
-                alguna modificación siga el procedimiento
-                <a
-                  href="https://www.supersociedades.gov.co/documents/20122/369705/Actualizacion-informacion-basica-Sociedades.pdf"
-                  target="_blank"
-                  >AQUI</a
-                >.
-              </p>
             </div>
           </div>
-        </p-accordionTab>
-        <p-accordionTab header="Cargue de documentos">
-          <div class="card">
-            <div class="card-container">
-              <p-table [value]="documents">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Selección</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-document>
-                  <tr style="color: #93bbf3 ;">
-                    <td>{{ document.nombre }}</td>
-                    <td>{{ document.descripcion }}</td>
-                    <td>
-                      <div class="row">
-                        <div
-                          class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5"
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="remCountry" style="color: #93bbf3"
+              >País <small class="p-error">*</small></label
+            >
+            <p-dropdown
+              inputId="remCountries"
+              [options]="countries"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [filter]="true"
+              optionLabel="nombre"
+              optionValue="idPais"
+              formControlName="idPaisRem"
+              emptyFilterMessage="No se encontró ningún resultado"
+              (ngModelChange)="handleChangeCountryRem($event)"
+              [readonly]="isRemPNJ"
+            ></p-dropdown>
+            <small
+              *ngIf="
+                form.controls['idPaisRem'].hasError('required') &&
+                (form.controls['idPaisRem'].dirty ||
+                  form.controls['idPaisRem'].touched)
+              "
+              class="p-error block"
+            >
+              El campo país es requerido.
+            </small>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="remDepartments" style="color: #93bbf3"
+              >Departamento
+              <small
+                *ngIf="
+                  isRequiredFormControl(form.controls['idDepartamentoRem'])
+                "
+                class="p-error"
+                >*</small
+              ></label
+            >
+            <p-dropdown
+              inputId="remDepartments"
+              [options]="departmentsRem"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [filter]="true"
+              optionLabel="nombreDepartamento"
+              optionValue="idDepartamento"
+              formControlName="idDepartamentoRem"
+              emptyFilterMessage="No se encontró ningún resultado"
+              (ngModelChange)="handleChangeDepartmentRem($event)"
+              [readonly]="isRemPNJ"
+            ></p-dropdown>
+            <small
+              *ngIf="
+                form.controls['idDepartamentoRem'].hasError('required') &&
+                (form.controls['idDepartamentoRem'].dirty ||
+                  form.controls['idDepartamentoRem'].touched)
+              "
+              class="p-error block"
+            >
+              El campo departamento es requerido.
+            </small>
+          </div>
+          <div class="field col-12 md:col-4" style="margin-top: -4%">
+            <label for="remMunicipalities" style="color: #93bbf3"
+              >Municipio
+              <small
+                *ngIf="
+                  isRequiredFormControl(form.controls['idDepartamentoRem'])
+                "
+                class="p-error"
+                >*</small
+              ></label
+            >
+            <p-dropdown
+              inputId="remMunicipalities"
+              [options]="municipalitiesRem"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [filter]="true"
+              optionLabel="nombreCiudad"
+              optionValue="idCiudad"
+              formControlName="idMunicipioRem"
+              emptyFilterMessage="No se encontró ningún resultado"
+            ></p-dropdown>
+            <small
+              *ngIf="
+                form.controls['idMunicipioRem'].hasError('required') &&
+                (form.controls['idMunicipioRem'].dirty ||
+                  form.controls['idMunicipioRem'].touched)
+              "
+              class="p-error block"
+            >
+              El campo municipio es requerido.
+            </small>
+          </div>
+          <div class="field col-12">
+            <p class="verificar">
+              Señor usuario por favor antes de realizar el trámite verifique que
+              sus datos se encuentren actualizados, si desea realizar alguna
+              modificación siga el procedimiento
+              <a
+                href="https://www.supersociedades.gov.co/documents/20122/369705/Actualizacion-informacion-basica-Sociedades.pdf"
+                target="_blank"
+                >AQUI</a
+              >.
+            </p>
+          </div>
+        </div>
+      </p-accordionTab>
+      <p-accordionTab header="Cargue de documentos" [selected]="true">
+        <div class="card">
+          <div class="card-container">
+            <p-table [value]="documents">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Selección</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-document>
+                <tr style="color: #93bbf3">
+                  <td>{{ document.nombre }}</td>
+                  <td>{{ document.descripcion }}</td>
+                  <td>
+                    <div class="row">
+                      <div
+                        class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5"
+                      >
+                        <button
+                          color="primary"
+                          mat-button
+                          (click)="openDialog(document.documentoPrincipal)"
+                          class="btn btn-outline-info"
                         >
-                          <button
-                            color="primary"
-                            mat-button
-                            (click)="openDialog(document.documentoPrincipal)"
-                            class="btn btn-outline-info"
-                          >
-                            Adjuntar archivo
-                          </button>
-                        </div>
+                          Adjuntar archivo
+                        </button>
                       </div>
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
-            </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
           </div>
-        </p-accordionTab>
-      </p-accordion>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
     <div class="p-fluid card-container px-3">
       <div class="field col-12">
-        <span style="color: #93bbf3 ;">Correo al que desea se le envíe el soporte de la radicación</span>
+        <span style="color: #93bbf3"
+          >Correo al que desea se le envíe el soporte de la radicación</span
+        >
       </div>
       <div class="field col-12">
-        <label for="emails" style="color: #93bbf3 ;"
-        >Diligencie el correo aquí <small class="p-error">*</small></label
-      >
-          <input
-            type="text"
-            pInputText
-            inputId="emails"
-            formControlName="emailRadicar"
-          />
+        <label for="emails" style="color: #93bbf3"
+          >Digite el correo<small class="p-error">*</small></label
+        >
+        <input
+          type="text"
+          pInputText
+          inputId="emails"
+          formControlName="emailRadicar"
+        />
         <small
           *ngIf="
             form.controls['emailRadicar'].hasError('required') &&
@@ -858,8 +877,19 @@
         >
           El campo correo es requerido.
         </small>
+        <small
+          *ngIf="
+            form.controls['emailRadicar'].hasError('email') &&
+            (form.controls['emailRadicar'].dirty ||
+              form.controls['emailRadicar'].touched)
+          "
+          class="p-error block"
+        >
+          El correo electrónico no es válido.
+        </small>
       </div>
-      <mat-checkbox style="color: #93bbf3 ;"
+      <mat-checkbox
+        style="color: #93bbf3"
         #miCheckbox
         class="example-margin"
         (change)="openDialogPrograma()"

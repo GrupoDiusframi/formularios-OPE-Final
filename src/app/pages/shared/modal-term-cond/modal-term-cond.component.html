@@ -1,6 +1,7 @@
+
 <h1 class="header">Términos & Condiciones</h1>
 <br />
-<div class="scrollable-content">
+<div class="scrollable-content" #scrollableContent>
   <div>
     <div>
       <h2 class="titulos">
@@ -80,8 +81,8 @@
       </div>
       <div>
         <h3 class="titulos">TERCERO. Obligaciones del usuario</h3>
-          <p class="texto">Son obligaciones del usuario:</p>
-          <ul style="text-align: justify" class="texto">
+        <p class="texto">Son obligaciones del usuario:</p>
+        <ul style="text-align: justify" class="texto">
           <li>Operar de manera directa su buzón de correo electrónico.</li>
           <li>
             Informar a la entidad en el caso de que el usuario decida cambiar de
@@ -127,7 +128,14 @@
   >
     Cancelar
   </button>
-  <button class="guardar" mat-raised-button color="primary" (click)="save()">
+  <button
+    #boton
+    class="guardar"
+    mat-raised-button
+    (click)="save()"
+    [disabled]="!scrollRecorrido"
+    [ngStyle]="{'background-color': scrollRecorrido ? '#004884' : 'gray'}"
+  >
     De Acuerdo
   </button>
 </div>
