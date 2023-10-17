@@ -2,8 +2,10 @@ import {
   Component,
   inject,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {
@@ -57,17 +59,14 @@ import { InstanciarRadicacion } from 'src/app/interfaces/instanciaRadicado';
   templateUrl: './form-furt.component.html',
   styleUrls: ['./form-furt.component.scss'],
 })
-export class FormFurtComponent implements OnInit, OnDestroy {
+export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   readonly authorizationPqrsdApi = environment.authorizationPqrsdApi;
   paisesControllerService: PaisesControllerService = inject(
     PaisesControllerService
   );
   paisService = inject(PaisesControllerService);
-  /*
-  private naturalLegalPersonService: NaturalLegalPersonService = inject(
-    NaturalLegalPersonService
-  );
-  */
+
+
   fb: FormBuilder = inject(FormBuilder);
   pqrsdService = inject(PqrsdControllerService);
   tramitesServices = inject(TramitesServices);
@@ -128,6 +127,19 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     this.getListPais();
     this.getDepartments();
     this.getListTipoIdentificacion();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['procedure']) {
+      this.loadForm();
+      const nuevoProcedure = changes['procedure'].currentValue as Tramites;
+      this.tipoSolicitante = nuevoProcedure?.tiposSolicitante;
+      this.documents = nuevoProcedure?.documentos;
+      this.form.get('idTramite')?.setValue(nuevoProcedure?.id);
+      this.form.get('descripcionTramite')?.setValue(nuevoProcedure?.descripcionSolicitud);
+      this.form.get('claseProceso')?.setValue(nuevoProcedure?.nombre);
+      this.form.get('dependencia')?.setValue(nuevoProcedure?.nombreGrupoTrabajo);
+    }
   }
 
   cambiarEstadoCheckbox(estado: boolean): void {
@@ -288,10 +300,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
         Validators.minLength(7),
         Validators.maxLength(10),
       ]),
-      emailPNJ: new FormControl(null, [
-        Validators.required,
-        Validators.email,
-      ]),
+      emailPNJ: new FormControl(null, [Validators.required, Validators.email]),
       direccionPNJ: new FormControl(null, [
         Validators.required,
         Validators.minLength(5),
@@ -320,10 +329,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
         Validators.minLength(7),
         Validators.maxLength(10),
       ]),
-      emailRem: new FormControl(null, [
-        Validators.required,
-        Validators.email,
-      ]),
+      emailRem: new FormControl(null, [Validators.required, Validators.email]),
       direccionRem: new FormControl(null, [
         Validators.required,
         Validators.minLength(5),
@@ -435,10 +441,9 @@ export class FormFurtComponent implements OnInit, OnDestroy {
       .get('departamentoRem')
       ?.setValue(this.isRemPNJ ? this.form.value.departamentoPNJ : null);
 
-    this.form.get('idMunicipioRem')
+    this.form
+      .get('idMunicipioRem')
       ?.setValue(this.isRemPNJ ? this.form.value.idMunicipioPNJ : null);
-      console.log("Ciudad idMunicipioPNJ: "+this.form.value.idMunicipioPNJ);
-      console.log("Ciudad idMunicipioRem ya asignado: "+this.form.value.idMunicipioRem);
     this.form
       .get('municipioRem')
       ?.setValue(this.isRemPNJ ? this.form.value.municipioPNJ : null);
@@ -545,6 +550,7 @@ export class FormFurtComponent implements OnInit, OnDestroy {
 
       let numeroArchivos = 0;
       const cantidadArchivos = this.tramitesServices.subirArchivo.anexos.length;
+      const fsubs = this.subirArchivoCorrespondenciaPrueba();
     }
   }
 
@@ -555,69 +561,75 @@ export class FormFurtComponent implements OnInit, OnDestroy {
     const fechaFormulario = formatDate(DateFormulario, 'yyyy-MM-dd', 'en-US');
 
     const orderRequest: RadicacionRequestDto = {
-      anexosFisicos: this.tramitesServices.subirArchivo.anexos.length,
-      aplicaCiudadCodigo: this.form.get('idMunicipioPNJ')?.value,
-      aplicaDepartamentoCodigo: this.form.get('idDepartamentoPNJ')?.value,
-      aplicaPaisCodigo: this.form.get('idPaisPNJ')?.value,
-      aplicaEmail: this.form.get('emailPNJ')?.value,
-      aplicaDireccion: this.form.get('direccionPNJ')?.value,
-      aplicaNombre: this.form.get('nombreRazonSocialPNJ')?.value,
-      aplicaTelefono: Number(this.form.get('telefonoPNJ')?.value),
-      aplicaIdentificacion: Number(
-        this.form.get('numeroIdentificacionPNJ')?.value
-      ),
-      aplicaTipoIdentificacionId: Number(
-        this.form.get('idTipoIdentificacionPNJ')?.value
-      ),
-      aplicaTipoIdentificacionNombre: this.form.get('numeroIdentificacionPNJ')
-        ?.value,
-      particularIdentificacion: Number(
-        this.form.get('numeroIdentificacionRem')?.value
-      ),
-      particularNombre: this.form.get('nombreRem')?.value,
-      particularTipoIdentificacionId: Number(
-        this.form.get('idTipoIdentificacionRem')?.value
-      ),
-      particularTipoIdentificacionNombre: this.form.get(
-        'numeroIdentificacionRem'
-      )?.value,
-      particularCiudadCodigo: this.form.get('idMunicipioRem')?.value,
-      particularDepartamentoCodigo: this.form.get('idDepartamentoRem')?.value,
-      particularPaisCodigo: this.form.get('idPaisRem')?.value,
-      particularDireccion: this.form.get('direccionRem')?.value,
-      particularTelefono: Number(this.form.get('telefonoRem')?.value),
-      particularEmail: this.form.get('emailRem')?.value,
-      //dependenciaId:Number(this.procedure?.codigoGrupoTrabajo),
-      dependenciaId: 547,
-      dependenciaNombre: this.procedure?.nombreGrupoTrabajo,
-      //dependenciaNombre: 'GRUPO DE GESTION DOCUMENTAL',
-      entregaFisica: false,
-      foliosNumero: 1,
-      referenciaExterna: 'PRUEBA SWITCH',
-      cuadernoTipoId: 0,
-      cuadernoCodigo: 0,
-      documentalTipoId: 0,
-      //documentalTipoCodigo:this.procedure?.proceso?.nombre,
-      documentalTipoCodigo: '0',
-      //tramiteId:this.procedure?.id,
-      tramiteId: 0,
-      //tramiteCodigo:Number(this.procedure?.codigo),
-      tramiteCodigo: 29001,
+      anexosFisicos:
+        this.tramitesServices.subirArchivo.anexos.length.toString(),
+      aplicaCiudadCodigo: this.form.get('idMunicipioPNJ')?.value.toString(),
+      aplicaDepartamentoCodigo: this.form
+        .get('idDepartamentoPNJ')
+        ?.value.toString(),
+      aplicaPaisCodigo: this.form.get('idPaisPNJ')?.value.toString(),
+      aplicaEmail: this.form.get('emailPNJ')?.value.toString(),
+      aplicaDireccion: this.form.get('direccionPNJ')?.value.toString(),
+      aplicaNombre: this.form.get('nombreRazonSocialPNJ')?.value.toString(),
+      aplicaTelefono: this.form.get('telefonoPNJ')?.value.toString(),
+      aplicaIdentificacion: this.form
+        .get('numeroIdentificacionPNJ')
+        ?.value.toString(),
+      aplicaTipoIdentificacionId: this.form
+        .get('idTipoIdentificacionPNJ')
+        ?.value.toString(),
+      //aplicaTipoIdentificacionNombre: this.form.get('numeroIdentificacionPNJ')?.value.toString(),
+      aplicaTipoIdentificacionNombre: 'CÉDULA',
+
+      particularIdentificacion: this.form
+        .get('numeroIdentificacionRem')
+        ?.value.toString(),
+      particularNombre: this.form.get('nombreRem')?.value.toString(),
+      particularTipoIdentificacionId: this.form
+        .get('idTipoIdentificacionRem')
+        ?.value.toString(),
+      //particularTipoIdentificacionNombre: this.form.get('numeroIdentificacionRem')?.value.toString(),
+      particularTipoIdentificacionNombre: 'CÉDULA',
+      particularCiudadCodigo: this.form.get('idMunicipioRem')?.value.toString(),
+      particularDepartamentoCodigo: this.form
+        .get('idDepartamentoRem')
+        ?.value.toString(),
+      particularPaisCodigo: this.form.get('idPaisRem')?.value.toString(),
+      particularDireccion: this.form.get('direccionRem')?.value.toString(),
+      particularTelefono: this.form.get('telefonoRem')?.value.toString(),
+      particularEmail: this.form.get('emailRem')?.value.toString(),
+
+      //dependenciaId: this.procedure?.codigoGrupoTrabajo.toString(),
+      dependenciaId: '460',
+      //dependenciaNombre: this.procedure?.nombreGrupoTrabajo.toString(),
+      dependenciaNombre: 'GRUPO DE ADMISIONES',
+      entregaFisica: '1',
+      foliosNumero: '1',
+      cuadernoTipoId: '0',
+      cuadernoCodigo: '30292457',
+      documentalTipoId: '460',
+      //documentalTipoCodigo:this.procedure?.proceso?.nombre.toString(),
+      documentalTipoCodigo: 'OFICIO',
       extensionArchivo: '.pdf',
-      codigoMedioEnvio: 5,
-      //codigoTipoSeguridad:this.procedure?.tipoSeguridadRadicacion?.nombre,
+      codigoMedioEnvio: '5',
+      //codigoTipoSeguridad:this.procedure?.tipoSeguridadRadicacion?.codigo,
       codigoTipoSeguridad: 'ABIERTA',
-      codigoSerie: 0,
-      codigoSubSerie: 0,
+      codigoSerie: '58',
+      codigoSubSerie: '194',
       loginUsuario: 'aplicaciones',
+      nombreSerie: 'PROCESOS JUDICIALES DE INSOLVENCIA',
+      nombreSubSerie: 'Proceso de Reorganización Abreviada',
+
       radicacionAnterior: '2023-07-000904',
-      //nombreSerie:this.procedure?.proceso?.nombre,
-      nombreSerie: 'TODAS',
-      nombreSubSerie: 'TODAS',
+      //tramiteCodigo:Number(this.procedure?.codigo),
+      tramiteCodigo: 16500,
+      referenciaExterna: '',
+      tramiteId: this.procedure?.id.toString(),
     };
     if (this.form.valid) {
       const request = this.tramitesServices.guardarTramite$(orderRequest);
-      request.subscribe({next: (res) => {
+      request.subscribe({
+        next: (res) => {
           this.saving = false;
           this.numeroTramite = res.message;
           console.log(res);
@@ -656,11 +668,11 @@ export class FormFurtComponent implements OnInit, OnDestroy {
             confirmButtonText: 'Aceptar',
           });
           */
-          console.log('se creo Tramite');
+          console.log('se creo Tramite: ' + res.message);
           if (this.tramitesServices.subirArchivo.anexos.length > 0) {
             this.uploadFileToFileNet();
           }
-          if (this.archivosCargadosExitoso) {
+          if (res.message) {
             console.log('se subieron Archivos');
             this.tramitesServices
               .generateStickerUsingPOST(this.generarSticker)

@@ -8,7 +8,7 @@ import { Tramites } from './interfaces/tramites';
 import { PqrsdControllerService } from 'src/pqrsd-api/src/src/services';
 import { environment } from 'src/environments/environment';
 import { GeneralResponseDTO } from 'src/pqrsd-api/src/src/models';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
 import { ProfesorResponse } from './interfaces/ProfesorResponse';
 
 @Component({
@@ -16,14 +16,14 @@ import { ProfesorResponse } from './interfaces/ProfesorResponse';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit{
   title = 'FormularioOPE';
   private pqrsdService = inject(PqrsdControllerService);
   private tramitesServices = inject(TramitesServices);
 
   private readonly authorizationPqrsdApi = environment.authorizationPqrsdApi;
   procedure!: Tramites;
-  procedures: Array<Procedure> = environment.procedures;
+
   datos: Array<Tramites>  = [];
   private subscription!: Subscription;
 
@@ -36,7 +36,6 @@ export class AppComponent implements OnInit {
     this.pqrsdService.tipoSolicitudAllUsingGET(this.authorizationPqrsdApi).pipe(
       map((data: Array<GeneralResponseDTO> | any) => data.map((obj: GeneralResponseDTO) => ({value: obj.id, name: obj.descripcion, type: 'pqrsd'})))
     ).subscribe({
-      next: (data: Array<Procedure>) => this.procedures.push(...data)
     });
   }
 

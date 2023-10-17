@@ -23,12 +23,5 @@
     </div>
   </div>
 </div>
-<app-form-furt
-  *ngIf="procedure?.nombre === 'QUEJAS'"
-  [procedure]="procedure"
-></app-form-furt>
-<app-form-soborno-int
-  *ngIf="procedure?.proceso?.nombre === 'PLANEACIÓN INSTITUCIONAL'"
-></app-form-soborno-int>
-
+<app-form-furt *ngIf="procedure" [procedure]="procedure"></app-form-furt>
 <app-footer class="mt-auto"></app-footer>
