@@ -772,7 +772,7 @@
               >Municipio
               <small
                 *ngIf="
-                  isRequiredFormControl(form.controls['idDepartamentoRem'])
+                  isRequiredFormControl(form.controls['idMunicipioRem'])
                 "
                 class="p-error"
                 >*</small
@@ -795,7 +795,7 @@
                 (form.controls['idMunicipioRem'].dirty ||
                   form.controls['idMunicipioRem'].touched)
               "
-              class="p-error block"
+
             >
               El campo municipio es requerido.
             </small>
@@ -824,6 +824,7 @@
                   <th>Nombre</th>
                   <th>Descripción</th>
                   <th>Selección</th>
+                  <th>Extensión</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-document>
@@ -846,6 +847,9 @@
                         </button>
                       </div>
                     </div>
+                  </td>
+                  <td>
+                    <span *ngFor="let extension of document.extensiones">{{ extension.nombre +' '}}</span>
                   </td>
                 </tr>
               </ng-template>
