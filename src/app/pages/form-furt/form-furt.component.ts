@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   inject,
   Input,
@@ -66,7 +67,6 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   );
   paisService = inject(PaisesControllerService);
 
-
   fb: FormBuilder = inject(FormBuilder);
   pqrsdService = inject(PqrsdControllerService);
   tramitesServices = inject(TramitesServices);
@@ -106,6 +106,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   documents: Array<any> = [];
   uploadedFiles: Array<{ [key: string]: File }> = [];
   tiposIdentificacion!: Array<TipoIdentificacion>;
+  tiposIdentificacionRem!: Array<TipoIdentificacion>;
   ArchivosFormulario: any;
   limpiarArchivos: any[] = [];
   statusCarga: boolean = false;
@@ -113,6 +114,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   paisCol: boolean = false;
   selectPersonaN: boolean = false;
   indicativo: string = ' ';
+  tipoSol!: any;
 
   subirArchivo: ISubirArchivo = {
     radicacion: '',
@@ -120,7 +122,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     extension: '',
     tipoDocumento: 'Principal',
   };
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadForm();
@@ -129,6 +131,37 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     this.getListTipoIdentificacion();
   }
 
+  cambiosTipoSolicitante(event: any) {
+    const selectedTipoSolicitante: TipoSolicitante = event.value;
+    this.tipoSol = selectedTipoSolicitante;
+
+    if (this.tipoSol === '1') {
+      setTimeout(() => {
+        this.tiposIdentificacion = this.tiposIdentificacion.filter(tipo => ![5, 8, 12].includes(tipo.idTipoIdentificacion));
+        this.cd.detectChanges();
+      }, 100);
+    }
+
+    else if (this.tipoSol === '4') {
+      console.log("entro al 4");
+      this.getListTipoIdentificacion();
+      setTimeout(() => {
+        this.tiposIdentificacion = this.tiposIdentificacion.filter(tipo => ![1, 2, 3, 4].includes(tipo.idTipoIdentificacion));
+        this.cd.detectChanges();
+      }, 100);
+    }
+
+    else if (this.tipoSol === '2') {
+      console.log("entro al 2");
+      this.getListTipoIdentificacion();
+      this.cd.detectChanges();
+
+    }
+  }
+
+
+  eliminarOpciones() {}
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['procedure']) {
       this.loadForm();
@@ -136,9 +169,13 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       this.tipoSolicitante = nuevoProcedure?.tiposSolicitante;
       this.documents = nuevoProcedure?.documentos;
       this.form.get('idTramite')?.setValue(nuevoProcedure?.id);
-      this.form.get('descripcionTramite')?.setValue(nuevoProcedure?.descripcionSolicitud);
+      this.form
+        .get('descripcionTramite')
+        ?.setValue(nuevoProcedure?.descripcionSolicitud);
       this.form.get('claseProceso')?.setValue(nuevoProcedure?.nombre);
-      this.form.get('dependencia')?.setValue(nuevoProcedure?.nombreGrupoTrabajo);
+      this.form
+        .get('dependencia')
+        ?.setValue(nuevoProcedure?.nombreGrupoTrabajo);
     }
   }
 
@@ -148,7 +185,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
 
   openDialogPrograma(): void {
     const dialogRef = this.dialog.open(ModalTermCondComponent, {
-      width: '50%',
+      width: '100vh',
       height: '80vh',
     });
 
@@ -166,11 +203,11 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   getListTipoIdentificacion(): void {
     this.pqrsdService
       .tiposIdentificacionAllUsingGET(this.authorizationPqrsdApi)
-      .pipe(take(1))
       .subscribe({
         next: (data: Array<TipoIdentificacion> | any) =>
           (this.tiposIdentificacion = data),
       });
+      this.tiposIdentificacionRem = this.tiposIdentificacion;
   }
 
   handleChangeProcess(event: InputSwitchOnChangeEvent): void {
@@ -306,7 +343,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
         Validators.minLength(5),
         Validators.maxLength(50),
       ]),
-      idPaisPNJ: new FormControl(80, Validators.required),
+      idPaisPNJ: new FormControl(Validators.required),
       paisPNJ: new FormControl(),
       idDepartamentoPNJ: new FormControl(null, Validators.required),
       departamentoPNJ: new FormControl(),
@@ -335,7 +372,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
         Validators.minLength(5),
         Validators.maxLength(50),
       ]),
-      idPaisRem: new FormControl(80, Validators.required),
+      idPaisRem: new FormControl(Validators.required),
       paisRem: new FormControl(),
       idDepartamentoRem: new FormControl(null, Validators.required),
       departamentoRem: new FormControl(),
@@ -632,14 +669,13 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
         next: (res) => {
           this.saving = false;
           this.numeroTramite = res.message;
-          console.log(res);
           this.loader = false;
           this.generarSticker = {
             cantidadSticker: 1,
             formatoRequerido: 'PDF',
-            generadoPor: '',
+            generadoPor: 'string',
             numRadicado: res.message,
-            numeroProceso: '',
+            numeroProceso: 'string',
           };
           this.estamparSticker = {
             base64Sticker: '',
@@ -652,22 +688,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
             funcionarioAsignado: this.procedure.funcionario,
             codigoDependencia: this.procedure.codigoGrupoTrabajo,
           };
-          /*
-          Swal.fire({
-            icon: 'success',
-            text:
-              'Su TRAMITE fue radicado con éxito con los siguientes datos: ' +
-              ' N° de Tramite ' +
-              res.message +
-              '\n' +
-              '. Fecha: ' +
-              fechaFormulario +
-              '\n' +
-              '. La información de su TRAMITE fue enviada al correo electrónico principal registrado en el formulario.',
-            confirmButtonColor: '#045cab',
-            confirmButtonText: 'Aceptar',
-          });
-          */
+
           console.log('se creo Tramite: ' + res.message);
           if (this.tramitesServices.subirArchivo.anexos.length > 0) {
             this.uploadFileToFileNet();
@@ -676,38 +697,41 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
             console.log('se subieron Archivos');
             this.tramitesServices
               .generateStickerUsingPOST(this.generarSticker)
+              .pipe(take(1))
               .subscribe((genSticker) => {
                 console.log('se genero Sticker');
-                this.tramitesServices
-                  .estamparStickerRequestDTO(this.estamparSticker)
-                  .subscribe((estSticker) => {
-                    console.log('se estampo Sticker');
-                    this.tramitesServices
-                      .instanciarRadicacion(this.instanciarRadicacion)
-                      .subscribe((insRadicacion) => {
-                        console.log('se instancio Radicacion');
-                        this.sendEmail(
-                          this.form.value.emailRadicar,
-                          this.form.value.nombreRazonSocialPNJ,
-                          this.numeroTramite
-                        );
-                        Swal.fire({
-                          icon: 'success',
-                          text:
-                            'Su TRAMITE fue radicado con éxito con los siguientes datos: ' +
-                            ' N° de Tramite ' +
-                            res.message +
-                            '\n' +
-                            '. Fecha: ' +
-                            fechaFormulario +
-                            '\n' +
-                            '. La información de su TRAMITE fue enviada al correo electrónico principal registrado en el formulario.',
-                          confirmButtonColor: '#045cab',
-                          confirmButtonText: 'Aceptar',
-                        });
-                      });
-                  });
               });
+            this.tramitesServices
+              .estamparStickerRequestDTO(this.estamparSticker)
+              .pipe(take(1))
+              .subscribe((estSticker) => {
+                console.log('se estampo Sticker');
+              });
+            this.tramitesServices
+              .instanciarRadicacion(this.instanciarRadicacion)
+              .pipe(take(1))
+              .subscribe((insRadicacion) => {
+                console.log('se instancio Radicacion');
+              });
+            this.sendEmail(
+              this.form.value.emailRadicar,
+              this.form.value.nombreRazonSocialPNJ,
+              this.numeroTramite
+            );
+            Swal.fire({
+              icon: 'success',
+              text:
+                'Su TRAMITE fue radicado con éxito con los siguientes datos: ' +
+                ' N° de Tramite ' +
+                res.message +
+                '\n' +
+                '. Fecha: ' +
+                fechaFormulario +
+                '\n' +
+                '. La información de su TRAMITE fue enviada al correo electrónico principal registrado en el formulario.',
+              confirmButtonColor: '#045cab',
+              confirmButtonText: 'Aceptar',
+            });
           }
           this.resetFormulario();
         },
@@ -757,6 +781,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   sendEmail(correoEnd: any, nombreUser: any, numeroRadicacion: any) {
     this.tramitesServices
       .enviarEmail(correoEnd, nombreUser, numeroRadicacion)
+      .pipe(take(1))
       .subscribe({
         next: (err) => {
           //  console.log(res, 'envio email');

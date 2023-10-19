@@ -115,6 +115,7 @@
               optionValue="codigo"
               emptyFilterMessage="No se encontró ningún resultado"
               formControlName="idTipoSolicitantePNJ"
+              (onChange)="cambiosTipoSolicitante($event)"
             ></p-dropdown>
             <small
               *ngIf="
@@ -141,7 +142,9 @@
               optionValue="idTipoIdentificacion"
               emptyFilterMessage="No se encontró ningún resultado"
               formControlName="idTipoIdentificacionPNJ"
-            ></p-dropdown>
+
+            >
+          </p-dropdown>
             <small
               *ngIf="
                 form.controls['idTipoIdentificacionPNJ'].hasError('required') &&
@@ -161,7 +164,6 @@
               pInputText
               formControlName="numeroIdentificacionPNJ"
               inputId="documentNumber"
-              pKeyFilter="int"
               maxlength="20"
             />
             <div
@@ -485,7 +487,7 @@
             >
             <p-dropdown
               inputId="remDocumentType"
-              [options]="tiposIdentificacion"
+              [options]="tiposIdentificacionRem"
               [autoDisplayFirst]="false"
               [showClear]="true"
               [filter]="true"
@@ -512,7 +514,6 @@
             <input
               type="text"
               pInputText
-              pKeyFilter="int"
               inputId="documentNumber"
               formControlName="numeroIdentificacionRem"
               maxlength="20"
@@ -819,6 +820,7 @@
             <p-table [value]="documents">
               <ng-template pTemplate="header">
                 <tr>
+                  <th>Obligatorio</th>
                   <th>Nombre</th>
                   <th>Descripción</th>
                   <th>Selección</th>
@@ -826,6 +828,7 @@
               </ng-template>
               <ng-template pTemplate="body" let-document>
                 <tr style="color: #93bbf3">
+                  <td style="color: red;">{{ document.documentoPrincipal != null ? '*' : ' ' }}</td>
                   <td>{{ document.nombre }}</td>
                   <td>{{ document.descripcion }}</td>
                   <td>

@@ -89,21 +89,25 @@ export class ModalTermCondComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   ngAfterViewInit() {
-    this.scrollableContent.nativeElement.addEventListener('scroll', () => {
-      console.log('Evento de desplazamiento detectado');
-      if (this.isScrolledToBottom(this.scrollableContent.nativeElement)) {
-        // El usuario ha llegado al final del scroll, aquí puedes habilitar tu botón
-        this.scrollRecorrido = true;
-      }
-    });
+    this.scrollableContent.nativeElement.addEventListener('scroll', this.handleScroll);
   }
+
+  handleScroll = () => {
+    console.log('Evento de desplazamiento detectado');
+    this.scrollRecorrido = this.isScrolledToBottom(this.scrollableContent.nativeElement);
+  }
+
 
   isScrolledToBottom(element: HTMLElement): boolean {
     const scrollTop = element.scrollTop;
     const scrollHeight = element.scrollHeight;
     const clientHeight = element.clientHeight;
 
-    return scrollTop + clientHeight >= scrollHeight;
+    const scrollBottom = scrollTop + clientHeight;
+    const scrollBottomWithTolerance = scrollHeight - 1; // Tolerancia de 1 píxel
+
+    return scrollBottom >= scrollBottomWithTolerance;
   }
+
 
 }

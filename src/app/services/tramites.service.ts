@@ -169,21 +169,16 @@ export class TramitesServices {
     );
   }
 
-  instanciarRadicacion(data: InstanciarRadicacion) {
-    // Define las credenciales de usuario y contraseña
-    const username = this.usuarioInstanciarRadicacion;
-    const password = this.claveInstanciarRadicacion;
-    // Codifica las credenciales en base64
-    const base64Credentials = btoa(username + ':' + password);
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Basic ' + base64Credentials,
-    });
-    // Realiza la solicitud HTTP POST con las cabeceras de autorización
-    return this.http.post(this.urlInstanciarRadicacion, data, {
-      headers: headers,
-    });
+
+  instanciarRadicacion(body: InstanciarRadicacion): Observable<any> {
+    return this.httpClient.post<any>(
+      this.urlInstanciarRadicacion,
+      body,
+      httpOptions
+    );
   }
+
+
 
   generateToken(): void {
     let body = {

@@ -1,22 +1,41 @@
 export const environment = {
   //apiUrlBaseDev: 'http://192.168.195.208:8480/SSOC_OPE_Administracion_Tramites/',
-  apiUrlBaseDev: 'https://192.168.195.208:8843/SSOC_OPE_Administracion_Tramites/',
+
+  //apiUrlBaseDev: 'https://192.168.195.208:8843/SSOC_OPE_Administracion_Tramites/',
+  apiUrlBaseDev: 'https://192.168.195.200:18643/SSOC_OPE_Administracion_Tramites/',
+
   //apiUrlBaseRadicar: 'http://192.168.195.208:8080/correspondencia-sgd-api/',
-  apiUrlBaseRadicar: 'https://192.168.195.208:8443/correspondencia-sgd-api/',
+  //apiUrlBaseRadicar: 'https://192.168.195.208:8443/correspondencia-sgd-api/',
+  apiUrlBaseRadicar: 'https://192.168.195.200:18443/correspondencia-sgd-api/',
+
+
+
   apiUrlBase: 'https://servicios.supersociedades.gov.co/',
+
+  //apiCorrespondenciaUrlBase: 'https://192.168.195.208:8443/correspondencia-sgd-api/',
   apiCorrespondenciaUrlBase: 'https://192.168.195.208:8443/correspondencia-sgd-api/',
+
+
+  //CORRESPODENCIA:'https://66.70.168.129:9443/correspondencia-sgd-api',
   CORRESPODENCIA:'https://66.70.168.129:9443/correspondencia-sgd-api',
+
+
   //correspondenciaPrueba:'http://192.168.195.208:8080/correspondencia-sgd-api/',
   correspondenciaPrueba:'https://192.168.195.208:8443/correspondencia-sgd-api/',
+
+
   //URLPRUEBA: 'http://192.168.195.208:8280/PQRSD/api/v1/',
-  URLPRUEBA: 'https://192.168.195.208:8280/PQRSD/api/v1/',
+  //URLPRUEBA: 'https://192.168.195.208:8280/PQRSD/api/v1/',
+  URLPRUEBA: 'https://192.168.195.200:18543/PQRSD/api/v1/',
+
+
   component:'formulario',
   username: 'BGONZALEZ',
   password: '8a2a4c86c1502d6df907259a04ec2354485da7059d3f37cbce54e713e44a3bed',
   authorizationPqrsdApi: 'Basic c3NvYy1wcXJzZDpDTEF2ZV8wOTg=',
   usuarioInstancia:'cp4baadmindllo',
   claveInstancia:'SD0cum3nt4ld',
-  apiUrlInstanciarRadicacion:'https://cpd-cp4badllo.apps.ssrhv-ops01.supersociedades.local/bawaut/automationservices/rest/RDE/REST_RADICACION/InstanciarRadicacion',
+  apiUrlInstanciarRadicacion:'https://192.168.195.208:8543/PQRSD/api/v1/iniciarFormularioOpe',
   procedures: [
       {value:5, name: 'Aprobación de colocación de acciones ordinarias', type: 'furt'},
       {value:7, name: 'Aprobación de los estudios actuariales por pensiones de jubilación, bonos y/o títulos pensionales', type: 'furt'},
