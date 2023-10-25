@@ -11,7 +11,7 @@ import { Injectable } from "@angular/core";
 })
 export class ApiConfiguration {
   //rootUrl: string = 'https://192.168.195.208:8443/PQRSD';// antiguo
-  rootUrl: string = 'https://192.168.195.208:8543/PQRSD';
+  rootUrl: string = 'https://192.168.195.200:18543/PQRSD';
   //rootUrl: string = 'http://192.168.195.208:8280/PQRSD';
 }
 

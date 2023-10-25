@@ -77,7 +77,6 @@ export class ModalComponent implements OnInit, OnDestroy {
         this.images.push({
           name: x.nombre,
           type: x.extension,
-          size: x.tamanio,
         });
       }
     });

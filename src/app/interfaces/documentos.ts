@@ -5,4 +5,5 @@ export interface Documentos {
   nombre: string;
   descripcion: string;
   documentoPrincipal:Boolean;
+  obligatorio?:Boolean;
 }

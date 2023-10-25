@@ -5,6 +5,5 @@ export interface ISubirArchivoByte {
   tipoDocumento: string;
   uploadBy: string;
   nombre?: string;
-  tamanio?: string;
-  seguridad?:string;
+  tramite?:string;
 }

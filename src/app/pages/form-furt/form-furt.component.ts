@@ -55,6 +55,8 @@ import { GenerarSticker } from 'src/app/interfaces/generarSticker';
 import { EstamparSticker } from 'src/app/interfaces/estamparSticker';
 import { InstanciarRadicacion } from 'src/app/interfaces/instanciaRadicado';
 import { Documentos } from 'src/app/interfaces/documentos';
+import { ISubirArchivoByte } from 'src/app/interfaces/ISubirArchivoByte';
+import { Files } from 'src/app/interfaces/Files.model';
 
 @Component({
   selector: 'app-form-furt',
@@ -116,6 +118,8 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   selectPersonaN: boolean = false;
   indicativo: string = ' ';
   tipoSol!: any;
+  typeFile: boolean = false;
+
 
   subirArchivo: ISubirArchivo = {
     radicacion: '',
@@ -123,7 +127,11 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     extension: '',
     tipoDocumento: 'Principal',
   };
-  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef) {}
+
+  filesToUpload: Files = {
+    anexos: [],
+  };
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.loadForm();
@@ -159,7 +167,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  eliminarOpciones() {}
+  eliminarOpciones() { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['procedure']) {
@@ -484,7 +492,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       .get('municipioRem')
       ?.setValue(this.isRemPNJ ? this.form.value.municipioPNJ : null);
   }
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
   progress: number = 0;
   cargaAnexos: any[] = [];
@@ -568,9 +576,54 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
+  subirArchivoCorrespondenciaPruebaDMV(): Subscription {
+    debugger
+    let numeroArchivos = 0;
+    const cantidadArchivos = this.filesToUpload.anexos.length;
+    const formData = new FormData();
+    for (var i = 0; i < this.filesToUpload.anexos.length; i++) {
+      if (this.filesToUpload.anexos[i].archivo) {
+        formData.append(
+          'archivos',
+          this.filesToUpload.anexos[i].archivo!
+        );
+      }
+      this.filesToUpload.anexos[i].archivo = undefined;
+    }
+
+    formData.append(
+      'archivoUploadDTO',
+      JSON.stringify(
+        this.filesToUpload.anexos.map((a) => {
+          return {
+            extension: a.extension,
+            radicacion: a.radicacion,
+            tipoDocumento: a.tipoDocumento,
+            uploadBy: a.uploadBy,
+          };
+        })
+      )
+    );
+
+    return this.tramitesServices.subirArchivoFilenetPrueba(formData).subscribe({
+      next: this.progressFiles,
+      error: (err) => {
+        console.log(`Error al subir el anexo al filenet`, err);
+        this.loaderFile = false;
+        // this.loader = true;
+        // this.enviarFormularioPqrsdf();
+        Swal.fire({
+          icon: 'error',
+          text: 'Error al subir el ANEXO al filenet',
+          confirmButtonColor: '#045cab',
+          confirmButtonText: 'Aceptar',
+        });
+      },
+    });
+  }
+
   uploadFileToFileNet(): void {
     this.loaderFile = true;
-
     this.tramitesServices.subirArchivo.anexos.forEach((archivo) => {
       console.log(archivo);
     });
@@ -590,9 +643,74 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  uploadFileToFileNetDMV(): void {
+
+    this.loaderFile = true;
+    this.filesToUpload.anexos.forEach((archivo) => {
+      console.log(archivo);
+    });
+
+    //  this.tramitesServices.getFilestoUpload(this.tramitesServices.subirArchivo);
+    if (this.filesToUpload.anexos.length !== 0) {
+      debugger
+      this.subirArchivoCorrespondenciaPruebaDMV();
+    }
+  }
+
+  onIterate(event: any, extension: any) {
+    debugger
+    console.log('Valor de la extensión: ', extension.nombre);
+  }
+
+  onUploadFile($event: any, tramite?: any, extension?: any) {
+    debugger
+    console.log(this.documents)
+    this.typeFile = false;
+    let files: File[] = $event.target.files;
+
+    this.filesToUpload.anexos = this.filesToUpload.anexos.filter(anexo => {
+      return anexo.tramite !== tramite;
+    });
+
+    extension.forEach((a: any) => {
+      if (a.nombre == $event.target.files[0].name.split('.').pop()) {
+        this.typeFile = true;
+      }
+    })
+    if (this.typeFile) {
+      for (let file of files) {
+        let anexo = {
+          archivo: file,
+          extension: file.name.split('.')[1],
+          radicacion: localStorage.getItem('numeroRadicado') as string,
+          tipoDocumento: 'Anexo',
+          uploadBy: 'PQRS',
+          nombre: file.name.split('.')[0],
+          tramite: tramite,
+        } as ISubirArchivoByte;
+        this.filesToUpload.anexos.push(anexo);
+
+      }
+    } else {
+
+      const inputElement = $event.target as HTMLInputElement;
+      if (inputElement) {
+        inputElement.value = '';
+      }
+
+      Swal.fire({
+        icon: 'error',
+        text:
+          'El formato del archivo que esta cargando no corresponde.',
+        confirmButtonColor: '#045cab',
+        confirmButtonText: 'Aceptar',
+      });
+    }
+  }
+
   guardarTramite() {
     this.saving = true;
-    if(!this.form.valid){
+    if (!this.form.valid) {
       this.saving = false;
     }
     let DateFormulario;
@@ -665,49 +783,49 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       referenciaExterna: '',
       tramiteId: this.procedure?.id.toString(),
     };
-    if(orderRequest.aplicaTipoIdentificacionId === '1'){orderRequest.aplicaTipoIdentificacionNombre = 'CÉDULA';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '2'){orderRequest.aplicaTipoIdentificacionNombre = 'CÉDULA DE EXTRANJERÍA';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '3'){orderRequest.aplicaTipoIdentificacionNombre = 'PASAPORTE';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '4'){orderRequest.aplicaTipoIdentificacionNombre = 'TARJETA DE IDENTIDAD';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '5'){orderRequest.aplicaTipoIdentificacionNombre = 'NIT';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '6'){orderRequest.aplicaTipoIdentificacionNombre = 'IMC (INTERMEDIARIO CAMBIARIO)';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '7'){orderRequest.aplicaTipoIdentificacionNombre = 'OTRO TIPO DE DOCUMENTO';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '8'){orderRequest.aplicaTipoIdentificacionNombre = 'NIT ESPECIAL';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '9'){orderRequest.aplicaTipoIdentificacionNombre = 'EXHORTO';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '10'){orderRequest.aplicaTipoIdentificacionNombre = 'IE SocExt BcoRep';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '11'){orderRequest.aplicaTipoIdentificacionNombre = 'No. IDENTIFICA CASA MATRIZ';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '12'){orderRequest.aplicaTipoIdentificacionNombre = 'MATRICULA MERCANTIL';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '13'){orderRequest.aplicaTipoIdentificacionNombre = 'SE';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '14'){orderRequest.aplicaTipoIdentificacionNombre = 'IDENTIFICA SOC EXTRANJERA';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '15'){orderRequest.aplicaTipoIdentificacionNombre = 'INTERVENCION PAGINA WEB';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '16'){orderRequest.aplicaTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO';}
-    else if(orderRequest.aplicaTipoIdentificacionId === '17'){orderRequest.aplicaTipoIdentificacionNombre = 'SIN IDENTIFICACIÓN MERCANTILES';}
+    if (orderRequest.aplicaTipoIdentificacionId === '1') { orderRequest.aplicaTipoIdentificacionNombre = 'CÉDULA'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '2') { orderRequest.aplicaTipoIdentificacionNombre = 'CÉDULA DE EXTRANJERÍA'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '3') { orderRequest.aplicaTipoIdentificacionNombre = 'PASAPORTE'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '4') { orderRequest.aplicaTipoIdentificacionNombre = 'TARJETA DE IDENTIDAD'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '5') { orderRequest.aplicaTipoIdentificacionNombre = 'NIT'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '6') { orderRequest.aplicaTipoIdentificacionNombre = 'IMC (INTERMEDIARIO CAMBIARIO)'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '7') { orderRequest.aplicaTipoIdentificacionNombre = 'OTRO TIPO DE DOCUMENTO'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '8') { orderRequest.aplicaTipoIdentificacionNombre = 'NIT ESPECIAL'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '9') { orderRequest.aplicaTipoIdentificacionNombre = 'EXHORTO'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '10') { orderRequest.aplicaTipoIdentificacionNombre = 'IE SocExt BcoRep'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '11') { orderRequest.aplicaTipoIdentificacionNombre = 'No. IDENTIFICA CASA MATRIZ'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '12') { orderRequest.aplicaTipoIdentificacionNombre = 'MATRICULA MERCANTIL'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '13') { orderRequest.aplicaTipoIdentificacionNombre = 'SE'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '14') { orderRequest.aplicaTipoIdentificacionNombre = 'IDENTIFICA SOC EXTRANJERA'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '15') { orderRequest.aplicaTipoIdentificacionNombre = 'INTERVENCION PAGINA WEB'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '16') { orderRequest.aplicaTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO'; }
+    else if (orderRequest.aplicaTipoIdentificacionId === '17') { orderRequest.aplicaTipoIdentificacionNombre = 'SIN IDENTIFICACIÓN MERCANTILES'; }
 
 
-    if(orderRequest.particularTipoIdentificacionId === '1'){orderRequest.particularTipoIdentificacionNombre = 'CÉDULA';}
-    else if(orderRequest.particularTipoIdentificacionId === '2'){orderRequest.particularTipoIdentificacionNombre = 'CÉDULA DE EXTRANJERÍA';}
-    else if(orderRequest.particularTipoIdentificacionId === '3'){orderRequest.particularTipoIdentificacionNombre = 'PASAPORTE';}
-    else if(orderRequest.particularTipoIdentificacionId === '4'){orderRequest.particularTipoIdentificacionNombre = 'TARJETA DE IDENTIDAD';}
-    else if(orderRequest.particularTipoIdentificacionId === '5'){orderRequest.particularTipoIdentificacionNombre = 'NIT';}
-    else if(orderRequest.particularTipoIdentificacionId === '6'){orderRequest.particularTipoIdentificacionNombre = 'IMC (INTERMEDIARIO CAMBIARIO)';}
-    else if(orderRequest.particularTipoIdentificacionId === '7'){orderRequest.particularTipoIdentificacionNombre = 'OTRO TIPO DE DOCUMENTO';}
-    else if(orderRequest.particularTipoIdentificacionId === '8'){orderRequest.particularTipoIdentificacionNombre = 'NIT ESPECIAL';}
-    else if(orderRequest.particularTipoIdentificacionId === '9'){orderRequest.particularTipoIdentificacionNombre = 'EXHORTO';}
-    else if(orderRequest.particularTipoIdentificacionId === '10'){orderRequest.particularTipoIdentificacionNombre = 'IE SocExt BcoRep';}
-    else if(orderRequest.particularTipoIdentificacionId === '11'){orderRequest.particularTipoIdentificacionNombre = 'No. IDENTIFICA CASA MATRIZ';}
-    else if(orderRequest.particularTipoIdentificacionId === '12'){orderRequest.particularTipoIdentificacionNombre = 'MATRICULA MERCANTIL';}
-    else if(orderRequest.particularTipoIdentificacionId === '13'){orderRequest.particularTipoIdentificacionNombre = 'SE';}
-    else if(orderRequest.particularTipoIdentificacionId === '14'){orderRequest.particularTipoIdentificacionNombre = 'IDENTIFICA SOC EXTRANJERA';}
-    else if(orderRequest.particularTipoIdentificacionId === '15'){orderRequest.particularTipoIdentificacionNombre = 'INTERVENCION PAGINA WEB';}
-    else if(orderRequest.particularTipoIdentificacionId === '16'){orderRequest.particularTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO';}
-    else if(orderRequest.particularTipoIdentificacionId === '17'){orderRequest.particularTipoIdentificacionNombre = 'SIN IDENTIFICACIÓN MERCANTILES';}
+    if (orderRequest.particularTipoIdentificacionId === '1') { orderRequest.particularTipoIdentificacionNombre = 'CÉDULA'; }
+    else if (orderRequest.particularTipoIdentificacionId === '2') { orderRequest.particularTipoIdentificacionNombre = 'CÉDULA DE EXTRANJERÍA'; }
+    else if (orderRequest.particularTipoIdentificacionId === '3') { orderRequest.particularTipoIdentificacionNombre = 'PASAPORTE'; }
+    else if (orderRequest.particularTipoIdentificacionId === '4') { orderRequest.particularTipoIdentificacionNombre = 'TARJETA DE IDENTIDAD'; }
+    else if (orderRequest.particularTipoIdentificacionId === '5') { orderRequest.particularTipoIdentificacionNombre = 'NIT'; }
+    else if (orderRequest.particularTipoIdentificacionId === '6') { orderRequest.particularTipoIdentificacionNombre = 'IMC (INTERMEDIARIO CAMBIARIO)'; }
+    else if (orderRequest.particularTipoIdentificacionId === '7') { orderRequest.particularTipoIdentificacionNombre = 'OTRO TIPO DE DOCUMENTO'; }
+    else if (orderRequest.particularTipoIdentificacionId === '8') { orderRequest.particularTipoIdentificacionNombre = 'NIT ESPECIAL'; }
+    else if (orderRequest.particularTipoIdentificacionId === '9') { orderRequest.particularTipoIdentificacionNombre = 'EXHORTO'; }
+    else if (orderRequest.particularTipoIdentificacionId === '10') { orderRequest.particularTipoIdentificacionNombre = 'IE SocExt BcoRep'; }
+    else if (orderRequest.particularTipoIdentificacionId === '11') { orderRequest.particularTipoIdentificacionNombre = 'No. IDENTIFICA CASA MATRIZ'; }
+    else if (orderRequest.particularTipoIdentificacionId === '12') { orderRequest.particularTipoIdentificacionNombre = 'MATRICULA MERCANTIL'; }
+    else if (orderRequest.particularTipoIdentificacionId === '13') { orderRequest.particularTipoIdentificacionNombre = 'SE'; }
+    else if (orderRequest.particularTipoIdentificacionId === '14') { orderRequest.particularTipoIdentificacionNombre = 'IDENTIFICA SOC EXTRANJERA'; }
+    else if (orderRequest.particularTipoIdentificacionId === '15') { orderRequest.particularTipoIdentificacionNombre = 'INTERVENCION PAGINA WEB'; }
+    else if (orderRequest.particularTipoIdentificacionId === '16') { orderRequest.particularTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO'; }
+    else if (orderRequest.particularTipoIdentificacionId === '17') { orderRequest.particularTipoIdentificacionNombre = 'SIN IDENTIFICACIÓN MERCANTILES'; }
 
 
     if (this.form.valid) {
       const request = this.tramitesServices.guardarTramite$(orderRequest);
       request.subscribe({
         next: (res) => {
-          this.saving = false;
+        //  this.saving = false;
           this.numeroTramite = res.message;
           this.loader = false;
           this.generarSticker = {
@@ -732,7 +850,8 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
           if (res.message && res.code != '-1') {
             console.log('se creo Tramite: ' + res.message);
             if (this.tramitesServices.subirArchivo.anexos.length > 0) {
-              this.uploadFileToFileNet();
+              // this.uploadFileToFileNet();
+              this.uploadFileToFileNetDMV();
             }
             console.log('se subieron Archivos');
             this.tramitesServices
@@ -773,15 +892,15 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
               confirmButtonText: 'Aceptar',
             });
             this.resetFormulario();
-          }else{
+          /*} else {
             this.saving = false;
-          Swal.fire({
-            icon: 'error',
-            text:
-              'Falló al generar la radicación. Intente mas tarde.',
-            confirmButtonColor: '#045cab',
-            confirmButtonText: 'Aceptar',
-          });
+            Swal.fire({
+              icon: 'error',
+              text:
+                'Falló al generar la radicación. Intente mas tarde.',
+              confirmButtonColor: '#045cab',
+              confirmButtonText: 'Aceptar',
+            }); */
           }
         },
         error: (err: any) => {
@@ -789,7 +908,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
           Swal.fire({
             icon: 'error',
             text:
-            'Falló al generar la radicación. Intente mas tarde.',
+              'Falló al generar la radicación. Intente mas tarde.',
             confirmButtonColor: '#045cab',
             confirmButtonText: 'Aceptar',
           });
