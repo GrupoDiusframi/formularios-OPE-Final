@@ -35,7 +35,7 @@ export const environment = {
   authorizationPqrsdApi: 'Basic c3NvYy1wcXJzZDpDTEF2ZV8wOTg=',
   usuarioInstancia: 'cp4baadmindllo',
   claveInstancia: 'SD0cum3nt4ld',
-  apiUrlInstanciarRadicacion: 'https://192.168.195.200:18543/PQRSD/api/v1/iniciarFormularioOpe',
+  apiUrlInstanciarRadicacion: 'https://192.168.195.200:18543/PQRSD/api/v1/iniciariniciarFormularioOpe',
   procedures: [
     { value: 5, name: 'Aprobación de colocación de acciones ordinarias', type: 'furt' },
     { value: 7, name: 'Aprobación de los estudios actuariales por pensiones de jubilación, bonos y/o títulos pensionales', type: 'furt' },

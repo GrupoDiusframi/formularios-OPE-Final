@@ -577,9 +577,13 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   subirArchivoCorrespondenciaPruebaDMV(): Subscription {
-    debugger
     let numeroArchivos = 0;
     const cantidadArchivos = this.filesToUpload.anexos.length;
+
+    this.filesToUpload.anexos.forEach((a)=>{
+      a.radicacion=this.numeroTramite;
+
+  })
     const formData = new FormData();
     for (var i = 0; i < this.filesToUpload.anexos.length; i++) {
       if (this.filesToUpload.anexos[i].archivo) {
@@ -647,24 +651,17 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
 
     this.loaderFile = true;
     this.filesToUpload.anexos.forEach((archivo) => {
-      console.log(archivo);
+      console.log(archivo,"archivos uploadFileToFileNetDMV");
     });
 
     //  this.tramitesServices.getFilestoUpload(this.tramitesServices.subirArchivo);
     if (this.filesToUpload.anexos.length !== 0) {
-      debugger
       this.subirArchivoCorrespondenciaPruebaDMV();
     }
   }
 
-  onIterate(event: any, extension: any) {
-    debugger
-    console.log('Valor de la extensión: ', extension.nombre);
-  }
 
   onUploadFile($event: any, tramite?: any, extension?: any) {
-    debugger
-    console.log(this.documents)
     this.typeFile = false;
     let files: File[] = $event.target.files;
 
@@ -682,14 +679,13 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
         let anexo = {
           archivo: file,
           extension: file.name.split('.')[1],
-          radicacion: localStorage.getItem('numeroRadicado') as string,
+          radicacion: this.numeroTramite as string,
           tipoDocumento: 'Anexo',
           uploadBy: 'PQRS',
           nombre: file.name.split('.')[0],
           tramite: tramite,
         } as ISubirArchivoByte;
-        this.filesToUpload.anexos.push(anexo);
-
+        this.filesToUpload.anexos.push(anexo);          
       }
     } else {
 
@@ -709,6 +705,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   guardarTramite() {
+    
     this.saving = true;
     if (!this.form.valid) {
       this.saving = false;
@@ -719,7 +716,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
 
     const orderRequest: RadicacionRequestDto = {
       anexosFisicos:
-        this.tramitesServices.subirArchivo.anexos.length.toString(),
+        this.filesToUpload.anexos.length.toString(),
       aplicaCiudadCodigo: this.form.get('idMunicipioPNJ')?.value.toString(),
       aplicaDepartamentoCodigo: this.form
         .get('idDepartamentoPNJ')
@@ -820,12 +817,12 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     else if (orderRequest.particularTipoIdentificacionId === '16') { orderRequest.particularTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO'; }
     else if (orderRequest.particularTipoIdentificacionId === '17') { orderRequest.particularTipoIdentificacionNombre = 'SIN IDENTIFICACIÓN MERCANTILES'; }
 
-
+    
     if (this.form.valid) {
       const request = this.tramitesServices.guardarTramite$(orderRequest);
       request.subscribe({
         next: (res) => {
-        //  this.saving = false;
+          this.saving = false;
           this.numeroTramite = res.message;
           this.loader = false;
           this.generarSticker = {
@@ -849,7 +846,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
 
           if (res.message && res.code != '-1') {
             console.log('se creo Tramite: ' + res.message);
-            if (this.tramitesServices.subirArchivo.anexos.length > 0) {
+            if (this.filesToUpload.anexos.length > 0) {
               // this.uploadFileToFileNet();
               this.uploadFileToFileNetDMV();
             }
@@ -892,7 +889,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
               confirmButtonText: 'Aceptar',
             });
             this.resetFormulario();
-          /*} else {
+          } else {
             this.saving = false;
             Swal.fire({
               icon: 'error',
@@ -900,7 +897,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
                 'Falló al generar la radicación. Intente mas tarde.',
               confirmButtonColor: '#045cab',
               confirmButtonText: 'Aceptar',
-            }); */
+            });
           }
         },
         error: (err: any) => {
