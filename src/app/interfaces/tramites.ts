@@ -9,7 +9,7 @@ export interface Tramites {
   nombreGrupoTrabajo:string;
   codigoGrupoTrabajo:string;
   tiposSolicitante:Array<TipoSolicitante>;
-  tipoSeguridadRadicacion:TipoSeguridadRadicacion;
+  tiposSeguridad:Array<TipoSeguridadRadicacion>;
   descripcionSolicitud:string;
   nombreAmigable:string;
   nombre:string;

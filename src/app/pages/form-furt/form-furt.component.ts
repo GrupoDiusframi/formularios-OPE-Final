@@ -82,6 +82,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   numeroTramite!: string;
   readonly processNumberRegex: RegExp = /[0-9]{4}-[0-9]{3}-[0-9]{3}$/;
   @ViewChild('miCheckbox') miCheckbox!: MatCheckbox;
+  tramite!: Tramites;
 
   form!: FormGroup;
   datos: Array<Tramites> = [];
@@ -119,6 +120,9 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   indicativo: string = ' ';
   tipoSol!: any;
   typeFile: boolean = false;
+  folios:number = 1;
+  tipoSeguridad!:string;
+  nombrePorceso!:string;
 
 
   subirArchivo: ISubirArchivo = {
@@ -172,6 +176,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['procedure']) {
       this.loadForm();
+      this.tramite = this.procedure;
       const nuevoProcedure = changes['procedure'].currentValue as Tramites;
       this.tipoSolicitante = nuevoProcedure?.tiposSolicitante;
       this.documents = nuevoProcedure?.documentos;
@@ -215,6 +220,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
           (this.tiposIdentificacion = data),
       });
     this.tiposIdentificacionRem = this.tiposIdentificacion;
+    console.log(this.tiposIdentificacionRem);
   }
 
   handleChangeProcess(event: InputSwitchOnChangeEvent): void {
@@ -444,6 +450,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   handleChangeRemPNJ(): void {
+    this.tiposIdentificacionRem;
     this.form
       .get('idTipoIdentificacionRem')
       ?.setValue(
@@ -685,7 +692,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
           nombre: file.name.split('.')[0],
           tramite: tramite,
         } as ISubirArchivoByte;
-        this.filesToUpload.anexos.push(anexo);          
+        this.filesToUpload.anexos.push(anexo);
       }
     } else {
 
@@ -705,7 +712,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   guardarTramite() {
-    
+
     this.saving = true;
     if (!this.form.valid) {
       this.saving = false;
@@ -713,7 +720,16 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     let DateFormulario;
     DateFormulario = new Date();
     const fechaFormulario = formatDate(DateFormulario, 'yyyy-MM-dd', 'en-US');
+    this.procedure?.documentos.forEach(fol =>{
+       if(fol.documentoPrincipal != null){
+        this.folios++;
+      }});
 
+    if (this.procedure.tiposSeguridad && Array.isArray(this.procedure.tiposSeguridad)) {
+    this.procedure.tiposSeguridad.forEach(obj => {
+        this.tipoSeguridad = obj.codigo;
+    });
+}
     const orderRequest: RadicacionRequestDto = {
       anexosFisicos:
         this.filesToUpload.anexos.length.toString(),
@@ -732,7 +748,6 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       aplicaTipoIdentificacionId: this.form
         .get('idTipoIdentificacionPNJ')
         ?.value.toString(),
-      //aplicaTipoIdentificacionNombre: this.form.get('numeroIdentificacionPNJ')?.value.toString(),
       aplicaTipoIdentificacionNombre: '',
 
       particularIdentificacion: this.form
@@ -742,7 +757,6 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       particularTipoIdentificacionId: this.form
         .get('idTipoIdentificacionRem')
         ?.value.toString(),
-      //particularTipoIdentificacionNombre: this.form.get('numeroIdentificacionRem')?.value.toString(),
       particularTipoIdentificacionNombre: '',
       particularCiudadCodigo: this.form.get('idMunicipioRem')?.value.toString(),
       particularDepartamentoCodigo: this.form
@@ -753,21 +767,18 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       particularTelefono: this.form.get('telefonoRem')?.value.toString(),
       particularEmail: this.form.get('emailRem')?.value.toString(),
 
-      //dependenciaId: this.procedure?.codigoGrupoTrabajo.toString(),
-      dependenciaId: '460',
-      //dependenciaNombre: this.procedure?.nombreGrupoTrabajo.toString(),
-      dependenciaNombre: 'GRUPO DE ADMISIONES',
-      entregaFisica: '1',
-      foliosNumero: '1',
+      dependenciaId: this.procedure?.codigoGrupoTrabajo.toString(),
+      dependenciaNombre: this.procedure?.nombreGrupoTrabajo.toString(),
+      entregaFisica: '0',
+      foliosNumero: this.folios.toString(),
       cuadernoTipoId: '0',
       cuadernoCodigo: '30292457',
-      documentalTipoId: '460',
-      //documentalTipoCodigo:this.procedure?.proceso?.nombre.toString(),
+      documentalTipoId: '0',
+      //documentalTipoCodigo:this.procedure.proceso.nombre.toString(),
       documentalTipoCodigo: 'OFICIO',
       extensionArchivo: '.pdf',
       codigoMedioEnvio: '5',
-      //codigoTipoSeguridad:this.procedure?.tipoSeguridadRadicacion?.codigo,
-      codigoTipoSeguridad: 'ABIERTA',
+      codigoTipoSeguridad:this.tipoSeguridad,
       codigoSerie: '58',
       codigoSubSerie: '194',
       loginUsuario: 'aplicaciones',
@@ -775,8 +786,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       nombreSubSerie: 'Proceso de Reorganización Abreviada',
 
       radicacionAnterior: '2023-07-000904',
-      //tramiteCodigo:Number(this.procedure?.codigo),
-      tramiteCodigo: 16500,
+      tramiteCodigo:Number(this.procedure?.codigo),
       referenciaExterna: '',
       tramiteId: this.procedure?.id.toString(),
     };
@@ -817,7 +827,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     else if (orderRequest.particularTipoIdentificacionId === '16') { orderRequest.particularTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO'; }
     else if (orderRequest.particularTipoIdentificacionId === '17') { orderRequest.particularTipoIdentificacionNombre = 'SIN IDENTIFICACIÓN MERCANTILES'; }
 
-    
+
     if (this.form.valid) {
       const request = this.tramitesServices.guardarTramite$(orderRequest);
       request.subscribe({

@@ -842,10 +842,10 @@
                           Formato unico permitido:
                           <span *ngFor="let extension of document.extensiones"  > {{ extension.nombre +' '}}</span>
                         </label>
-                        <input 
-                        class="form-control" 
+                        <input
+                        class="form-control"
                         type="file"
-                         id="formFile" 
+                         id="formFile"
                          style="max-width: 400px;"
                          (change)="onUploadFile($event,document.nombre,document.extensiones)"
                         >

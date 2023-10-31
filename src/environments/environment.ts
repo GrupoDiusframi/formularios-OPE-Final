@@ -1,7 +1,7 @@
 export const environment = {
   //apiUrlBaseDev: 'http://192.168.195.208:8480/SSOC_OPE_Administracion_Tramites/',
 
-  //apiUrlBaseDev: 'https://192.168.195.208:8843/SSOC_OPE_Administracion_Tramites/',
+  //apiUrlBaseDev: 'http://192.168.195.208:8480/SSOC_OPE_Administracion_Tramites/',
   apiUrlBaseDev: 'https://192.168.195.200:18643/SSOC_OPE_Administracion_Tramites/',
 
   //apiUrlBaseRadicar: 'http://192.168.195.208:8080/correspondencia-sgd-api/',
@@ -29,13 +29,15 @@ export const environment = {
   URLPRUEBA: 'https://192.168.195.200:18543/PQRSD/api/v1/',
 
 
+
   component: 'formulario',
   username: 'BGONZALEZ',
   password: '8a2a4c86c1502d6df907259a04ec2354485da7059d3f37cbce54e713e44a3bed',
   authorizationPqrsdApi: 'Basic c3NvYy1wcXJzZDpDTEF2ZV8wOTg=',
   usuarioInstancia: 'cp4baadmindllo',
   claveInstancia: 'SD0cum3nt4ld',
-  apiUrlInstanciarRadicacion: 'https://192.168.195.200:18543/PQRSD/api/v1/iniciariniciarFormularioOpe',
+  apiUrlInstanciarRadicacion: 'https://192.168.195.200:18543/PQRSD/api/v1/iniciarFormularioOpe',
+
   procedures: [
     { value: 5, name: 'Aprobación de colocación de acciones ordinarias', type: 'furt' },
     { value: 7, name: 'Aprobación de los estudios actuariales por pensiones de jubilación, bonos y/o títulos pensionales', type: 'furt' },
