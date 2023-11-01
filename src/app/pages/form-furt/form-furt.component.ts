@@ -48,7 +48,7 @@ import {
   DepartamentoDTO,
   PaisDTO,
 } from 'src/pqrsd-api/src/src/models';
-import { formatDate } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import { ModalTermCondComponent } from '../shared/modal-term-cond/modal-term-cond.component';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { GenerarSticker } from 'src/app/interfaces/generarSticker';
@@ -123,7 +123,8 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   folios:number = 1;
   tipoSeguridad!:string;
   nombrePorceso!:string;
-
+  fechaActual = new Date();
+  fechaFormateada: string | null;
 
   subirArchivo: ISubirArchivo = {
     radicacion: '',
@@ -135,7 +136,11 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   filesToUpload: Files = {
     anexos: [],
   };
-  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef) { }
+
+
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private datePipe: DatePipe) {
+    this.fechaFormateada = this.datePipe.transform(this.fechaActual, 'yyyy-MM-dd');
+  }
 
   ngOnInit(): void {
     this.loadForm();
@@ -211,16 +216,15 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  //handleChangeProcedure(idTramite: number) {}
   getListTipoIdentificacion(): void {
     this.pqrsdService
       .tiposIdentificacionAllUsingGET(this.authorizationPqrsdApi)
       .subscribe({
-        next: (data: Array<TipoIdentificacion> | any) =>
-          (this.tiposIdentificacion = data),
+        next: (data: Array<TipoIdentificacion> | any) => {
+          this.tiposIdentificacion = data;
+          this.tiposIdentificacionRem = this.tiposIdentificacion; // Mover la asignación aquí
+        },
       });
-    this.tiposIdentificacionRem = this.tiposIdentificacion;
-    console.log(this.tiposIdentificacionRem);
   }
 
   handleChangeProcess(event: InputSwitchOnChangeEvent): void {
@@ -450,7 +454,10 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   handleChangeRemPNJ(): void {
-    this.tiposIdentificacionRem;
+    setTimeout(() => {
+      this.tiposIdentificacionRem;
+      this.tiposIdentificacion;
+    }, 4000);
     this.form
       .get('idTipoIdentificacionRem')
       ?.setValue(
@@ -774,7 +781,6 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       cuadernoTipoId: '0',
       cuadernoCodigo: '30292457',
       documentalTipoId: '0',
-      //documentalTipoCodigo:this.procedure.proceso.nombre.toString(),
       documentalTipoCodigo: 'OFICIO',
       extensionArchivo: '.pdf',
       codigoMedioEnvio: '5',
@@ -826,10 +832,10 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     else if (orderRequest.particularTipoIdentificacionId === '15') { orderRequest.particularTipoIdentificacionNombre = 'INTERVENCION PAGINA WEB'; }
     else if (orderRequest.particularTipoIdentificacionId === '16') { orderRequest.particularTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO'; }
     else if (orderRequest.particularTipoIdentificacionId === '17') { orderRequest.particularTipoIdentificacionNombre = 'SIN IDENTIFICACIÓN MERCANTILES'; }
-
-
+    orderRequest.dependenciaNombre = orderRequest.dependenciaNombre.replace(/\s+$/g, '');
     if (this.form.valid) {
       const request = this.tramitesServices.guardarTramite$(orderRequest);
+      console.log(orderRequest);
       request.subscribe({
         next: (res) => {
           this.saving = false;
@@ -849,10 +855,11 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
           this.instanciarRadicacion = {
             numeroRadicado: res.message,
             tipoRadicacion: 'Radicación Entrada',
-            fechaVencimientoTarea: '2023-10-25',
-            funcionarioAsignado: this.procedure.funcionario,
+            fechaVencimientoTarea: this.fechaFormateada,
+            funcionarioAsignado: 'HIGHTECH S.A',
             codigoDependencia: this.procedure.codigoGrupoTrabajo,
           };
+          console.log("Objeto de Instancia Radicacion: "+this.instanciarRadicacion)
 
           if (res.message && res.code != '-1') {
             console.log('se creo Tramite: ' + res.message);

@@ -16,7 +16,7 @@ import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/fo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FooterComponent } from './pages/shared/footer/footer.component';
 import { NavBarComponent } from './pages/shared/nav-bar/nav-bar.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
@@ -85,10 +85,11 @@ import { NgxCaptchaModule } from 'ngx-captcha';
     ToastModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    DatePipe
 
   ],
-  providers: [TramitesServices, MessageService,
+  providers: [TramitesServices, MessageService, DatePipe
   ],
   bootstrap: [AppComponent]
 })
