@@ -1,3 +1,4 @@
+import { AppComponent } from './../../app.component';
 import {
   ChangeDetectorRef,
   Component,
@@ -36,7 +37,7 @@ import { ISubirArchivo } from 'src/app/interfaces/ISubirArchivo';
 import { ModalComponent } from '../modal/modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { HttpEvent, HttpEventType, HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import {
   PaisesControllerService,
@@ -57,6 +58,8 @@ import { InstanciarRadicacion } from 'src/app/interfaces/instanciaRadicado';
 import { Documentos } from 'src/app/interfaces/documentos';
 import { ISubirArchivoByte } from 'src/app/interfaces/ISubirArchivoByte';
 import { Files } from 'src/app/interfaces/Files.model';
+import { Router } from '@angular/router';
+import { SelectionService } from 'src/app/services/compartido.service';
 
 @Component({
   selector: 'app-form-furt',
@@ -139,7 +142,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     anexos: [],
   };
 
-  constructor(
+  constructor(private selectionService: SelectionService,
     private dialog: MatDialog,
     private cd: ChangeDetectorRef,
     private datePipe: DatePipe
@@ -149,7 +152,6 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       'yyyy-MM-dd'
     );
   }
-
   ngOnInit(): void {
     this.loadForm();
     this.getListPais();
@@ -194,6 +196,11 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       this.tipoSolicitante = nuevoProcedure?.tiposSolicitante;
       this.documents = nuevoProcedure?.documentos;
 
+      if (this.procedure.tiposSeguridad && Array.isArray(this.procedure.tiposSeguridad)) {
+        this.procedure.tiposSeguridad.forEach((obj) => {
+          this.tipoSeguridad = obj.codigo;
+        });
+      }
       this.documents.forEach((obj) => {
         if (obj.obligatorio === true) {
           this.cantidadObligatorio++;
@@ -546,16 +553,72 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       } else {
         this.archivosCargadosExitoso = true;
         this.loaderFile = false;
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title:
-            'Se guardaron con éxito un total de ' +
-            this.cargaAnexos.length +
-            ' Archivos',
-          confirmButtonColor: '#045cab',
-          confirmButtonText: 'Aceptar',
+
+        this.generarSticker = {
+          cantidadSticker: 1,
+          formatoRequerido: 'PDF',
+          generadoPor: 'string',
+          numRadicado: this.numeroTramite,
+          numeroProceso: 'string',
+        };
+        this.estamparSticker = {
+          base64Sticker: '',
+          numeroRadicado: this.numeroTramite,
+        };
+        this.instanciarRadicacion = {
+          numeroRadicado: this.numeroTramite,
+          tipoRadicacion: 'Radicación Entrada',
+          fechaVencimientoTarea: this.fechaFormateada,
+          funcionarioAsignado: 'HIGHTECH S.A',
+          codigoDependencia: this.procedure.codigoGrupoTrabajo,
+        };
+
+        this.tramitesServices
+        .generateStickerUsingPOST(this.generarSticker)
+        .pipe(take(1))
+        .subscribe((genSticker) => {
+          console.log('se genero Sticker');
         });
+      this.tramitesServices
+        .estamparStickerRequestDTO(this.estamparSticker)
+        .pipe(take(1))
+        .subscribe((estSticker) => {
+          console.log('se estampo Sticker');
+        });
+      this.tramitesServices
+        .instanciarRadicacion(this.instanciarRadicacion)
+        .pipe(take(1))
+        .subscribe((insRadicacion) => {
+          console.log('se instancio Radicacion');
+        });
+      this.sendEmail(
+        this.form.value.emailRadicar,
+        this.form.value.nombreRazonSocialPNJ,
+        this.numeroTramite
+      );
+      this.saving = false;
+      Swal.fire({
+        icon: 'success',
+        text:
+          'Su TRAMITE fue radicado con éxito con los siguientes datos: ' +
+          ' N° de Tramite ' +
+          this.numeroTramite +
+          '\n' +
+          '. Fecha: ' +
+          this.fechaFormateada +
+          '\n' +
+          '. La información de su TRAMITE fue enviada al correo electrónico principal registrado en el formulario.',
+        confirmButtonColor: '#045cab',
+        confirmButtonText: 'Aceptar',
+      }).then(() => {
+          this.selectionService.clearSelection();
+      });
+
+      this.documents = [];
+      this.filesToUpload.anexos = [];
+      this.resetFormulario();
+
+
       }
     }
   };
@@ -745,45 +808,23 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
 
-    if (
-      this.procedure.tiposSeguridad &&
-      Array.isArray(this.procedure.tiposSeguridad)
-    ) {
-      this.procedure.tiposSeguridad.forEach((obj) => {
-        this.tipoSeguridad = obj.codigo;
-      });
-    }
     const orderRequest: RadicacionRequestDto = {
       anexosFisicos: this.filesToUpload.anexos.length.toString(),
       aplicaCiudadCodigo: this.form.get('idMunicipioPNJ')?.value.toString(),
-      aplicaDepartamentoCodigo: this.form
-        .get('idDepartamentoPNJ')
-        ?.value.toString(),
+      aplicaDepartamentoCodigo: this.form.get('idDepartamentoPNJ')?.value.toString(),
       aplicaPaisCodigo: this.form.get('idPaisPNJ')?.value.toString(),
       aplicaEmail: this.form.get('emailPNJ')?.value.toString(),
       aplicaDireccion: this.form.get('direccionPNJ')?.value.toString(),
       aplicaNombre: this.form.get('nombreRazonSocialPNJ')?.value.toString(),
       aplicaTelefono: this.form.get('telefonoPNJ')?.value.toString(),
-      aplicaIdentificacion: this.form
-        .get('numeroIdentificacionPNJ')
-        ?.value.toString(),
-      aplicaTipoIdentificacionId: this.form
-        .get('idTipoIdentificacionPNJ')
-        ?.value.toString(),
+      aplicaIdentificacion: this.form.get('numeroIdentificacionPNJ')?.value.toString(),
+      aplicaTipoIdentificacionId: this.form.get('idTipoIdentificacionPNJ')?.value.toString(),
       aplicaTipoIdentificacionNombre: '',
-
-      particularIdentificacion: this.form
-        .get('numeroIdentificacionRem')
-        ?.value.toString(),
+      particularIdentificacion: this.form.get('numeroIdentificacionRem')?.value.toString(),
       particularNombre: this.form.get('nombreRem')?.value.toString(),
-      particularTipoIdentificacionId: this.form
-        .get('idTipoIdentificacionRem')
-        ?.value.toString(),
-      particularTipoIdentificacionNombre: '',
-      particularCiudadCodigo: this.form.get('idMunicipioRem')?.value.toString(),
-      particularDepartamentoCodigo: this.form
-        .get('idDepartamentoRem')
-        ?.value.toString(),
+      particularTipoIdentificacionId: this.form.get('idTipoIdentificacionRem')?.value.toString(),
+      particularTipoIdentificacionNombre: '',particularCiudadCodigo: this.form.get('idMunicipioRem')?.value.toString(),
+      particularDepartamentoCodigo: this.form.get('idDepartamentoRem')?.value.toString(),
       particularPaisCodigo: this.form.get('idPaisRem')?.value.toString(),
       particularDireccion: this.form.get('direccionRem')?.value.toString(),
       particularTelefono: this.form.get('telefonoRem')?.value.toString(),
@@ -891,36 +932,17 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       orderRequest.particularTipoIdentificacionNombre =
         'SIN IDENTIFICACIÓN MERCANTILES';
     }
-    orderRequest.dependenciaNombre = orderRequest.dependenciaNombre.replace(
-      /\s+$/g,
-      ''
-    );
+
+    orderRequest.dependenciaNombre = orderRequest.dependenciaNombre.replace(/\s+$/g,  '');
+
     if (this.form.valid) {
       const request = this.tramitesServices.guardarTramite$(orderRequest);
       console.log(orderRequest);
       request.subscribe({
         next: (res) => {
-          this.saving = false;
           this.numeroTramite = res.message;
           this.loader = false;
-          this.generarSticker = {
-            cantidadSticker: 1,
-            formatoRequerido: 'PDF',
-            generadoPor: 'string',
-            numRadicado: res.message,
-            numeroProceso: 'string',
-          };
-          this.estamparSticker = {
-            base64Sticker: '',
-            numeroRadicado: res.message,
-          };
-          this.instanciarRadicacion = {
-            numeroRadicado: res.message,
-            tipoRadicacion: 'Radicación Entrada',
-            fechaVencimientoTarea: this.fechaFormateada,
-            funcionarioAsignado: 'HIGHTECH S.A',
-            codigoDependencia: this.procedure.codigoGrupoTrabajo,
-          };
+
           console.log(
             'Objeto de Instancia Radicacion: ' + this.instanciarRadicacion
           );
@@ -928,48 +950,8 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
           if (res.message && res.code != '-1') {
             console.log('se creo Tramite: ' + res.message);
             if (this.filesToUpload.anexos.length > 0) {
-              // this.uploadFileToFileNet();
               this.uploadFileToFileNetDMV();
             }
-            console.log('se subieron Archivos');
-            this.tramitesServices
-              .generateStickerUsingPOST(this.generarSticker)
-              .pipe(take(1))
-              .subscribe((genSticker) => {
-                console.log('se genero Sticker');
-              });
-            this.tramitesServices
-              .estamparStickerRequestDTO(this.estamparSticker)
-              .pipe(take(1))
-              .subscribe((estSticker) => {
-                console.log('se estampo Sticker');
-              });
-            this.tramitesServices
-              .instanciarRadicacion(this.instanciarRadicacion)
-              .pipe(take(1))
-              .subscribe((insRadicacion) => {
-                console.log('se instancio Radicacion');
-              });
-            this.sendEmail(
-              this.form.value.emailRadicar,
-              this.form.value.nombreRazonSocialPNJ,
-              this.numeroTramite
-            );
-            Swal.fire({
-              icon: 'success',
-              text:
-                'Su TRAMITE fue radicado con éxito con los siguientes datos: ' +
-                ' N° de Tramite ' +
-                res.message +
-                '\n' +
-                '. Fecha: ' +
-                fechaFormulario +
-                '\n' +
-                '. La información de su TRAMITE fue enviada al correo electrónico principal registrado en el formulario.',
-              confirmButtonColor: '#045cab',
-              confirmButtonText: 'Aceptar',
-            });
-            this.resetFormulario();
           } else {
             this.saving = false;
             Swal.fire({

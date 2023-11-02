@@ -1,5 +1,5 @@
 export const requestRadicacionRadicar ={
-  anexosFisicos: "1",
+  anexosFisicos: "false",
   aplicaCiudadCodigo: "1",
   aplicaDepartamentoCodigo: "11",
   aplicaDireccion: "Dir 123",

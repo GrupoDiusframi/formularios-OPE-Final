@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { GeneralResponseDTO } from 'src/pqrsd-api/src/src/models';
 import { Component, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
 import { ProfesorResponse } from './interfaces/ProfesorResponse';
+import { SelectionService } from './services/compartido.service';
 
 @Component({
   selector: 'app-root',
@@ -27,9 +28,14 @@ export class AppComponent implements OnInit{
   datos: Array<Tramites>  = [];
   private subscription!: Subscription;
 
+  constructor(private selectionService: SelectionService) {}
+
   ngOnInit(): void {
       this.getListTipoSolicitud();
       this.getListaTramites();
+      this.selectionService.getSelectedProcedure().subscribe((selectedProcedure) => {
+        this.procedure = selectedProcedure;
+      });
   }
 
   private getListTipoSolicitud(): void {
@@ -51,7 +57,9 @@ export class AppComponent implements OnInit{
     .catch(err => console.log(`%c ${err}`, 'background-color: #f3e295;'));
   }
 
-
+  onSelectionChange() {
+    this.selectionService.setSelectedProcedure(this.procedure);
+  }
 
 }
 

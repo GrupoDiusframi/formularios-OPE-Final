@@ -1350,23 +1350,29 @@ fdescribe('FormFurtComponent', () => {
   describe('Test unitarios para el metodo getArchivosCargados', () => {
     it('debería asignar el valor de uploadArchivo a archivoCargados', () => {
       // Configura tus datos de prueba
+
       const uploadArchivoMock = [
         {
           archivo: new File(['contenido'], 'archivo.pdf'),
           extension: 'pdf',
-          radicacion: '2023-01-006799',
+          radicacion: '2023-01-006798',
           tipoDocumento: 'documento',
           uploadBy: 'usuario',
+          nombre:'prueba',
+          tramite:'prueba'
         },
         {
           archivo: new File(['contenido'], 'archivo2.pdf'),
           extension: 'pdf',
-          radicacion: '2023-01-006799',
+          radicacion: '2023-01-006798',
           tipoDocumento: 'documento',
           uploadBy: 'usuario',
+          nombre:'prueba',
+          tramite:'prueba'
         },
         // Agrega otros elementos según sea necesario
       ];
+
 
       // Llama al método que deseas probar
       tramitesServices.getArchivosCargados(uploadArchivoMock);
@@ -1383,18 +1389,22 @@ fdescribe('FormFurtComponent', () => {
       const anexosMock = {
         archivo: new File(['contenido'], 'archivo.pdf'),
         extension: 'pdf',
-        radicacion: '2023-01-006799',
+        radicacion: '2023-01-006798',
         tipoDocumento: 'documento',
         uploadBy: 'usuario',
+        nombre:'prueba',
+        tramite:'1234565',
       };
 
       const anexosMockArray = [
         {
           archivo: new File(['contenido'], 'archivo1.pdf'),
           extension: 'pdf',
-          radicacion: '2023-01-006799',
+          radicacion: '2023-01-006798',
           tipoDocumento: 'documento',
           uploadBy: 'usuario',
+          nombre:'prueba',
+        tramite:'1234565',
         },
         // ... otros anexos
       ];
