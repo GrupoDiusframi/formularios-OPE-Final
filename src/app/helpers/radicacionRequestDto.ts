@@ -1,5 +1,5 @@
 export const requestRadicacionRadicar ={
-  anexosFisicos: "false",
+  anexosFisicos: "1",
   aplicaCiudadCodigo: "1",
   aplicaDepartamentoCodigo: "11",
   aplicaDireccion: "Dir 123",
@@ -84,3 +84,9 @@ export const anexosMockArray = [
   // ... otros anexos
 ];
 
+export const tiposSeguridad = [
+  {
+    codigo: "ABIERTA",
+    nombre: "ABIERTA"
+}
+];

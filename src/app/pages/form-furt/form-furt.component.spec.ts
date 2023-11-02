@@ -10,7 +10,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
-import { SlicePipe } from '@angular/common';
+import { DatePipe, SlicePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
   DialogPosition,
@@ -29,7 +29,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TramitesServices } from 'src/app/services/tramites.service';
 import { NO_ERRORS_SCHEMA, forwardRef } from '@angular/core';
 import { RadicacionRequestDto } from 'src/app/interfaces/radicacionRequest';
-import { InstanciarRadicacion, anexosMock, anexosMockArray, estamparSticker, generarSticker, requestRadicacionRadicar } from 'src/app/helpers/radicacionRequestDto';
+import { InstanciarRadicacion, anexosMock, anexosMockArray, estamparSticker, generarSticker, requestRadicacionRadicar, tiposSeguridad } from 'src/app/helpers/radicacionRequestDto';
 import { generateNArchivos } from 'src/app/helpers/mock testing/Files.mocks';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -101,6 +101,7 @@ fdescribe('FormFurtComponent', () => {
           },
         },
         { provide: MatDialogRef, useValue: {} },
+        DatePipe
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -1089,10 +1090,12 @@ fdescribe('FormFurtComponent', () => {
             nombre: 'Ciudadano',
           },
         ],
-        tipoSeguridadRadicacion: {
-          codigo: 'ABIERTA',
-          nombre: 'ABIERTA',
-        },
+        tiposSeguridad: [
+          {
+              "codigo": "ABIERTA",
+              "nombre": "ABIERTA"
+          }
+      ],
         descripcionSolicitud: 'soli 2',
         nombreAmigable: 'feli 1',
         nombre: 'FELICITACIONES',
@@ -1351,14 +1354,14 @@ fdescribe('FormFurtComponent', () => {
         {
           archivo: new File(['contenido'], 'archivo.pdf'),
           extension: 'pdf',
-          radicacion: '123456',
+          radicacion: '2023-01-006799',
           tipoDocumento: 'documento',
           uploadBy: 'usuario',
         },
         {
           archivo: new File(['contenido'], 'archivo2.pdf'),
           extension: 'pdf',
-          radicacion: '1234567',
+          radicacion: '2023-01-006799',
           tipoDocumento: 'documento',
           uploadBy: 'usuario',
         },
@@ -1611,6 +1614,7 @@ fdescribe('FormFurtComponent', () => {
     it('guardarTramite con valid form datos  successful response', fakeAsync(() => {
       spyOn(tramitesServices, 'guardarTramite$').and.returnValue(of({message: '123' }));
       // Configura el estado del formulario con datos válidos
+
       component.form.patchValue(requestRadicacionRadicar);
       // Configura otros valores del formulario según sea necesario
 

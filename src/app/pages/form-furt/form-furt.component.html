@@ -820,52 +820,44 @@
             <p-table [value]="documents">
               <ng-template pTemplate="header">
                 <tr>
-                  <th>Obligatorio</th>
+                  <th></th>
                   <th>Nombre</th>
                   <th>Descripción</th>
                   <th>Selección</th>
                  <!-- <th>Extensión</th>-->
                 </tr>
               </ng-template>
-              <ng-template pTemplate="body" let-document>
+              <ng-template pTemplate="body" let-document let-i="index">
                 <tr style="color: #93bbf3">
-                  <td style="color: red;">{{ document.documentoPrincipal == null ? '*' : ' ' }}</td>
-                  <td>{{ document.nombre }}</td>
-                  <td>{{ document.descripcion }}</td>
-                  <td>
-                    <div class="row">
-                      <div
-                        class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5"
-                      >
-                      <div class="mb-3">
-                        <label for="formFile" class="form-label">
-                          Formato unico permitido:
-                          <span *ngFor="let extension of document.extensiones"  > {{ extension.nombre +' '}}</span>
-                        </label>
-                        <input
-                        class="form-control"
-                        type="file"
-                         id="formFile"
-                         style="max-width: 400px;"
-                         (change)="onUploadFile($event,document.nombre,document.extensiones)"
-                        >
+                    <td>
+                        <ng-container *ngIf="document.obligatorio == true; else noAsterisk">
+                            <span style="color: red;">*</span>
+                        </ng-container>
+                        <ng-template #noAsterisk>&nbsp;</ng-template>
+                    </td>
+                    <td>{{ document.nombre }}</td>
+                    <td>{{ document.descripcion }}</td>
+                    <td>
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5">
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">
+                                        Formato único permitido:
+                                        <span *ngFor="let extension of document.extensiones">{{ extension.nombre + ' ' }}</span>
+                                    </label>
+                                    <input
+                                        class="form-control"
+                                        type="file"
+                                        id="formFile"
+                                        style="max-width: 400px;"
+                                        (change)="onUploadFile($event, document.nombre, document.extensiones, document)">
+                                    <small *ngIf="document.obligatorio && !atLeastOneRequiredFileUploaded" style="color: red;">Este adjunto es obligatorio.</small>
+                                </div>
+                            </div>
                         </div>
-                        <!-- <button
-                          color="primary"
-                          mat-button
-                          (click)="openDialog(document.documentoPrincipal)"
-                          class="btn btn-outline-info"
-                          >
-                          Adjuntar archivo
-                        </button>-->
-                      </div>
-                    </div>
-                  </td>
-                  <!--  <td>
-                    <span *ngFor="let extension of document.extensiones">{{ extension.nombre +' '}}</span>
-                  </td>-->
+                    </td>
                 </tr>
-              </ng-template>
+            </ng-template>
             </p-table>
           </div>
         </div>
@@ -931,7 +923,7 @@
 
       <div class="field col-12">
         <p-button
-          [disabled]="form.invalid || !confirmTermAndCond || !isCaptchaResolved"
+          [disabled]="form.invalid || !confirmTermAndCond || !isCaptchaResolved || !atLeastOneRequiredFileUploaded"
           label="Radicar"
           class="btn btn-round btn-high"
           id="btnRadicar"

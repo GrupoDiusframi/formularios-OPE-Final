@@ -83,6 +83,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   readonly processNumberRegex: RegExp = /[0-9]{4}-[0-9]{3}-[0-9]{3}$/;
   @ViewChild('miCheckbox') miCheckbox!: MatCheckbox;
   tramite!: Tramites;
+  atLeastOneRequiredFileUploaded: boolean = false;
 
   form!: FormGroup;
   datos: Array<Tramites> = [];
@@ -120,11 +121,12 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   indicativo: string = ' ';
   tipoSol!: any;
   typeFile: boolean = false;
-  folios:number = 1;
-  tipoSeguridad!:string;
-  nombrePorceso!:string;
+  folios: number = 1;
+  tipoSeguridad!: string;
+  nombrePorceso!: string;
   fechaActual = new Date();
   fechaFormateada: string | null;
+  cantidadObligatorio:number = 0;
 
   subirArchivo: ISubirArchivo = {
     radicacion: '',
@@ -137,9 +139,15 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     anexos: [],
   };
 
-
-  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private datePipe: DatePipe) {
-    this.fechaFormateada = this.datePipe.transform(this.fechaActual, 'yyyy-MM-dd');
+  constructor(
+    private dialog: MatDialog,
+    private cd: ChangeDetectorRef,
+    private datePipe: DatePipe
+  ) {
+    this.fechaFormateada = this.datePipe.transform(
+      this.fechaActual,
+      'yyyy-MM-dd'
+    );
   }
 
   ngOnInit(): void {
@@ -176,7 +184,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  eliminarOpciones() { }
+  eliminarOpciones() {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['procedure']) {
@@ -185,6 +193,13 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       const nuevoProcedure = changes['procedure'].currentValue as Tramites;
       this.tipoSolicitante = nuevoProcedure?.tiposSolicitante;
       this.documents = nuevoProcedure?.documentos;
+
+      this.documents.forEach((obj) => {
+        if (obj.obligatorio === true) {
+          this.cantidadObligatorio++;
+        }
+      });
+
       this.form.get('idTramite')?.setValue(nuevoProcedure?.id);
       this.form
         .get('descripcionTramite')
@@ -506,7 +521,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       .get('municipioRem')
       ?.setValue(this.isRemPNJ ? this.form.value.municipioPNJ : null);
   }
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 
   progress: number = 0;
   cargaAnexos: any[] = [];
@@ -594,17 +609,13 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     let numeroArchivos = 0;
     const cantidadArchivos = this.filesToUpload.anexos.length;
 
-    this.filesToUpload.anexos.forEach((a)=>{
-      a.radicacion=this.numeroTramite;
-
-  })
+    this.filesToUpload.anexos.forEach((a) => {
+      a.radicacion = this.numeroTramite;
+    });
     const formData = new FormData();
     for (var i = 0; i < this.filesToUpload.anexos.length; i++) {
       if (this.filesToUpload.anexos[i].archivo) {
-        formData.append(
-          'archivos',
-          this.filesToUpload.anexos[i].archivo!
-        );
+        formData.append('archivos', this.filesToUpload.anexos[i].archivo!);
       }
       this.filesToUpload.anexos[i].archivo = undefined;
     }
@@ -662,10 +673,9 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   uploadFileToFileNetDMV(): void {
-
     this.loaderFile = true;
     this.filesToUpload.anexos.forEach((archivo) => {
-      console.log(archivo,"archivos uploadFileToFileNetDMV");
+      console.log(archivo, 'archivos uploadFileToFileNetDMV');
     });
 
     //  this.tramitesServices.getFilestoUpload(this.tramitesServices.subirArchivo);
@@ -674,12 +684,10 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-
-  onUploadFile($event: any, tramite?: any, extension?: any) {
+  onUploadFile($event: any, tramite?: any, extension?: any, registro?: any) {
     this.typeFile = false;
     let files: File[] = $event.target.files;
-
-    this.filesToUpload.anexos = this.filesToUpload.anexos.filter(anexo => {
+    this.filesToUpload.anexos = this.filesToUpload.anexos.filter((anexo) => {
       return anexo.tramite !== tramite;
     });
 
@@ -687,7 +695,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       if (a.nombre == $event.target.files[0].name.split('.').pop()) {
         this.typeFile = true;
       }
-    })
+    });
     if (this.typeFile) {
       for (let file of files) {
         let anexo = {
@@ -702,7 +710,6 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
         this.filesToUpload.anexos.push(anexo);
       }
     } else {
-
       const inputElement = $event.target as HTMLInputElement;
       if (inputElement) {
         inputElement.value = '';
@@ -710,16 +717,21 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
 
       Swal.fire({
         icon: 'error',
-        text:
-          'El formato del archivo que esta cargando no corresponde.',
+        text: 'El formato del archivo que esta cargando no corresponde.',
         confirmButtonColor: '#045cab',
         confirmButtonText: 'Aceptar',
       });
     }
+    let cantidad = 0;
+    if (registro.obligatorio === true) {
+      cantidad++;
+      if(cantidad = this.cantidadObligatorio){
+        this.atLeastOneRequiredFileUploaded = true;
+      }
+    }
   }
 
   guardarTramite() {
-
     this.saving = true;
     if (!this.form.valid) {
       this.saving = false;
@@ -727,19 +739,22 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     let DateFormulario;
     DateFormulario = new Date();
     const fechaFormulario = formatDate(DateFormulario, 'yyyy-MM-dd', 'en-US');
-    this.procedure?.documentos.forEach(fol =>{
-       if(fol.documentoPrincipal != null){
+    this.procedure?.documentos.forEach((fol) => {
+      if (fol.documentoPrincipal != null) {
         this.folios++;
-      }});
-
-    if (this.procedure.tiposSeguridad && Array.isArray(this.procedure.tiposSeguridad)) {
-    this.procedure.tiposSeguridad.forEach(obj => {
-        this.tipoSeguridad = obj.codigo;
+      }
     });
-}
+
+    if (
+      this.procedure.tiposSeguridad &&
+      Array.isArray(this.procedure.tiposSeguridad)
+    ) {
+      this.procedure.tiposSeguridad.forEach((obj) => {
+        this.tipoSeguridad = obj.codigo;
+      });
+    }
     const orderRequest: RadicacionRequestDto = {
-      anexosFisicos:
-        this.filesToUpload.anexos.length.toString(),
+      anexosFisicos: this.filesToUpload.anexos.length.toString(),
       aplicaCiudadCodigo: this.form.get('idMunicipioPNJ')?.value.toString(),
       aplicaDepartamentoCodigo: this.form
         .get('idDepartamentoPNJ')
@@ -784,7 +799,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       documentalTipoCodigo: 'OFICIO',
       extensionArchivo: '.pdf',
       codigoMedioEnvio: '5',
-      codigoTipoSeguridad:this.tipoSeguridad,
+      codigoTipoSeguridad: this.tipoSeguridad,
       codigoSerie: '58',
       codigoSubSerie: '194',
       loginUsuario: 'aplicaciones',
@@ -792,47 +807,94 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       nombreSubSerie: 'Proceso de Reorganización Abreviada',
 
       radicacionAnterior: '2023-07-000904',
-      tramiteCodigo:Number(this.procedure?.codigo),
+      tramiteCodigo: Number(this.procedure?.codigo),
       referenciaExterna: '',
       tramiteId: this.procedure?.id.toString(),
     };
-    if (orderRequest.aplicaTipoIdentificacionId === '1') { orderRequest.aplicaTipoIdentificacionNombre = 'CÉDULA'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '2') { orderRequest.aplicaTipoIdentificacionNombre = 'CÉDULA DE EXTRANJERÍA'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '3') { orderRequest.aplicaTipoIdentificacionNombre = 'PASAPORTE'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '4') { orderRequest.aplicaTipoIdentificacionNombre = 'TARJETA DE IDENTIDAD'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '5') { orderRequest.aplicaTipoIdentificacionNombre = 'NIT'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '6') { orderRequest.aplicaTipoIdentificacionNombre = 'IMC (INTERMEDIARIO CAMBIARIO)'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '7') { orderRequest.aplicaTipoIdentificacionNombre = 'OTRO TIPO DE DOCUMENTO'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '8') { orderRequest.aplicaTipoIdentificacionNombre = 'NIT ESPECIAL'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '9') { orderRequest.aplicaTipoIdentificacionNombre = 'EXHORTO'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '10') { orderRequest.aplicaTipoIdentificacionNombre = 'IE SocExt BcoRep'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '11') { orderRequest.aplicaTipoIdentificacionNombre = 'No. IDENTIFICA CASA MATRIZ'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '12') { orderRequest.aplicaTipoIdentificacionNombre = 'MATRICULA MERCANTIL'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '13') { orderRequest.aplicaTipoIdentificacionNombre = 'SE'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '14') { orderRequest.aplicaTipoIdentificacionNombre = 'IDENTIFICA SOC EXTRANJERA'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '15') { orderRequest.aplicaTipoIdentificacionNombre = 'INTERVENCION PAGINA WEB'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '16') { orderRequest.aplicaTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO'; }
-    else if (orderRequest.aplicaTipoIdentificacionId === '17') { orderRequest.aplicaTipoIdentificacionNombre = 'SIN IDENTIFICACIÓN MERCANTILES'; }
+    if (orderRequest.aplicaTipoIdentificacionId === '1') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'CÉDULA';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '2') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'CÉDULA DE EXTRANJERÍA';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '3') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'PASAPORTE';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '4') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'TARJETA DE IDENTIDAD';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '5') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'NIT';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '6') {
+      orderRequest.aplicaTipoIdentificacionNombre =
+        'IMC (INTERMEDIARIO CAMBIARIO)';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '7') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'OTRO TIPO DE DOCUMENTO';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '8') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'NIT ESPECIAL';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '9') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'EXHORTO';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '10') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'IE SocExt BcoRep';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '11') {
+      orderRequest.aplicaTipoIdentificacionNombre =
+        'No. IDENTIFICA CASA MATRIZ';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '12') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'MATRICULA MERCANTIL';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '13') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'SE';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '14') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'IDENTIFICA SOC EXTRANJERA';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '15') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'INTERVENCION PAGINA WEB';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '16') {
+      orderRequest.aplicaTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO';
+    } else if (orderRequest.aplicaTipoIdentificacionId === '17') {
+      orderRequest.aplicaTipoIdentificacionNombre =
+        'SIN IDENTIFICACIÓN MERCANTILES';
+    }
 
-
-    if (orderRequest.particularTipoIdentificacionId === '1') { orderRequest.particularTipoIdentificacionNombre = 'CÉDULA'; }
-    else if (orderRequest.particularTipoIdentificacionId === '2') { orderRequest.particularTipoIdentificacionNombre = 'CÉDULA DE EXTRANJERÍA'; }
-    else if (orderRequest.particularTipoIdentificacionId === '3') { orderRequest.particularTipoIdentificacionNombre = 'PASAPORTE'; }
-    else if (orderRequest.particularTipoIdentificacionId === '4') { orderRequest.particularTipoIdentificacionNombre = 'TARJETA DE IDENTIDAD'; }
-    else if (orderRequest.particularTipoIdentificacionId === '5') { orderRequest.particularTipoIdentificacionNombre = 'NIT'; }
-    else if (orderRequest.particularTipoIdentificacionId === '6') { orderRequest.particularTipoIdentificacionNombre = 'IMC (INTERMEDIARIO CAMBIARIO)'; }
-    else if (orderRequest.particularTipoIdentificacionId === '7') { orderRequest.particularTipoIdentificacionNombre = 'OTRO TIPO DE DOCUMENTO'; }
-    else if (orderRequest.particularTipoIdentificacionId === '8') { orderRequest.particularTipoIdentificacionNombre = 'NIT ESPECIAL'; }
-    else if (orderRequest.particularTipoIdentificacionId === '9') { orderRequest.particularTipoIdentificacionNombre = 'EXHORTO'; }
-    else if (orderRequest.particularTipoIdentificacionId === '10') { orderRequest.particularTipoIdentificacionNombre = 'IE SocExt BcoRep'; }
-    else if (orderRequest.particularTipoIdentificacionId === '11') { orderRequest.particularTipoIdentificacionNombre = 'No. IDENTIFICA CASA MATRIZ'; }
-    else if (orderRequest.particularTipoIdentificacionId === '12') { orderRequest.particularTipoIdentificacionNombre = 'MATRICULA MERCANTIL'; }
-    else if (orderRequest.particularTipoIdentificacionId === '13') { orderRequest.particularTipoIdentificacionNombre = 'SE'; }
-    else if (orderRequest.particularTipoIdentificacionId === '14') { orderRequest.particularTipoIdentificacionNombre = 'IDENTIFICA SOC EXTRANJERA'; }
-    else if (orderRequest.particularTipoIdentificacionId === '15') { orderRequest.particularTipoIdentificacionNombre = 'INTERVENCION PAGINA WEB'; }
-    else if (orderRequest.particularTipoIdentificacionId === '16') { orderRequest.particularTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO'; }
-    else if (orderRequest.particularTipoIdentificacionId === '17') { orderRequest.particularTipoIdentificacionNombre = 'SIN IDENTIFICACIÓN MERCANTILES'; }
-    orderRequest.dependenciaNombre = orderRequest.dependenciaNombre.replace(/\s+$/g, '');
+    if (orderRequest.particularTipoIdentificacionId === '1') {
+      orderRequest.particularTipoIdentificacionNombre = 'CÉDULA';
+    } else if (orderRequest.particularTipoIdentificacionId === '2') {
+      orderRequest.particularTipoIdentificacionNombre = 'CÉDULA DE EXTRANJERÍA';
+    } else if (orderRequest.particularTipoIdentificacionId === '3') {
+      orderRequest.particularTipoIdentificacionNombre = 'PASAPORTE';
+    } else if (orderRequest.particularTipoIdentificacionId === '4') {
+      orderRequest.particularTipoIdentificacionNombre = 'TARJETA DE IDENTIDAD';
+    } else if (orderRequest.particularTipoIdentificacionId === '5') {
+      orderRequest.particularTipoIdentificacionNombre = 'NIT';
+    } else if (orderRequest.particularTipoIdentificacionId === '6') {
+      orderRequest.particularTipoIdentificacionNombre =
+        'IMC (INTERMEDIARIO CAMBIARIO)';
+    } else if (orderRequest.particularTipoIdentificacionId === '7') {
+      orderRequest.particularTipoIdentificacionNombre =
+        'OTRO TIPO DE DOCUMENTO';
+    } else if (orderRequest.particularTipoIdentificacionId === '8') {
+      orderRequest.particularTipoIdentificacionNombre = 'NIT ESPECIAL';
+    } else if (orderRequest.particularTipoIdentificacionId === '9') {
+      orderRequest.particularTipoIdentificacionNombre = 'EXHORTO';
+    } else if (orderRequest.particularTipoIdentificacionId === '10') {
+      orderRequest.particularTipoIdentificacionNombre = 'IE SocExt BcoRep';
+    } else if (orderRequest.particularTipoIdentificacionId === '11') {
+      orderRequest.particularTipoIdentificacionNombre =
+        'No. IDENTIFICA CASA MATRIZ';
+    } else if (orderRequest.particularTipoIdentificacionId === '12') {
+      orderRequest.particularTipoIdentificacionNombre = 'MATRICULA MERCANTIL';
+    } else if (orderRequest.particularTipoIdentificacionId === '13') {
+      orderRequest.particularTipoIdentificacionNombre = 'SE';
+    } else if (orderRequest.particularTipoIdentificacionId === '14') {
+      orderRequest.particularTipoIdentificacionNombre =
+        'IDENTIFICA SOC EXTRANJERA';
+    } else if (orderRequest.particularTipoIdentificacionId === '15') {
+      orderRequest.particularTipoIdentificacionNombre =
+        'INTERVENCION PAGINA WEB';
+    } else if (orderRequest.particularTipoIdentificacionId === '16') {
+      orderRequest.particularTipoIdentificacionNombre = 'PATRIMONIO AUTONOMO';
+    } else if (orderRequest.particularTipoIdentificacionId === '17') {
+      orderRequest.particularTipoIdentificacionNombre =
+        'SIN IDENTIFICACIÓN MERCANTILES';
+    }
+    orderRequest.dependenciaNombre = orderRequest.dependenciaNombre.replace(
+      /\s+$/g,
+      ''
+    );
     if (this.form.valid) {
       const request = this.tramitesServices.guardarTramite$(orderRequest);
       console.log(orderRequest);
@@ -859,7 +921,9 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
             funcionarioAsignado: 'HIGHTECH S.A',
             codigoDependencia: this.procedure.codigoGrupoTrabajo,
           };
-          console.log("Objeto de Instancia Radicacion: "+this.instanciarRadicacion)
+          console.log(
+            'Objeto de Instancia Radicacion: ' + this.instanciarRadicacion
+          );
 
           if (res.message && res.code != '-1') {
             console.log('se creo Tramite: ' + res.message);
@@ -910,8 +974,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
             this.saving = false;
             Swal.fire({
               icon: 'error',
-              text:
-                'Falló al generar la radicación. Intente mas tarde.',
+              text: 'Falló al generar la radicación. Intente mas tarde.',
               confirmButtonColor: '#045cab',
               confirmButtonText: 'Aceptar',
             });
@@ -921,8 +984,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
           this.saving = false;
           Swal.fire({
             icon: 'error',
-            text:
-              'Falló al generar la radicación. Intente mas tarde.',
+            text: 'Falló al generar la radicación. Intente mas tarde.',
             confirmButtonColor: '#045cab',
             confirmButtonText: 'Aceptar',
           });
