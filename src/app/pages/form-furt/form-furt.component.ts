@@ -186,7 +186,6 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  eliminarOpciones() {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['procedure']) {
@@ -430,7 +429,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       this.form.controls[campo].addValidators(Validators.required);
     }
   }
-
+/*
   openDialog(tipoDocumento: Boolean) {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '700px',
@@ -441,12 +440,11 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       disableClose: true,
     });
   }
+  */
 
   subirArchivoFilenet(): void {
     this.tramitesServices.subirArchivoFilenet(this.subirArchivo).subscribe(
       (res) => {
-        console.log('Se subio el archivo correctamente');
-        console.log('Respuesta ' + res);
         this.guardarTramite();
       },
       (error) => {
@@ -810,28 +808,29 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
 
     const orderRequest: RadicacionRequestDto = {
       anexosFisicos: this.filesToUpload.anexos.length.toString(),
-      aplicaCiudadCodigo: this.form.get('idMunicipioPNJ')?.value.toString(),
-      aplicaDepartamentoCodigo: this.form.get('idDepartamentoPNJ')?.value.toString(),
-      aplicaPaisCodigo: this.form.get('idPaisPNJ')?.value.toString(),
-      aplicaEmail: this.form.get('emailPNJ')?.value.toString(),
-      aplicaDireccion: this.form.get('direccionPNJ')?.value.toString(),
-      aplicaNombre: this.form.get('nombreRazonSocialPNJ')?.value.toString(),
-      aplicaTelefono: this.form.get('telefonoPNJ')?.value.toString(),
-      aplicaIdentificacion: this.form.get('numeroIdentificacionPNJ')?.value.toString(),
-      aplicaTipoIdentificacionId: this.form.get('idTipoIdentificacionPNJ')?.value.toString(),
+      aplicaCiudadCodigo: this.form.get('idMunicipioPNJ')?.value,
+      aplicaDepartamentoCodigo: this.form.get('idDepartamentoPNJ')?.value,
+      aplicaPaisCodigo: this.form.get('idPaisPNJ')?.value,
+      aplicaEmail: this.form.get('emailPNJ')?.value,
+      aplicaDireccion: this.form.get('direccionPNJ')?.value,
+      aplicaNombre: this.form.get('nombreRazonSocialPNJ')?.value,
+      aplicaTelefono: this.form.get('telefonoPNJ')?.value,
+      aplicaIdentificacion: this.form.get('numeroIdentificacionPNJ')?.value,
+      aplicaTipoIdentificacionId: this.form.get('idTipoIdentificacionPNJ')?.value?.toString(),
       aplicaTipoIdentificacionNombre: '',
-      particularIdentificacion: this.form.get('numeroIdentificacionRem')?.value.toString(),
-      particularNombre: this.form.get('nombreRem')?.value.toString(),
-      particularTipoIdentificacionId: this.form.get('idTipoIdentificacionRem')?.value.toString(),
-      particularTipoIdentificacionNombre: '',particularCiudadCodigo: this.form.get('idMunicipioRem')?.value.toString(),
-      particularDepartamentoCodigo: this.form.get('idDepartamentoRem')?.value.toString(),
-      particularPaisCodigo: this.form.get('idPaisRem')?.value.toString(),
-      particularDireccion: this.form.get('direccionRem')?.value.toString(),
-      particularTelefono: this.form.get('telefonoRem')?.value.toString(),
-      particularEmail: this.form.get('emailRem')?.value.toString(),
+      particularIdentificacion: this.form.get('numeroIdentificacionRem')?.value,
+      particularNombre: this.form.get('nombreRem')?.value,
+      particularTipoIdentificacionId: this.form.get('idTipoIdentificacionRem')?.value?.toString(),
+      particularTipoIdentificacionNombre: '',
+      particularCiudadCodigo: this.form.get('idMunicipioRem')?.value,
+      particularDepartamentoCodigo: this.form.get('idDepartamentoRem')?.value,
+      particularPaisCodigo: this.form.get('idPaisRem')?.value,
+      particularDireccion: this.form.get('direccionRem')?.value,
+      particularTelefono: this.form.get('telefonoRem')?.value,
+      particularEmail: this.form.get('emailRem')?.value,
 
-      dependenciaId: this.procedure?.codigoGrupoTrabajo.toString(),
-      dependenciaNombre: this.procedure?.nombreGrupoTrabajo.toString(),
+      dependenciaId: this.procedure?.codigoGrupoTrabajo,
+      dependenciaNombre: this.procedure?.nombreGrupoTrabajo,
       entregaFisica: '0',
       foliosNumero: this.folios.toString(),
       cuadernoTipoId: '0',
@@ -852,6 +851,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       referenciaExterna: '',
       tramiteId: this.procedure?.id.toString(),
     };
+
     if (orderRequest.aplicaTipoIdentificacionId === '1') {
       orderRequest.aplicaTipoIdentificacionNombre = 'CÉDULA';
     } else if (orderRequest.aplicaTipoIdentificacionId === '2') {
@@ -890,6 +890,7 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       orderRequest.aplicaTipoIdentificacionNombre =
         'SIN IDENTIFICACIÓN MERCANTILES';
     }
+
 
     if (orderRequest.particularTipoIdentificacionId === '1') {
       orderRequest.particularTipoIdentificacionNombre = 'CÉDULA';
@@ -932,8 +933,10 @@ export class FormFurtComponent implements OnInit, OnDestroy, OnChanges {
       orderRequest.particularTipoIdentificacionNombre =
         'SIN IDENTIFICACIÓN MERCANTILES';
     }
+    if(orderRequest.dependenciaNombre){
+      orderRequest.dependenciaNombre = orderRequest.dependenciaNombre.replace(/\s+$/g,  '');
+    }
 
-    orderRequest.dependenciaNombre = orderRequest.dependenciaNombre.replace(/\s+$/g,  '');
 
     if (this.form.valid) {
       const request = this.tramitesServices.guardarTramite$(orderRequest);

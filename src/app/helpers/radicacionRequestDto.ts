@@ -1,50 +1,89 @@
 export const requestRadicacionRadicar ={
-  anexosFisicos: "false",
-  aplicaCiudadCodigo: "1",
-  aplicaDepartamentoCodigo: "11",
-  aplicaDireccion: "Dir 123",
-  aplicaEmail: "prueba@nuvu.cc",
-  aplicaIdentificacion: "999999999",
-  aplicaNombre: "Representante Legal de Pruebas",
+  anexosFisicos: "1",
+  aplicaCiudadCodigo: "405",
+  aplicaDepartamentoCodigo: "91",
   aplicaPaisCodigo: "80",
-  aplicaTelefono: "3105531681",
+  aplicaEmail: "casarrubia999@gmail.com",
+  aplicaDireccion: "calle 20",
+  aplicaNombre: "SOLICITUDES POR CENTRO DE CONCILIACIÓN",
+  aplicaTelefono: "5555555",
+  aplicaIdentificacion: "5555555",
   aplicaTipoIdentificacionId: "1",
   aplicaTipoIdentificacionNombre: "CÉDULA",
-
-  codigoMedioEnvio: "5",
-  codigoSerie: "58",
-  codigoSubSerie: "194",
-  codigoTipoSeguridad: "ABIERTA",
-  cuadernoCodigo: "30292457",
-  cuadernoTipoId: "0",
+  particularIdentificacion: "5555555",
+  particularNombre: "SOLICITUDES POR CENTRO DE CONCILIACIÓN",
+  particularTipoIdentificacionId: "1",
+  particularTipoIdentificacionNombre: "CÉDULA",
+  particularCiudadCodigo: "405",
+  particularDepartamentoCodigo: "91",
+  particularPaisCodigo: "80",
+  particularDireccion: "calle 20",
+  particularTelefono: "5555555",
+  particularEmail: "casarrubia999@gmail.com",
   dependenciaId: "460",
   dependenciaNombre: "GRUPO DE ADMISIONES",
-  documentalTipoCodigo: "OFICIO",
+  entregaFisica: "0",
+  foliosNumero: "4",
+  cuadernoTipoId: "0",
+  cuadernoCodigo: "30292457",
   documentalTipoId: "0",
-  entregaFisica: "1",
+  documentalTipoCodigo: "OFICIO",
   extensionArchivo: ".pdf",
-  foliosNumero: "1",
+  codigoMedioEnvio: "5",
+  codigoTipoSeguridad: "ABIERTA",
+  codigoSerie: "58",
+  codigoSubSerie: "194",
   loginUsuario: "aplicaciones",
   nombreSerie: "PROCESOS JUDICIALES DE INSOLVENCIA",
   nombreSubSerie: "Proceso de Reorganización Abreviada",
-
-  particularCiudadCodigo: "1",
-  particularDepartamentoCodigo: "11",
-  particularDireccion: "Dir 123",
-  particularEmail: "prueba@nuvu.cc",
-  particularIdentificacion: "999999999",
-  particularNombre: "Representante Legal de Pruebas",
-  particularPaisCodigo: "80",
-  particularTelefono: "3105531681",
-  particularTipoIdentificacionId: "1",
-  particularTipoIdentificacionNombre: "CÉDULA",
-
-  radicacionAnterior: "0",
-  referenciaExterna: "",
+  radicacionAnterior: "2023-07-000904",
   tramiteCodigo: 16500,
-  tramiteId: "0"
-
+  referenciaExterna: "1",
+  tramiteId: "37"
 }
+
+export const tramite = {
+  id: 16,
+  nombreGrupoTrabajo: "GRUPO DE ADMISIONES",
+  codigoGrupoTrabajo: "460",
+  tiposSolicitante: [
+      {
+          codigo: "3",
+          nombre: "Instituciones o dependencias pï¿½blicas"
+      }
+  ],
+  tiposSeguridad: [
+      {
+          codigo: "ABIERTA",
+          nombre: "ABIERTA"
+      }
+  ],
+  descripcionSolicitud: "Prueba",
+  nombreAmigable: "Prueba2",
+  nombre: "ADMISIÓN A REORGANIZACIÓN ABREVIADA",
+  codigo: "16918",
+  proceso: {
+      codigo: "16",
+      nombre: "REOGANIZACIÓN EMPRESARIAL Y CONCORDATOS"
+  },
+  documentos: [
+      {
+          extensiones: [
+              {
+                  codigo: "1",
+                  nombre: "txt"
+              }
+          ],
+          nombre: "Prueba",
+          descripcion: "Prueba",
+          documentoPrincipal: false,
+          obligatorio: false
+      }
+  ],
+  estado: true,
+  funcionario: "1030691121 - RAMIRO HERNÁN GÓMEZ HORTA"
+}
+
 export const InstanciarRadicacion ={
   numeroRadicado: '2023-01-006096',
   tipoRadicacion: 'Radicación Entrada',
